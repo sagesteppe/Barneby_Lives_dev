@@ -1,0 +1,242 @@
+---
+title: "Barneby Lives!"
+author: "steppe"
+date: "9/13/2021"
+output: html_document
+---
+The purpose of this script is to assist Botanical Collectors in accessioning their collections. 
+
+It is our lived experience that many herbaria now request digital copies of collection information in there own format. This script aims to alleviate the investment in time this requires, and in doing so allow the collector more time to do less onerous tasks; such as collection and study. 
+
+While in theory all of the tasks in this script could be automated, doing so would be an unconscionable action against local taxonomic authorities. While several database options for updating collections (and spell checking nomen) which are current and well curated (e.g. Kew Plants of the World) exist, we feel many proposals and combinations require interpretation by those in the regions attempting to understand the material at hand. 
+
+This script will perform the following tasks:
+
+**Geographic:**
+
+**1)** Convert coordinates to a Decimal Degrees format, if needed (e.g. from DMS 72*17.55 -> 72.29861). 
+**2)** Retrieve appropriate political place names. (i.e. State, County).
+**3)** Retrieve accurate elevation values of coordinates.
+**4)** Retrieve Public Land Ownership (e.g. United States Forest Service, Bureau of Land Management).
+**5)** Project coordinates from one system to another, if needed (e.g. from an UTM zone to WGS84).
+**6)** Retrieve Cadastral data from the PLSS for Township, Range, Section (TRS)
+
+**Temporal:**
+
+**1)** Provide a 'written' date in the style of choosing. (e.g. May 12th 2021 OR 12th May 2021), for the purpose of labelling. 
+
+**Taxonomic:**
+
+**1)** Provide a 'spell check' for family. 
+**2)** Provide a 'spell check' for genus. 
+**3)** Provide a 'spell check' for epithet.
+**4)** Provide a 'spell check' for authorities. 
+**5)** In addition you may check for synonymy at each of these taxonomic levels, and accept or reject suggestions. 
+
+**Directions:**
+
+I preface this with the anecdote that a good deal of collectors and curators consider these data non-essential now. Regardless, if you are so inclined to gain access to a free google maps account these services are provided. 
+
+**1)** Write directions, from a town of notable size or repute, to the closet parking spot to the collection locality.
+
+Note that these directions may not reflect the actual route traveled. *Caveat emptor.*
+
+
+We would like to acknowledge the following developers of the libraries, and databases, which this script utilizes. As is everything under the sun, nothing here is new and none of this is novel, it is merely the regurgitated contents from the fingertips and intellect of others. 
+
+Of final note, this script is named for the late and great Rupert Charles Barneby, and by no small means is a dig at certain attributes of the fictional 'Hayduke'. 
+
+Files required to use this script:
+
+- PAD-US database for retrieving land ownership information if needed (*note does not include identities of Private owners*). 
+- World Flora Online static copy of the database.
+
+In order to not bog people's computers down with opening and storing many large files we make use of downloading items into R repeatedly.
+
+```{r Libraries, message=FALSE, warning=FALSE}
+#install.packages("WorldFlora", "elevatr")
+library(tidyverse)
+library(sf)
+#library(parzer)
+library(tigris)
+#library(WorldFlora)
+library(elevatr)
+```
+
+Please load your data here. *If you want to create a copy of your herbarium ledger and move the copy to a folder containing this script that would be a path of quite low resistance.*
+
+```{r}
+path_f <- "L:/Pollen_Reference_Library/Herbarium_spreadsheets-ACTIVE"
+files <- list.files(path_f)
+files <- paste(path_f, sep = "/", files) 
+df <- readxl::read_excel(files[5], sheet = 2) %>%  
+  mutate(across(.cols = everything(),
+                .fns = ~ str_replace(string = ., pattern =  '[°*]', ""))) %>% 
+  mutate(collection_number = as.numeric(collection_number)) %>%
+  mutate(tissue_col = as.numeric(tissue_col)) %>% 
+  mutate(county = paste(county, "Co.", sep = " ")) %>% 
+  mutate(across(starts_with('elevation'), function(x) as.numeric(as.character(x)))) %>% 
+  mutate(across(c('latitude', 'longitude'), function(x) as.numeric(x)))
+
+rm(path_f, files)
+```
+
+
+# Geographic 
+
+**Convert coordinates from Degrees, Minutes, Seconds to Decimal Degrees.**
+```{r Convert coords from DMS to DD, eval = F}
+
+df <- df %>% 
+  mutate(Longitude.dd = parzer::parse(Longitude),
+          Latitude.dd = parzer::parse(Latitude))
+
+```
+
+
+**Create a Spatial (Simple Features) Object**
+
+```{r}
+df <- st_as_sf(df, coords = c("longitude (raw)", "latitude"), remove = F, crs = 4269)
+```
+
+
+**Retrieve state of collections.**
+
+```{r Retrieve State of Collection, message = F, wanrning = F}
+states.sf <- tigris::states(cb = FALSE, resolution = "5m", class = "sf") %>% 
+  dplyr::select(state = NAME) 
+
+df <- df %>% dplyr::select(-state, -county)
+df <- st_intersection(df, states.sf) 
+
+rm(states.sf)
+```
+
+**Retrieve counties of collections**
+```{r Retrieve county of collection}
+states_vec <- df %>% ungroup() %>% distinct(state) %>% pull(state) %>% unique()
+
+counties.sf <- tigris::counties(state = states_vec, cb = FALSE, resolution = "5m", class = "sf") %>% 
+  dplyr::select(NAME) %>% rename(county = NAME)
+
+df <- st_intersection(df, counties.sf)
+
+rm(counties.sf, states_vec)
+```
+
+**Retrieve elevation of site**
+```{r retrieve sites elevation}
+df <- df %>% dplyr::select(-elevation_ft,  -elevation_m, -elevation_ft_final,)
+
+prj_dd <- "EPSG:4269"
+
+df_points <- df %>% dplyr::select('longitude..raw.', 'latitude')
+df_elev_epqs <- get_elev_point(df_points, prj = prj_dd, src = "epqs")
+df_elev_epqs <- df_elev_epqs %>% 
+  rename(elevation_m = elevation) %>% 
+  dplyr::select(elevation_m) %>% 
+  mutate(elevation_ft = elevation_m *  3.28084) %>% 
+  mutate(across(c('elevation_m','elevation_ft'), round, 0)) %>% 
+  st_drop_geometry()
+# st_geometry(df_elev_epqs) <- NULL # just in case last operation does not work. 
+df <- cbind(df, df_elev_epqs)
+
+rm(prj_dd, df_elev_epqs, df_points)
+```
+
+**Retrieve Ownership of site**
+
+# Background 
+This section will require you to download a slightly hefty file in order to determine ownership of a site.
+
+```{r}
+knitr::include_graphics("files/spatial/doi-unified-regions.jpg", dpi = NA)
+```
+The image above may help you determine which files are necessary for your work. You may know download these two ways. 
+
+First off you may manually download them to the 'spatial' subfolder in Barneby Lives. 
+
+Or you may use the following code...
+
+```{r}
+install.packages("rvest")
+page <- rvest::html("https://www.sciencebase.gov/catalog/item/6026ed89d34eb1203113955e")
+
+page %>% 
+  html_nodes("a") %>% 
+  html_attr("href")
+```
+
+# Practice
+
+```{r}
+ownership.f <- as.list(list.files("files/spatial/PADUS", pattern = "^PADUS2_1_Region"))
+ownership.sf <- lapply(owernship.f, function(x) read_sf(x))
+
+rm(ownership.f, ownership.sf)
+```
+
+**Retrieve Township, Range, Section information from the PLSS**
+Bear in mind these are *usually* only present in Western States.  
+
+I thought I had a way of patching this through a REST API once upon a time... Well if you are interested in this follow along... Refer to the file "Barneby_Lives/files/spatial/PLSS-CadNSDI-Data-Set-Availability.pdf" to find a proper reference source to download a CAD from. Usually they come direct from BLM (AK, MT, UT are a few of the exceptions)
+
+```{r}
+plss.f <-as.list(list.files("files/spatial/PLSS"))
+plss.sf <- lapply(owernship.f, function(x) read_sf(x))
+
+rm(plss.f, plss.sf)
+```
+
+
+# Temporal
+
+Simple stuff here, let's get a nice date format for making labels. I do not like nor accept that a format such as 07.07.2021 is acceptable for an museum label, is this month 7 or day 7 ? oh wait... Either way, let's make it unambiguous. 
+
+```{r Date formats}
+
+df <- df %>% 
+  mutate(date_digital = case_when(
+    
+  ))
+```
+
+# Taxonomic 
+
+**Spelling**
+
+We will largely use the backbone from the World Flora online as a dictionary to search against using the WorldFlora package. 
+```{r}
+
+library("WorldFlora")
+data("WFO.example")
+test <- WorldFlora::WFO.match(spec.data = df, 
+   WFO.file = "L:/Barneby_Lives/files/taxonomic/WFO_Backbone/classification.txt",
+   spec.name = 'binomial',
+   #Genus = ,
+   #Species = ,
+   #Infraspecific.rank = ,
+   #Infraspecifc = , 
+   #Authorship = ,
+   Fuzzy = 0.1)
+
+spec.test <- data.frame(spec.name=c("Faidherbia albida", "Acacia albida",
+    "Omalanthus populneus", "Pygeum afric"))
+   
+WFO.match(spec.data=spec.test, WFO.data=WFO.example, counter=1, verbose=TRUE)
+
+```
+
+**Taxonomy** 
+We will switch over to Kews Plants of the World to see if a conserved name or some other alternative opinion exists for our taxa. 
+```{r}
+taxize::pow_synonyms()
+```
+
+**Family**
+These things change. 
+```{r}
+taxize::classification("", db = "pow")
+```
+
