@@ -12,6 +12,7 @@ Many of these datasets are very large we are going to crop them to the area of a
 library(sf)
 library(terra)
 library(tidyverse)
+source('functions.R')
 ```
 
 ```{r define domain of data}
@@ -43,27 +44,24 @@ tile_cells <- st_make_grid(
          cellname = paste0('n', abs(y), 'w', abs(x))
          )
 
-object.size(tile_cells)
-  
-```
-
-
-```{r geomorphons}
-
 tile_cellsV <- vect(tile_cells)
-
-geom_p <- '../geodata_raw/geomorphons/'
-geo_f <- paste0(geom_p, list.files(path = geom_p, recursive = T))
-
-geomorphons <- vrt(geo_f)
-geomorphons <- crop(geomorphons, st_union(tile_cells))
-
-fname <- paste0('../geodata/geomorphons/', tile_cells$cellname, "_.tif")
-makeTiles(geomorphons, tile_cellsV,filename = fname, na.rm = F)
-
-rm(geomorphons)
 ```
 
+```{r subset physical variables to domain, eval = F}
+
+mason(dirin = '../geodata_raw/geomorphons/',
+      dirout = '../geodata/geomorphons/',
+      grid = tile_cellsV, fnames = 'cellname')
+
+mason(dirin = '../geodata_raw/aspect/',
+      dirout = '../geodata/aspect/',
+      grid = tile_cellsV, fnames = 'cellname')
+
+mason(dirin = '../geodata_raw/slope/',
+      dirout = '../geodata/slope/',
+      grid = tile_cellsV, fnames = 'cellname')
+
+```
 
 
 ```{r import states to crop to}
