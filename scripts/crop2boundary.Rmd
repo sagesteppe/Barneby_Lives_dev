@@ -61,18 +61,162 @@ mason(dirin = '../geodata_raw/slope/',
       dirout = '../geodata/slope/',
       grid = tile_cellsV, fnames = 'cellname')
 
+rm(mason)
+```
+
+```{r crop political boundary data to extent, eval = F}
+counties <- st_read('../geodata_raw/USCounties/tl_2020_us_county.shp', quiet = T) %>% 
+  st_transform(st_crs(tile_cells)) %>% 
+  select(STATEFP, COUNTY = NAME)
+
+states <- tigris::states() %>% 
+  select(STATEFP, STATE = NAME, STUSPS) %>% 
+  st_drop_geometry()
+
+counties <- counties[st_intersects(counties, st_union(tile_cells)) %>% lengths > 0, ]
+counties <- left_join(counties, states, by = "STATEFP") %>% 
+  select(-STATEFP) %>% 
+  arrange(STATE)
+
+states <- counties %>%
+  distinct(STUSPS) %>% 
+  pull(STUSPS)
+
+st_write(counties, dsn = file.path('../geodata/political', 'political.shp'))
+
+rm(counties)
+```
+
+```{r crop mountain names database to extent, eval = F}
+
+mtns <- st_read('../geodata_raw/globalMountains/GMBA_Inventory_v2.0_standard_basic.shp', 
+        quiet = T) %>% 
+  st_make_valid() %>% 
+  select(MapName) %>% 
+  st_crop(., st_union(tile_cells))
+
+st_write(mtns, dsn = file.path('../geodata/mountains', 'mountains.shp'), quiet = T)
+
+rm(mtns)
+```
+
+```{r crop geographic place name database to extent, eval = F}
+
+files <- paste0('../geodata_raw/GNIS/Text/DomesticNames_', states, '.txt')
+cols <- c('feature_name', 'prim_lat_dec', 'prim_long_dec')
+
+places <- lapply(files, read.csv, sep = "|") %>% 
+  map(., ~ .x |> select(all_of(cols))) %>% 
+  data.table::rbindlist() %>% 
+  st_as_sf(coords = c('prim_long_dec', 'prim_lat_dec'), crs = 4269) %>% 
+  st_transform(4326)
+
+places <- places[st_intersects(places, st_union(tile_cells)) %>% lengths > 0, ]
+
+st_write(places, dsn = file.path('../geodata/places', 'places.shp'), quiet = T)
+
+rm(places, cols, files)
 ```
 
 
-```{r import states to crop to}
-counties <- st_read('../geodata/USCounties')
-st <- tigris::states() %>% select(STATEFP, STUSPS, STATE = NAME) %>% 
-  filter(STUSPS %in% c('AZ', 'AK', 'CA', 'CO', 'ID', 'KS', 'NE', 'ND', 'NM', 'NV', 
-                       'MN', 'MT', 'SD', 'TX', 'OK', 'OR', 'UT', 'WA', 'WY'))
+```{r crop padus to domain, eval = F}
+
+padus <- st_read(dsn = '../geodata_raw/PADUS3/PAD_US3_0.gdb', 
+                 layer = 'PADUS3_0Fee') %>% 
+  filter(State_Nm %in% states) %>% 
+  select(Mang_Name, Unit_Nm) %>% 
+  st_cast('MULTIPOLYGON')
+
+tile_cells <- st_transform(tile_cells, st_crs(padus))
+padus <- padus[st_intersects(padus, st_union(tile_cells)) %>% lengths > 0, ]
+padus <- st_transform(padus, crs = 4326)
+
+st_write(padus, dsn = file.path('../geodata/pad', 'pad.shp'), quiet = T)
+rm(padus)
 ```
 
-```{r}
-ggplot() + 
-  geom_sf(data = st, aes(fill = STATEFP), color = NA)
+```{r geological map, eval = F}
+geological <- st_read(
+  '../geodata_raw/geologicalMap/USGS_StateGeologicMapCompilation_ver1.1.gdb', 
+          layer = 'SGMC_Geology', quiet = T) %>% 
+  select(GENERALIZED_LITH, UNIT_NAME) 
+
+tile_cells <- st_transform(tile_cells, st_crs(geological))
+geological <- geological[st_intersects(geological, st_union(tile_cells)) %>% lengths > 0, ]
+geological <- st_crop(geological, st_union(tile_cells))
+geological <- st_transform(geological, 4326)
+
+st_write(geological, dsn = file.path('../geodata/geology', 'geology.shp'), quiet = T)
+
+tile_cells <- st_transform(tile_cells, crs = 4326)
+rm(geological)
+```
+
+
+```{r allotments, eval = F}
+
+blm <- st_read(
+  '../geodata_raw/BLMAllotments/BLM_Natl_Grazing_Allotment_Polygons.shp') %>% 
+  select(ALLOT_NAME)
+usfs <- st_read(
+  '../geodata_raw/USFSAllotment/S_USA.Allotment.shp', quiet = T
+) %>% 
+  select(ALLOT_NAME = ALLOTMENT_) 
+
+allotments <- bind_rows(blm, usfs) %>% 
+  st_make_valid()
+tile_cells <- st_transform(tile_cells, st_crs(allotments))
+allotments <- allotments[st_intersects(allotments, st_union(tile_cells)) %>% lengths > 0, ]
+allotments <- st_crop(allotments, st_union(tile_cells))
+allotments <- st_transform(allotments, 4326)
+
+st_write(allotments, dsn = file.path('../geodata/allotments', 'allotments.shp'), quiet = T)
+
+rm(blm, usfs, allotments)
+```
+
+```{r public land survey system only for west the front range}
+
+
+bound_nm <- data.frame(
+  y = c(31, 31, 50, 50, 31), 
+  x = c(-105, -125, -125, -105, -103)
+) %>% 
+  st_as_sf(coords = c('x', 'y'), crs = 4326) %>% 
+  st_bbox() %>% 
+  st_as_sfc()
+
+township <- st_read(
+  '../geodata_raw/nationalPLSS/ilmocplss.gdb', layer = 'PLSSTownship', quiet = T
+) %>% 
+  st_cast('POLYGON') %>% 
+  select(TWNSHPLAB)
+
+bound_nm <- st_transform(bound_nm, st_crs(township))
+township <- township[st_intersects(township, bound_nm) %>% lengths > 0, ]
+
+section <- st_read(
+  '../geodata_raw/nationalPLSS/ilmocplss.gdb', layer = 'PLSSFirstDivision', quiet = T
+) %>% 
+  st_cast('POLYGON') %>% 
+  select(FRSTDIVLAB)
+
+section <- section[st_intersects(section, bound_nm) %>% lengths > 0, ]
+
+trs <- st_join(township, section, .predicate = st_overlaps) %>% 
+  mutate(TRS = paste0(TWNSHPLAB, ' S', FRSTDIVLAB)) %>% 
+  select(TRS)
+
+plot(trs)
+
+before <- object.size(trs)
+trs <- st_simplify(trs)
+after <- object.size(trs)
+after
+
+st_write(trs, 
+         dsn = file.path('../geodata/plss', 'plss.shp'), quiet = T)
+
+rm(section, township, trs)
 ```
 
