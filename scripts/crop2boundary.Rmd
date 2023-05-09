@@ -5,11 +5,7 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-
-
-
-
-
+Many of these datasets are very large we are going to crop them to the area of analysis, and save the subsets. 
 
 
 ```{r library}
@@ -40,35 +36,32 @@ tile_cells <- st_make_grid(
 ) %>% 
   st_as_sf() %>% 
   rename(geometry = x) %>% 
-  mutate(x = st_coordinates(st_centroid(tile_cells))[,1],
-         y = st_coordinates(st_centroid(tile_cells))[,2], 
+  mutate(x = st_coordinates(st_centroid(.))[,1],
+         y = st_coordinates(st_centroid(.))[,2], 
          .before = geometry, 
          across(c('x', 'y'), round, 1),
          cellname = paste0('n', abs(y), 'w', abs(x))
          )
-  
-tile_cells
 
+object.size(tile_cells)
+  
 ```
 
 
-```{r import data which defines extent of analysis}
+```{r geomorphons}
 
-geom_p <- '../geodata/geomorphons/'
+tile_cellsV <- vect(tile_cells)
+
+geom_p <- '../geodata_raw/geomorphons/'
 geo_f <- paste0(geom_p, list.files(path = geom_p, recursive = T))
 
 geomorphons <- vrt(geo_f)
-w_illi <- ext(c(-125, -85, 30, 50))
+geomorphons <- crop(geomorphons, st_union(tile_cells))
 
-geomorphons <- crop(geomorphons, w_illi)
-plot(geomorphons)
+fname <- paste0('../geodata/geomorphons/', tile_cells$cellname, "_.tif")
+makeTiles(geomorphons, tile_cellsV,filename = fname, na.rm = F)
 
-makeTiles()
-
-(125-85) / 5 # 8 tiles x
-(50-30) / 5 # 4 tiles y
-
-
+rm(geomorphons)
 ```
 
 

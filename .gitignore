@@ -50,6 +50,7 @@ rsconnect/
 
 # datasets
 taxonomic_data/
+geodata_raw/
 geodata/
 
 
