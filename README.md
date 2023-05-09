@@ -5,21 +5,21 @@ BarnebyLives! serves the area of Western North America West of the 90th Western 
 BarnebyLives! Is meant to supplement, not supplant, collectors field note endeavors. Variables which BarnebyLives! may produce for each collection includes:
 
 **Political**  
-State  
-County   
-Township  
-Public Land Survey System (township, range, section)  
+- State  
+- County   
+- Township  
+- Public Land Survey System (township, range, section)  
 
 **Geographic**
-Mountain Range (if relevant)  
-Nearest GNIS place name, and azimuth from it  
+- Mountain Range (if relevant)  
+- Nearest GNIS place name, and azimuth from it  
 
 **Site characteristics**  
-Elevation (both meters and feet)  
-Slope  
-Aspect  
-Surficial geology  
-Geomorphon  
+- Elevation (both meters and feet)  
+- Slope  
+- Aspect  
+- Surficial geology  
+- Geomorphon  
 
 **Taxonomic**  
 - Searches for synonym to species  

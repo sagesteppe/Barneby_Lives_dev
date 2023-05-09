@@ -1,0 +1,87 @@
+---
+title: "crop"
+author: "steppe"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+
+
+
+
+
+
+```{r library}
+library(sf)
+library(terra)
+library(tidyverse)
+```
+
+```{r define domain of data}
+
+bound <- data.frame(
+  y = c(30, 30, 50, 50, 30), 
+  x = c(-85, -125, -125, -85, -85)
+) %>% 
+  st_as_sf(coords = c('x', 'y'), crs = 4326) %>% 
+  st_bbox() %>% 
+  st_as_sfc()
+
+bb_vals <- c(-125, -85, 30, 50)
+w_illi <- ext(bb_vals)
+
+tile_cells <- st_make_grid(
+  bound,
+  what = "polygons", square = T, flat_topped = F, crs = 4326,
+  n = c(
+  abs(round( (bb_vals[2] - bb_vals[1]) / 5, 0)), # rows
+    abs(round( (bb_vals[3] - bb_vals[4]) / 5, 0))) #cols
+) %>% 
+  st_as_sf() %>% 
+  rename(geometry = x) %>% 
+  mutate(x = st_coordinates(st_centroid(tile_cells))[,1],
+         y = st_coordinates(st_centroid(tile_cells))[,2], 
+         .before = geometry, 
+         across(c('x', 'y'), round, 1),
+         cellname = paste0('n', abs(y), 'w', abs(x))
+         )
+  
+tile_cells
+
+```
+
+
+```{r import data which defines extent of analysis}
+
+geom_p <- '../geodata/geomorphons/'
+geo_f <- paste0(geom_p, list.files(path = geom_p, recursive = T))
+
+geomorphons <- vrt(geo_f)
+w_illi <- ext(c(-125, -85, 30, 50))
+
+geomorphons <- crop(geomorphons, w_illi)
+plot(geomorphons)
+
+makeTiles()
+
+(125-85) / 5 # 8 tiles x
+(50-30) / 5 # 4 tiles y
+
+
+```
+
+
+
+```{r import states to crop to}
+counties <- st_read('../geodata/USCounties')
+st <- tigris::states() %>% select(STATEFP, STUSPS, STATE = NAME) %>% 
+  filter(STUSPS %in% c('AZ', 'AK', 'CA', 'CO', 'ID', 'KS', 'NE', 'ND', 'NM', 'NV', 
+                       'MN', 'MT', 'SD', 'TX', 'OK', 'OR', 'UT', 'WA', 'WY'))
+```
+
+```{r}
+ggplot() + 
+  geom_sf(data = st, aes(fill = STATEFP), color = NA)
+```
+
