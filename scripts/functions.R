@@ -12,7 +12,7 @@ mason <- function(dirin, dirout, grid, fnames, ...){
 
   # create and crop the virtual raster
   virtualRast <- terra::vrt(paths2rast)
- # virtualRast_sub <- terra::crop(virtualRast, terra::ext(grid))
+  virtualRast_sub <- terra::crop(virtualRast, terra::ext(grid))
 
   # set file names and write out product
   columns <- terra::values(grid)
@@ -22,7 +22,6 @@ mason <- function(dirin, dirout, grid, fnames, ...){
   fname <- file.path(dirout, paste0(cellname, ".tif"))
   terra::makeTiles(virtualRast_sub, grid, filename = fname, na.rm = F)
   
-  return(fname)
   rm(virtualRast_sub)
   gc()
 

@@ -60,6 +60,10 @@ mason(dirin = '../geodata_raw/aspect/',
 mason(dirin = '../geodata_raw/slope/',
       dirout = '../geodata/slope/',
       grid = tile_cellsV, fnames = 'cellname')
+      
+mason(dirin = '../geodata_raw/elevation/',
+      dirout = '../geodata/elevation/',
+      grid = tile_cellsV, fnames = 'cellname')
 
 rm(mason)
 ```
@@ -175,12 +179,12 @@ st_write(allotments, dsn = file.path('../geodata/allotments', 'allotments.shp'),
 rm(blm, usfs, allotments)
 ```
 
-```{r public land survey system only for west the front range}
+```{r public land survey system only for land west of CO border, eval = F}
 
 
 bound_nm <- data.frame(
   y = c(31, 31, 50, 50, 31), 
-  x = c(-105, -125, -125, -105, -103)
+  x = c(-95, -125, -125, -95, -95)
 ) %>% 
   st_as_sf(coords = c('x', 'y'), crs = 4326) %>% 
   st_bbox() %>% 
@@ -190,33 +194,32 @@ township <- st_read(
   '../geodata_raw/nationalPLSS/ilmocplss.gdb', layer = 'PLSSTownship', quiet = T
 ) %>% 
   st_cast('POLYGON') %>% 
-  select(TWNSHPLAB)
+  select(TWNSHPLAB, PLSSID)
 
 bound_nm <- st_transform(bound_nm, st_crs(township))
 township <- township[st_intersects(township, bound_nm) %>% lengths > 0, ]
+township <- st_drop_geometry(township)
 
 section <- st_read(
   '../geodata_raw/nationalPLSS/ilmocplss.gdb', layer = 'PLSSFirstDivision', quiet = T
 ) %>% 
   st_cast('POLYGON') %>% 
-  select(FRSTDIVLAB)
+  select(FRSTDIVLAB, PLSSID, FRSTDIVID)
 
 section <- section[st_intersects(section, bound_nm) %>% lengths > 0, ]
 
-trs <- st_join(township, section, .predicate = st_overlaps) %>% 
-  mutate(TRS = paste0(TWNSHPLAB, ' S', FRSTDIVLAB)) %>% 
+trs <- inner_join(section, township, 'PLSSID') %>% 
+  mutate(TRS = paste(TWNSHPLAB, FRSTDIVLAB)) %>% 
   select(TRS)
-
-plot(trs)
 
 before <- object.size(trs)
 trs <- st_simplify(trs)
 after <- object.size(trs)
-after
+object.size(trs)
 
 st_write(trs, 
          dsn = file.path('../geodata/plss', 'plss.shp'), quiet = T)
 
-rm(section, township, trs)
+rm(section, township, trs, bound_nm, before, after)
 ```
 
