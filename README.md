@@ -27,7 +27,7 @@ BarnebyLives! Is meant to supplement, not supplant, collectors field note endeav
 - Consults taxonomic authors abbreviations to ensure correct spelling 
 
 **Directions**  
-- directions to a parking spot can be acquired from Google Maps; however this implies the location is drivable in the first place. This will require interactive alterations from the user. 
+- directions to a parking spot can be acquired from Google Maps; however this implies the location can be driven to in the first place. This will require interactive alterations from the user. 
 
 **Other features include**   
 - Date parsing, e.g. convert date into congruent museum formats (month in roman numerals)  
@@ -36,7 +36,7 @@ BarnebyLives! Is meant to supplement, not supplant, collectors field note endeav
 
 If the datasheet which is submitted to BarnebyLives! contains text in a cell, the program WILL NOT BE QUERIED for that variable if it is under 'Site Characteristics'. 
 
-Currently BarnebyLives! Is being run on a juiced up computer either in Rogers Park Chicago or Reno. The amount of data which it queries is very large. Please let me know if you have a query and I will run it for you. If you only collect from a smaller portion of the West, e.g. a certain state, or FS/BLM Unit/Field Office, you should be able to set up a local instance. Although, the document for such an endeavor is nascent. 
+Currently BarnebyLives! Is being run on a juiced up computer either in Rogers Park Chicago or Reno. The amount of data which it queries is very large. Please let me know if you have a query and I will run it for you. If you only collect from a smaller portion of the West, e.g. a certain state, or FS/BLM Unit/Field Office, you should be able to set up a local instance. Although, the documentation for such an endeavor is nascent the endeavor is simple, see "crop2boundary" for the workflow. 
 
 *BarnebyLives! Was named after Rupert Charles Barneby, botanist extraordinaire, artist, socialite, and kind hearted human being. He is the hero the West needs not racist, misogynists, such as Hayduke. Hence, BarnebyLives!*
 

@@ -1,0 +1,75 @@
+---
+title: "Barneby Lives!"
+author: "steppe"
+date: "9/13/2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(kewr)
+```
+
+
+
+stages...
+verify the spelling of the genus (parse these from the POWO webshot)
+verify the spelling of the epithet (parse these from the POWO webshot)
+
+if not verified
+fuzzy match genus... (somehow get a local list.....)
+fuzzy match epithet...
+
+find authorship...
+
+
+```{r}
+re <- search_powo("Ivesia lycopodioides")
+
+# some considerations.... 
+
+# If the species cannot be found, RESULTS will be NULL 
+search_powo("Ivesia lycopodioides var. lycopodioides")
+# if results are NULL, can we strip from subsp./var./ssp. until the end to query only species?
+
+# in the situation where there is a synonym of the group RESULTS will be a list of length two. 
+re_syn <- search_powo("Ivesia lycopodioides")
+# results will be a list of length 2
+
+# when the appropriate name is searched RESULTS will be a list of length one...
+re_perf <- search_powo("Potentilla lycopodioides")
+
+
+
+re1 <- re[['results']]
+
+```
+
+
+
+```{r}
+
+data("WFO.example")
+
+WFO.remember()
+
+test <- WorldFlora::WFO.match(
+  spec.data = WFO.example, 
+   spec.name = 'binomial',
+   Fuzzy = 0.1)
+
+family_spellings <- vascular.families %>% 
+  dplyr::pull(Family)
+
+
+pec.test <- data.frame(spec.name=c("Faidherbia albida", "Acacia albida",
+"Faidherbia albidum", "Faidherbia albidus",
+"Faidherbia albiida",
+"Prunus africanus", "Prunos africanea",
+"Prunus afrocaneus", "Prunus afrocaneos"))
+
+match1 <- WFO.match.fuzzyjoin(spec.data=spec.test, WFO.data=WFO.example,
+fuzzydist.max = 6)
+```
+
+   
