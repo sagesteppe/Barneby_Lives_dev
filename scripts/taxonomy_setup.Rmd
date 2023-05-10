@@ -10,6 +10,7 @@ library(tidyverse)
 library(kewr)
 library(WorldFlora)
 WFO.remember()
+source('functions.R')
 ```
 
 
@@ -25,71 +26,18 @@ find authorship...
 
 
 ```{r}
-x <- search_powo("Ivesia lycopodioides")
-# some considerations.... 
 
-# If the species cannot be found, RESULTS will be NULL 
-re_none <- search_powo("Ivesia lycopodioides var. lycopodioides")
+dropped_infra <- search_powo("Ivesia lycopodioides var. lycopodioides")
+valid_binomial <- search_powo("Ivesia lycopodioides")
+kept_infra <- search_powo("Potentilla lycopodioides var. megalopetala")
+what_do_w_authority_autonyms <- search_powo("Potentilla lycopodioides var. lycopodioides")
 
-try_again <- 
+powo_searcher("Potentilla lycopodioides var. megalopetala")
+powo_searcher("Potentilla lycopodioides var. lycopodioides")
 
-
-
-is.null(re_none[["results"]]){
-  
-  try_again
-  
-} else {final <- result_grabber(query_results)} 
-
-# if results are NULL, can we strip from subsp./var./ssp. until the end to query only species?
-
-# in the situation where there is a synonym of the group RESULTS will be a list of length two. 
-re_syn <- search_powo("Ivesia lycopodioides")
-# results will be a list of length 2
-
-# when the appropriate name is searched RESULTS will be a list of length one...
-re_perf <- search_powo("Potentilla lycopodioides")
+lapply(c('Poa annua', 'Linnaea borealis'), powo_searcher)
 
 
-
-
-# once everything has gone correctly - i.e. we have found the species, we come to
-# this stage of the process where we extract the values. 
-
-result_grabber <- function(x){
-
-  # subset the appropriate data frame, there is one if clean data were entered, 
-  # and two if a synonym was entered.
-  results <- x[['results']]
-  resultT <- data.frame(results[which(lapply(results, length) == 8)])
-
-  # the main variables which all results should have. 
-  family = resultT$family
-  authority = resultT$author
-  full_name = resultT$name
-  split_name <- unlist(str_split(full_name, pattern = " "))
-  genus = split_name[1]
-  epithet = split_name[2]
-
-  # the infra species information if relevant. 
-  if( length(split_name) > 2){
-     infraspecies = split_name[length(split_name)]
-  } else {infraspecies = NA}
-
-  if( length(split_name) > 2){
-     infrarank = str_extract(full_name, ' var\\. | spp\\. | subsp\\. ') |>
-       str_trim(side = 'both')
-  } else {infrarank = NA}
-  
-  taxonomic_info <- data.frame(
-    family, name_authority = paste(full_name, authority), 
-    full_name, genus, epithet, infrarank, infraspecies, authority
-  )
-  
-  return(taxonomic_info)
-}
-
-result_grabber(re_syn)
 
 ```
 
