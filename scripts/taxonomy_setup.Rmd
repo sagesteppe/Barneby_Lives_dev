@@ -13,10 +13,40 @@ WFO.remember()
 source('functions.R')
 ```
 
+# the first letter of the genus must be correct, 
+# the first three letters of the species must be correct
+
+
+```{r}
+
+
+cla <- data.table::fread('../taxonomic_data/WFO_Backbone/classification.txt')
+genLKPtab <- unique(cla, by = 'genus')[taxonomicStatus == 'Accepted','genus'] %>% 
+  arrange(genus) %>% 
+  mutate(Grp = str_extract(genus, '[A-Z][a-z]{1}'))%>% 
+  rename(strings = genus)
+
+speLKPtab <- unique(cla, by = 'specificEpithet')[
+  taxonomicStatus == 'Accepted','specificEpithet'] %>% 
+  arrange(specificEpithet) %>% 
+  mutate(Grp = str_extract(specificEpithet, '[a-z]{3}')) %>% 
+  rename(strings = specificEpithet)
+
+
+spell_check('Poa annua') # works
+spell_check('Poar annua') # works
+spell_check('Poa annur') # works
+spell_check('Poar annur') # works
+spell_check('Pou annua') # works
+
+
+```
 
 stages...
 verify the spelling of the genus (parse these from the POWO webshot)
 verify the spelling of the epithet (parse these from the POWO webshot)
+
+
 
 if not verified
 fuzzy match genus... (somehow get a local list.....)
@@ -26,42 +56,10 @@ find authorship...
 
 
 ```{r}
-
-dropped_infra <- search_powo("Ivesia lycopodioides var. lycopodioides")
-valid_binomial <- search_powo("Ivesia lycopodioides")
-kept_infra <- search_powo("Potentilla lycopodioides var. megalopetala")
-what_do_w_authority_autonyms <- search_powo("Potentilla lycopodioides var. lycopodioides")
-
-powo_searcher("Potentilla lycopodioides var. megalopetala")
-powo_searcher("Potentilla lycopodioides var. lycopodioides")
-
-lapply(c('Poa annua', 'Linnaea borealis'), powo_searcher)
-
-
-
+lapply(c('Cryptantha glomerata', 'Sphenosciadium capitellatum'), powo_searcher)
 ```
 
 
 
-```{r}
-
-test <- WorldFlora::WFO.match(
-  spec.data = WFO.example, 
-   spec.name = 'binomial',
-   Fuzzy = 0.1)
-
-family_spellings <- vascular.families %>% 
-  dplyr::pull(Family)
-
-
-pec.test <- data.frame(spec.name=c("Faidherbia albida", "Acacia albida",
-"Faidherbia albidum", "Faidherbia albidus",
-"Faidherbia albiida",
-"Prunus africanus", "Prunos africanea",
-"Prunus afrocaneus", "Prunus afrocaneos"))
-
-match1 <- WFO.match.fuzzyjoin(spec.data=spec.test, WFO.data=WFO.example,
-fuzzydist.max = 6)
-```
 
    
