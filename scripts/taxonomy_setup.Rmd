@@ -13,33 +13,29 @@ library(WorldFlora)
 source('functions.R')
 ```
 
-# the first letter of the genus must be correct, 
+# the first two letters of the genus must be correct, 
 # the first three letters of the species must be correct
-
 
 ```{r prepare materials for look up tables, eval = F}
 
-cla <- data.table::fread('../taxonomic_data/WFO_Backbone/classification.txt', na.strings = "")
+cla <- data.table::fread('../taxonomic_data_raw/WFO_Backbone/classification.txt', na.strings = "")
 
-epiLKPtab <- cla[, c('scientificName', 'specificEpithet', 'infraspecificEpithet', 'verbatimTaxonRank')]
-epiLKPtab <- filter(epiLKPtab, is.na(verbatimTaxonRank) | verbatimTaxonRank != "f.")
+sppLKPtab <- cla[, c('scientificName', 'specificEpithet', 'infraspecificEpithet', 'verbatimTaxonRank')]
+sppLKPtab <- filter(sppLKPtab, is.na(verbatimTaxonRank) | verbatimTaxonRank != "f.")
 
 genLKPtab <- unique(cla, by = 'genus')[taxonomicStatus == 'Accepted','genus'] %>% 
   arrange(genus) %>% 
   mutate(Grp = str_extract(genus, '[A-Z][a-z]{1}'))%>% 
   rename(strings = genus)
-speLKPtab <- unique(cla, by = 'specificEpithet')[
+epiLKPtab <- unique(cla, by = 'specificEpithet')[
   taxonomicStatus == 'Accepted','specificEpithet'] %>% 
   arrange(specificEpithet) %>% 
   mutate(Grp = str_extract(specificEpithet, '[a-z]{3}')) %>% 
   rename(strings = specificEpithet)
 
-
-spell_check('Penstemon scariosus var. garrettii') # works
-spell_check('Penstemen scariosus var. garrettii') # works
-spell_check('Penstemen scariosius var garratti') # works
-spell_check('Penstemen scariosius ssp garratti') # works
-spell_check('Penstemen scariosus') # works
+write.csv(sppLKPtab, '../taxonomic_data/species_lookup_table.csv', row.names = F)
+write.csv(epiLKPtab, '../taxonomic_data/epithet_lookup_table.csv', row.names = F)
+write.csv(genLKPtab, '../taxonomic_data/genus_lookup_table.csv', row.names = F)
 
 ```
 
@@ -48,6 +44,48 @@ spell_check('Penstemen scariosus') # works
 lapply(c('Cryptantha glomerata', 'Sphenosciadium capitellatum'), powo_searcher)
 ```
 
+```{r}
+library(sf)
+
+dummy_pts <- data.frame(
+  collectionNo = paste0(rep('RCB', 20), seq(1:20)),
+  x = runif(20, min = -120, max = -85), 
+  y = runif(20, min = 35, max = 48)
+) %>% sf::st_as_sf(coords = c('x', 'y'), crs = 4269)
+
+
+states_sf <- st_read('../geodata/political/political.shp', quiet = T)
+
+map_maker <- function(x, states, path, collection_col){
+  
+  if(st_crs(x) == sf::st_crs(states)) {
+    pts } else {pts <- sf::st_transform(x, sf::st_crs(states))}
+  
+  ints <- sf::st_intersection(pts, states)
+  
+  focal_state <- dplyr::filter(states, STATE == ints$STATE)
+  
+  p <- ggplot() + 
+    geom_sf(data = focal_state, fill = NA, color = 'grey15') + 
+    geom_sf(data = pts, size = 0.5) +
+    theme_void() 
+  
+  fname <- file.path(path, 'maps', paste0('map_', sf::st_drop_geometry(x[1,'collectionNo']), '.png'))
+  ggsave(filename =  fname, plot = p, device = 'png', dpi = 300, width = 1, height = 1, units = 'in', 
+         bg = 'transparent')
+}
+
+
+dummy_pts_l <- split(dummy_pts, dummy_pts$collectionNo)
+
+out <- lapply(dummy_pts_l, map_maker, states_sf, '../results', collection_col = 'collectionNo')
+
+
+ggplot() + 
+    geom_sf(data = states_sf, fill = NA, color = 'grey15') + 
+    geom_sf(data = dummy_pts, size = 0.5)
+
+```
 
 
 
