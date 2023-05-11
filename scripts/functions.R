@@ -271,3 +271,93 @@ map_maker <- function(x, states, path, collection_col){
          bg = 'transparent')
 }
 
+
+#' gather political site information
+#' 
+#' this function grabs information on the state, county, and township of collections
+#' @param x an sf data frame of collection points
+#' @param y a column which unambiguously identifies each collection
+political_grabber <- function(x) {
+  
+  political <- sf::st_read('../geodata/political/political.shp', quiet = T)
+  allotment <- sf::st_read('../geodata/allotments/allotments.shp', quiet = T)
+  plss <- sf::st_read('../geodata/plss/plss.shp', quiet = T)
+  ownership <- sf::st_read('../geodata/pad/pad.shp', quiet = T)
+  
+  # write attributes to data set
+  
+  x <- sf::st_join(x, political)
+  x <- sf::st_join(x, allotment)
+  x <- sf::st_join(x, ownership)
+  
+  x_plss <- sf::st_transform(x, sf::st_crs(plss))
+  x_plss <- sf::st_join(x_plss, plss) %>% 
+    sf::st_drop_geometry()
+  
+  x_vars <- dplyr::left_join(x, x_plss) %>% 
+    relocate(any_of(c('State', 'County', 'Mang_Name', 'Unit_Nm', 'trs')),
+             .before = geometry)
+  return(x_vars)
+  
+  rm(political, allotment, plss, ownership)
+}
+
+
+
+#' gather place and site information
+#' 
+#' this function grabs information on the state, county, and township of collections
+#' @param x an sf data frame of collection points
+#' @param y a column which unambiguously identifies each collection
+place_grabber <- function(x) {
+  
+  mountains <- sf::st_read('../geodata/mountains/mountains.shp', quiet = T)
+  places <- sf::st_read('../geodata/places/places.shp', quiet = T)
+  
+  x <- sf::st_join(x, mountains)
+  
+  st_nearest(x, places)
+  x <- sf::st_join(x, places)
+  
+  return(x)
+  
+}
+
+
+
+
+#' gather distance and azimuth from shop to center of town
+#'
+#' Help provide some simple context between the building and the 
+#' @param x an sf/tibble/dataframe of locations with associated nearest locality data
+#' @param places_data an sf/dataframe/dataframe which contains coordinates for the locations in the data
+distAZE <- function(x, places_data){
+  
+  locality <- sf::st_drop_geometry(x)
+  locality <- locality[1, 'Locality']
+  
+  focal <- places_data[grep(locality, places_data$NAME), ]
+  if(nrow(focal) > 1){
+    union_loc <- sf::st_union(x) |> sf::st_point_on_surface()
+    focal <- focal[sf::st_nearest_feature(union_loc, focal),]
+  }
+  
+  location_from <- sf::st_centroid(focal)
+  
+  location_from <- sf::st_transform(location_from, 5070)
+  x_planar <- sf::st_transform(x, 5070)
+  distances <- sf::st_distance(location_from, x_planar, which = 'Euclidean')
+  
+  azy <- nngeo::st_azimuth(
+    location_from, 
+    x_planar
+  )
+  
+  distances <- data.frame(
+    st_drop_geometry(x),
+    Distance = round(as.numeric(distances / 1609.34), 1),
+    Azimuth = round(as.numeric(azy), 0),
+    geometry = x[,'geometry']
+  )
+  
+}

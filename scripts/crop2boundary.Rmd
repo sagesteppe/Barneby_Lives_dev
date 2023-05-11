@@ -223,3 +223,29 @@ st_write(trs,
 rm(section, township, trs, bound_nm, before, after)
 ```
 
+```{r modify names of variables to be in proper formats, eval = F}
+
+
+sf::st_read('../geodata/political/political.shp', quiet = T) %>% 
+  rename(County = COUNTY, State = STATE) %>% 
+  st_write(., '../geodata/political/political.shp', quiet = T, append = F)
+
+sf::st_read('../geodata/allotments/allotments.shp', quiet = T) %>% 
+  dplyr::mutate(Allotment = str_to_title(ALLOT_NAME)) %>% 
+  dplyr::select(-ALLOT_NAME) %>% 
+  st_write(., '../geodata/allotments/allotments.shp', quiet = T, append = F)
+
+sf::st_read('../geodata/plss/plss.shp', quiet = T) %>% 
+  rename(trs = TRS) %>% 
+  st_write(., '../geodata/plss/plss.shp', quiet = T, append = F)
+
+sf::st_read('../geodata/pad/pad.shp', quiet = T) %>% 
+  sf::st_make_valid() %>% 
+  dplyr::filter(sf::st_is_valid(.)) %>% 
+  mutate(Unit_Nm = str_replace(Unit_Nm, "National Forest", "NF"),
+         Unit_Nm = str_replace(Unit_Nm, "Field Office", "FO"),
+         Unit_Nm = str_replace(Unit_Nm, "National Wildlife Refuge", "NWR")) %>% 
+  st_write(., '../geodata/pad/pad.shp', quiet = T, append = F)
+
+```
+

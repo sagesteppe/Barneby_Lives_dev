@@ -1,0 +1,49 @@
+---
+title: "Barneby Lives usage example"
+author: "steppe"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r}
+dummy_pts <- data.frame(
+  collectionNo = paste0(rep('RCB', 50), seq(1:50)),
+  day = c(sample(1:31, size = 50, replace = T)),
+  month = c(sample(5:10, size = 50, replace = T)),
+  year = 2023,
+  x = runif(50, min = -120, max = -85), 
+  y = runif(50, min = 35, max = 48)
+) %>% sf::st_as_sf(coords = c(x = 'x', y = 'y'), crs = 4326)
+
+```
+
+```{r Acquire administrative geodata}
+
+political <- sf::st_read('../geodata/political/political.shp', quiet = T)
+allotment <- sf::st_read('../geodata/allotments/allotments.shp', quiet = T)
+plss <- sf::st_read('../geodata/plss/plss.shp', quiet = T)
+ownership <- sf::st_read('../geodata/pad/pad.shp', quiet = T)
+
+x <- sf::st_join(x, political) 
+x <- sf::st_join(x, allotment) 
+x <- sf::st_join(x, ownership)
+
+x_plss <- sf::st_transform(x, sf::st_crs(plss))
+x_plss <- sf::st_join(x_plss, plss) 
+
+x_vars <- dplyr::left_join(x, x_plss)
+
+
+places <- sf::st_read('../geodata/places/places.shp', quiet = T)
+
+head(dummy_ownership)
+  
+out <- political_grabber(dummy_pts)
+out <- place_grabber(dummy_pts)
+
+# if within 0.5 km of place, use
+# if dist > 0.5 km direct
+
+```
+
