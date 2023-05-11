@@ -132,10 +132,10 @@ powo_searcher <- function(x) {
   
   # this is the end of the process, return empty results without error, or real results
   if (exists('taxonomic_info')) {
-    return(taxonomic_info)
+    return(cbind(query = x, taxonomic_info))
   } else {
     taxonomic_info <- result_grabber(results_to_process)
-    return(taxonomic_info)
+    return(cbind(query = x, taxonomic_info))
   }
 }
 

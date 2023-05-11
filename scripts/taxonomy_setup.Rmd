@@ -41,7 +41,6 @@ spell_check('Penstemen scariosius var garratti') # works
 spell_check('Penstemen scariosius ssp garratti') # works
 spell_check('Penstemen scariosus') # works
 
-
 ```
 
 
