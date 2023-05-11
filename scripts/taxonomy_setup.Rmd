@@ -9,7 +9,7 @@ output: html_document
 library(tidyverse)
 library(kewr)
 library(WorldFlora)
-WFO.remember()
+# WFO.remember()
 source('functions.R')
 ```
 
@@ -17,15 +17,17 @@ source('functions.R')
 # the first three letters of the species must be correct
 
 
-```{r}
+```{r prepare materials for look up tables, eval = F}
 
+cla <- data.table::fread('../taxonomic_data/WFO_Backbone/classification.txt', na.strings = "")
 
-cla <- data.table::fread('../taxonomic_data/WFO_Backbone/classification.txt')
+epiLKPtab <- cla[, c('scientificName', 'specificEpithet', 'infraspecificEpithet', 'verbatimTaxonRank')]
+epiLKPtab <- filter(epiLKPtab, is.na(verbatimTaxonRank) | verbatimTaxonRank != "f.")
+
 genLKPtab <- unique(cla, by = 'genus')[taxonomicStatus == 'Accepted','genus'] %>% 
   arrange(genus) %>% 
   mutate(Grp = str_extract(genus, '[A-Z][a-z]{1}'))%>% 
   rename(strings = genus)
-
 speLKPtab <- unique(cla, by = 'specificEpithet')[
   taxonomicStatus == 'Accepted','specificEpithet'] %>% 
   arrange(specificEpithet) %>% 
@@ -33,26 +35,14 @@ speLKPtab <- unique(cla, by = 'specificEpithet')[
   rename(strings = specificEpithet)
 
 
-spell_check('Poa annua') # works
-spell_check('Poar annua') # works
-spell_check('Poa annur') # works
-spell_check('Poar annur') # works
-spell_check('Pou annua') # works
+spell_check('Penstemon scariosus var. garrettii') # works
+spell_check('Penstemen scariosus var. garrettii') # works
+spell_check('Penstemen scariosius var garratti') # works
+spell_check('Penstemen scariosius ssp garratti') # works
+spell_check('Penstemen scariosus') # works
 
 
 ```
-
-stages...
-verify the spelling of the genus (parse these from the POWO webshot)
-verify the spelling of the epithet (parse these from the POWO webshot)
-
-
-
-if not verified
-fuzzy match genus... (somehow get a local list.....)
-fuzzy match epithet...
-
-find authorship...
 
 
 ```{r}
