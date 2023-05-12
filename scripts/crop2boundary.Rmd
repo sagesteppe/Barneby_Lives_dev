@@ -247,5 +247,36 @@ sf::st_read('../geodata/pad/pad.shp', quiet = T) %>%
          Unit_Nm = str_replace(Unit_Nm, "National Wildlife Refuge", "NWR")) %>% 
   st_write(., '../geodata/pad/pad.shp', quiet = T, append = F)
 
+
+sf::st_read('../geodata/places/places.shp', quiet = T) %>% 
+  mutate(
+    fetr_nm = str_remove(fetr_nm, ' Census Designated Place' ),
+    fetr_nm = str_remove(fetr_nm, 'Township of '), 
+    fetr_nm = str_remove(fetr_nm, ' \\(historical\\)'),
+    fetr_nm = str_remove(fetr_nm, 'Village of '),
+    fetr_nm = str_remove(fetr_nm, 'Town of '), 
+    fetr_nm = str_remove(fetr_nm, 'City of ')
+    ) %>% 
+  filter(!str_detect(fetr_nm,
+                     'Election Precinct| County|Ditch|Unorganized Territory|Canal|Lateral|Division|
+                     River Division|Drain Number|Waste Pond|Commissioner District|Lake Superior|Lake Michigan')) %>% 
+  st_write(., '../geodata/places/places.shp', quiet = T, append = F)
+
+
 ```
+
+
+' Lake', ' lk.'
+' Canyon', ' cnyn.'
+' Campground', ' cmpgrnd.'
+' Creek', ' crk.'
+' River', ' rvr.'
+' Reservoir', ' rsvr.'
+' Fork', ' fk.'
+' Number', ' #'
+' Mountain', ' mtn.'
+' Mountains', ' mtns.'
+' Meadow', ' mdw.'
+' Meadows' , ' mdws.'
+' Point', ' pt.'
 
