@@ -30,8 +30,14 @@ dummy_pts <- data.frame(
 
 places <- sf::st_read('../geodata/places/places.shp', quiet = T)
 
-out <- political_grabber(dummy_pts)
-out <- place_grabber(dummy_pts)
+out1 <- political_grabber(dummy_pts)
+out2 <- place_grabber(dummy_pts)
+out3 <- physical_grabber(dummy_pts)
+
+
+library(scales)    
+ scales::comma(1234) 
+
 
 rm(out)
 # if within 0.5 km of place, use
