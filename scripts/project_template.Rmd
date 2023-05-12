@@ -15,33 +15,32 @@ source('functions.R')
 
 ```{r}
 dummy_pts <- data.frame(
-  collectionNo = paste0(rep('RCB', 500), seq(1:500)),
-  day = c(sample(1:31, size = 500, replace = T)),
-  month = c(sample(5:10, size = 500, replace = T)),
+  collectionNo = paste0(rep('RCB', 1000), seq(1:1000)),
+  day = c(sample(1:31, size = 1000, replace = T)),
+  month = c(sample(5:10, size = 1000, replace = T)),
   year = 2023,
-  x = runif(500, min = -120, max = -100), 
-  y = runif(500, min = 35, max = 48)
+  x = runif(1000, min = -120, max = -100), 
+  y = runif(1000, min = 35, max = 48)
 ) %>% sf::st_as_sf(coords = c(x = 'x', y = 'y'), crs = 4326)
 
 ```
 
 ```{r Acquire administrative geodata}
 
-
 places <- sf::st_read('../geodata/places/places.shp', quiet = T)
 
-out1 <- political_grabber(dummy_pts)
+out1 <- political_grabber(dummy_pts, 'collectionNo')
 out2 <- place_grabber(dummy_pts)
 out3 <- physical_grabber(dummy_pts)
 
+out <- out1 %>% 
+  dplyr::mutate(
+    Gen = paste0(
+      Country, ', ', State, ', ', County, ' Co., ', Mang_Name, " ", Unit_Nm, " ", trs), 
+    Gen = stringr::str_replace_all(Gen, "NA", ""), 
+    Gen = stringr::str_replace_all(Gen, "  ", ""))
 
-library(scales)    
- scales::comma(1234) 
 
-
-rm(out)
-# if within 0.5 km of place, use
-# if dist > 0.5 km direct
 
 ```
 

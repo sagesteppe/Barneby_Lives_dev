@@ -277,7 +277,9 @@ map_maker <- function(x, states, path, collection_col){
 #' this function grabs information on the state, county, and township of collections
 #' @param x an sf data frame of collection points
 #' @param y a column which unambiguously identifies each collection
-political_grabber <- function(x) {
+political_grabber <- function(x, y) {
+  
+  y_quo <- rlang::enquo(y)
   
   political <- sf::st_read('../geodata/political/political.shp', quiet = T)
   allotment <- sf::st_read('../geodata/allotments/allotments.shp', quiet = T)
@@ -291,18 +293,23 @@ political_grabber <- function(x) {
   x <- sf::st_join(x, ownership)
   
   x_plss <- sf::st_transform(x, sf::st_crs(plss))
-  x_plss <- sf::st_join(x_plss, plss) %>% 
-    sf::st_drop_geometry()
+  x_plss <- sf::st_join(x_plss, plss) |>
+    sf::st_drop_geometry() %>% 
+    dplyr::select(y, trs)
   
-  x_vars <- dplyr::left_join(x, x_plss) %>% 
-    relocate(any_of(c('State', 'County', 'Mang_Name', 'Unit_Nm', 'trs')),
-             .before = geometry)
+  x_vars <- dplyr::left_join(x, x_plss, by = y) |> 
+    dplyr::mutate(Country = 'U.S.A.') |> 
+    dplyr::relocate(any_of(c('Country', 'State', 'County', 'Mang_Name', 'Unit_Nm', 'trs')),
+             .before = geometry) |>
+    dplyr::distinct(.keep_all = T) |> # some points may theoretically fall on an exact border
+    dplyr::group_by( .data[[y]] ) |>
+    dplyr::slice_head(n = 1) |> 
+    dplyr::ungroup()
+  
   return(x_vars)
   
   rm(political, allotment, plss, ownership)
 }
-
-
 
 #' gather place and site information
 #' 
@@ -328,13 +335,13 @@ place_grabber <- function(x) {
   
   places <- data.frame(
     'place' = sf::st_drop_geometry(nearest_place), distance, azimuth)  |>
-    rename(place = fetr_nm)
+    dplyr::rename(place = fetr_nm)
     
   x <- dplyr::bind_cols(x, places)|>
     dplyr::mutate(area_from =
                     paste0('From ', place, ' ', distance, ' km at ', azimuth, '°.'),
                   .before = geometry) |>
-    select(-place, -distance, -azimuth) 
+    dplyr::select(-place, -distance, -azimuth) 
   
   return(x)
 }
@@ -402,11 +409,19 @@ physical_grabber <- function(x) {
   
   cols <- c('elevation_m', 'elevation_ft', 'aspect', 'slope', 'geomorphon', 'geology') 
   
-  object <- bind_cols(x, values) %>% 
-    relocate(cols, .before = geometry)
+  object <- dplyr::bind_cols(x, values) |> 
+    dplyr::relocate(tidyselect::all_of(cols), .before = geometry) |> 
+    dplyr::mutate(
+      physical_environ = 
+        paste0('At ', elevation_ft, ' ft, on a ', geomorphon, ', ', slope,
+               '° slo. and ', aspect, '° asp.; geology: ', geology, '.'
+                                ), .before = geometry)
   
   return(object)
 }
+
+
+
 
 
 
