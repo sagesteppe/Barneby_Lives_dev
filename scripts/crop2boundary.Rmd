@@ -243,8 +243,19 @@ sf::st_read('../geodata/pad/pad.shp', quiet = T) %>%
   sf::st_make_valid() %>% 
   dplyr::filter(sf::st_is_valid(.)) %>% 
   mutate(Unit_Nm = str_replace(Unit_Nm, "National Forest", "NF"),
-         Unit_Nm = str_replace(Unit_Nm, "Field Office", "FO"),
-         Unit_Nm = str_replace(Unit_Nm, "National Wildlife Refuge", "NWR")) %>% 
+         Unit_Nm = str_replace(Unit_Nm, "District Office", "DO"), 
+         Unit_Nm = str_replace(Unit_Nm, "Field Office", "FO"), 
+         Unit_Nm = str_replace(Unit_Nm, "National Park", "NP"),
+         Unit_Nm = str_replace(Unit_Nm, 'National Grassland', 'NG'),
+         Unit_Nm = str_replace(Unit_Nm, "National Wildlife Refuge|National Wildlife Range", "NWR"),
+         Unit_Nm = str_replace(Unit_Nm, 'National Monument', 'NM'),
+         Unit_Nm = str_replace(Unit_Nm, "National Recreation Area", "NRA"), 
+         Unit_Nm = str_replace(Unit_Nm, "State Resource Management Area", "SRMA"), 
+         Unit_Nm = str_replace(Unit_Nm, "State Trust Lands", "STL"), 
+         Unit_Nm = str_replace(Unit_Nm, "Department", "Dept."),
+         Unit_Nm = str_replace(Unit_Nm, "Recreation Area", "Rec. Area"),
+         Unit_Nm = str_replace(Unit_Nm, 'Wildlife Habitat Management Area', "WHMA"), 
+         Unit_Nm = str_replace(Unit_Nm, 'Wildlife Management Area', "WMA")) %>% 
   st_write(., '../geodata/pad/pad.shp', quiet = T, append = F)
 
 
@@ -260,23 +271,24 @@ sf::st_read('../geodata/places/places.shp', quiet = T) %>%
   filter(!str_detect(fetr_nm,
                      'Election Precinct| County|Ditch|Unorganized Territory|Canal|Lateral|Division|
                      River Division|Drain Number|Waste Pond|Commissioner District|Lake Superior|Lake Michigan')) %>% 
+  mutate(
+    fetr_nm = str_replace(fetr_nm, ' Canyon', ' cnyn.'),
+    fetr_nm = str_replace(fetr_nm, ' Campground', ' cmpgrnd.'),
+    fetr_nm = str_replace(fetr_nm, ' Creek', ' crk.'),
+    fetr_nm = str_replace(fetr_nm, ' Fork', ' fk.'),
+    fetr_nm = str_replace(fetr_nm, ' Lake', ' lk.'),
+    fetr_nm = str_replace(fetr_nm, ' Meadows', ' mdws.'),
+    fetr_nm = str_replace(fetr_nm, ' Meadow', ' mdw.'),
+    fetr_nm = str_replace(fetr_nm, ' Mountains', ' mtns.'),
+    fetr_nm = str_replace(fetr_nm, ' Mountain', ' mtn.'),
+    fetr_nm = str_replace(fetr_nm, ' Number', ' #'),
+    fetr_nm = str_replace(fetr_nm, ' Point', ' pt.'),
+    fetr_nm = str_replace(fetr_nm, ' Reservoir', ' rsvr.'),
+    fetr_nm = str_replace(fetr_nm, ' River ', ' rvr.')
+  ) %>% 
   st_write(., '../geodata/places/places.shp', quiet = T, append = F)
-
 
 ```
 
-
-' Lake', ' lk.'
-' Canyon', ' cnyn.'
-' Campground', ' cmpgrnd.'
-' Creek', ' crk.'
-' River', ' rvr.'
-' Reservoir', ' rsvr.'
-' Fork', ' fk.'
-' Number', ' #'
-' Mountain', ' mtn.'
-' Mountains', ' mtns.'
-' Meadow', ' mdw.'
-' Meadows' , ' mdws.'
 ' Point', ' pt.'
 

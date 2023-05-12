@@ -319,20 +319,24 @@ place_grabber <- function(x) {
   nearest_place <- places[sf::st_nearest_feature(dummy_pts, places),]
   distance <- round(
     as.numeric(
-      st_distance(x, nearest_place, by_element = T)),
+      sf::st_distance(x, nearest_place, by_element = T)),
     -2) / 1000 # distance in kilometers
   
   azimuth <- nngeo::st_azimuth(
-    nearest_place, 
-    x) |> round(0)
+    nearest_place, # from 
+    x) |> round(0) # to
   
-  places <- data.frame(place = st_drop_geometry(nearest_place), distance, azimuth)
-  
-  x <- dplyr::bind_cols(x, places) %>% 
-    relocate(any_of(c('place', 'distance', 'azimuth')),
-             .before = geometry)
+  places <- data.frame(
+    'place' = sf::st_drop_geometry(nearest_place), distance, azimuth)  |>
+    rename(place = fetr_nm)
+    
+  x <- dplyr::bind_cols(x, places)|>
+    dplyr::mutate(area_from =
+                    paste0('From ', place, ' ', distance, ' km at ', azimuth, '°.'),
+                  .before = geometry) |>
+    select(-place, -distance, -azimuth) 
   
   return(x)
-  
 }
+
 
