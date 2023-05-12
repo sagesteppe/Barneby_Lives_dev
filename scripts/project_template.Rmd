@@ -32,15 +32,5 @@ places <- sf::st_read('../geodata/places/places.shp', quiet = T)
 out1 <- political_grabber(dummy_pts, 'collectionNo')
 out2 <- place_grabber(dummy_pts)
 out3 <- physical_grabber(dummy_pts)
-
-out <- out1 %>% 
-  dplyr::mutate(
-    Gen = paste0(
-      Country, ', ', State, ', ', County, ' Co., ', Mang_Name, " ", Unit_Nm, " ", trs), 
-    Gen = stringr::str_replace_all(Gen, "NA", ""), 
-    Gen = stringr::str_replace_all(Gen, "  ", ""))
-
-
-
 ```
 

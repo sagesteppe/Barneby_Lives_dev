@@ -301,10 +301,20 @@ political_grabber <- function(x, y) {
     dplyr::mutate(Country = 'U.S.A.') |> 
     dplyr::relocate(any_of(c('Country', 'State', 'County', 'Mang_Name', 'Unit_Nm', 'trs')),
              .before = geometry) |>
-    dplyr::distinct(.keep_all = T) |> # some points may theoretically fall on an exact border
+    dplyr::distinct(.keep_all = T) |> # with large enough sample size some points fall on an exact border
     dplyr::group_by( .data[[y]] ) |>
     dplyr::slice_head(n = 1) |> 
     dplyr::ungroup()
+  
+  x_vars <- x_vars %>% 
+    dplyr::mutate(
+      Gen = paste0(
+        Country, ', ', State, ', ', County, ' Co., ', Mang_Name, " ", Unit_Nm, " ", trs), 
+      Gen = stringr::str_replace_all(Gen, "NA", ""), 
+      Gen = stringr::str_replace_all(Gen, "  ", ""),
+      Gen = stringr::str_trim(Gen),
+      Gen = stringr::str_remove(Gen, ",$"), 
+      .before = geometry)
   
   return(x_vars)
   
