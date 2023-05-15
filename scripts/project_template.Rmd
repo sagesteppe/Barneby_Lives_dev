@@ -63,33 +63,30 @@ IsDate <- function(mydate, date.format = "%m/%d/%y") {
 date <- c('12/11/2003','07/09/2023', '13/01/2016')
 IsDate(date)
 
-stringr::str_split(date, pattern = '/', simplify = T)[,2] # capture the month
 
-
-date_text <- function(x, col2text){
+#' take ISO 8601 date and make it written herbarium label format
+#' 
+#' @param x a data frame with dates
+#' @param y the data frame holding Internationally formatted dates (day, month, year)
+date2text <- function(x, col2text) {
+  x$col2text <- as.Date(x[, col2text], format = "%d/%m/%Y")
+  m <- as.numeric(format(x$col2text, "%m"))
   
-  text_col <- !!enquo(col2text)
+  text <- paste0(format(x$col2text, "%d"), # just grab day of month here
+                 ' ',
+                 month.abb[m], # grab the abbrevation for the month here
+                 ', ',
+                 format(x$col2text, "%Y")) # grab the year here
   
-  month_tab <- data.frame(Month_Num = sprintf("%02d", 1:12), Month_Abb = month.abb)
-  y <- format(as.Date(x[,col2text], format="%d/%m/%Y"), "%Y")
-  d <- format(as.Date(x[,col2text], format="%d/%m/%Y"), "%d")
-  m <- format(as.Date(x[,col2text], format="%d/%m/%Y"), "%m")
-  m_text <- month_tab[m == month_tab$Month_Num, 'Month_Abb']
-  
- # text <- paste0(d, ' ', m, ', ', y)
-  return(m)
+  return(text)
   
 }
 
 fourtet <- data.frame(date, tet = c('abc', 'def', 'ggg'))
 
-t <- date_text(fourtet, 'date')
+fourtet %>% 
+  mutate(dtest = date2text(., 'date'))
 
-
-t %>% 
-  mutate(dtest = date_text(., ))
-
-t == month_tab$Month_Num
 ```
 
 
