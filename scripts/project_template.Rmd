@@ -13,7 +13,7 @@ source('functions.R')
 ```
 
 
-```{r}
+```{r dummy data}
 dummy_pts <- data.frame(
   collectionNo = paste0(rep('RCB', 1000), seq(1:1000)),
   day = c(sample(1:31, size = 1000, replace = T)),
@@ -24,6 +24,76 @@ dummy_pts <- data.frame(
 ) %>% sf::st_as_sf(coords = c(x = 'x', y = 'y'), crs = 4326)
 
 ```
+
+
+# first convert from american date format (m%d%year%) to ISO 8601 for both collection and determination date 
+
+# second from ISO 8601 prepare notation dates for day of collection and date of determination in text format
+
+
+
+```{r Date parsing}
+
+#' create herbarium format dates for specimens
+#' 
+#' this function will return up to two additional columns with x. 'coll_date_text' a text format for the date of collection and 'det_date_text" a shorter text format date for identification
+#' @param x an (sf/tibble/) data frame with both the collection date
+#' and determination date
+#' @param coll_date date of collection, expected to be of the format 'DD/MM/YYYY', minor checks for compliance to the format will be carried out before returning an error.
+#' @param det_date date of determination, same format and processes as above. 
+date_parser <- function(x, coll_date, det_date){
+  
+    if(missing(det_date)) {
+        
+      
+    } else {
+       
+      
+    }
+  
+}
+
+
+# FIRST CHECK IF FORMAT IS CORRECT ... 
+IsDate <- function(mydate, date.format = "%m/%d/%y") {
+  tryCatch(!is.na(as.Date(mydate, date.format)),  
+           error = function(err) {FALSE})  
+}
+
+date <- c('12/11/2003','07/09/2023', '13/01/2016')
+IsDate(date)
+
+stringr::str_split(date, pattern = '/', simplify = T)[,2] # capture the month
+
+
+date_text <- function(x, col2text){
+  
+  text_col <- !!enquo(col2text)
+  
+  month_tab <- data.frame(Month_Num = sprintf("%02d", 1:12), Month_Abb = month.abb)
+  y <- format(as.Date(x[,col2text], format="%d/%m/%Y"), "%Y")
+  d <- format(as.Date(x[,col2text], format="%d/%m/%Y"), "%d")
+  m <- format(as.Date(x[,col2text], format="%d/%m/%Y"), "%m")
+  m_text <- month_tab[m == month_tab$Month_Num, 'Month_Abb']
+  
+ # text <- paste0(d, ' ', m, ', ', y)
+  return(m)
+  
+}
+
+fourtet <- data.frame(date, tet = c('abc', 'def', 'ggg'))
+
+t <- date_text(fourtet, 'date')
+
+
+t %>% 
+  mutate(dtest = date_text(., ))
+
+t == month_tab$Month_Num
+```
+
+
+
 
 ```{r Acquire administrative geodata}
 
