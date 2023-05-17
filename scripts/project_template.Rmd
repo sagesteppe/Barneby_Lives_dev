@@ -26,66 +26,57 @@ dummy_pts <- data.frame(
 ```
 
 
-# first convert from american date format (m%d%year%) to ISO 8601 for both collection and determination date 
+ first convert from american date format (m%d%year%) to ISO 8601 for both collection and determination date 
 
-# second from ISO 8601 prepare notation dates for day of collection and date of determination in text format
+ second from ISO 8601 prepare notation dates for day of collection and date of determination in text format
 
 
 
 ```{r Date parsing}
+
 
 #' create herbarium format dates for specimens
 #' 
 #' this function will return up to two additional columns with x. 'coll_date_text' a text format for the date of collection and 'det_date_text" a shorter text format date for identification
 #' @param x an (sf/tibble/) data frame with both the collection date
 #' and determination date
-#' @param coll_date date of collection, expected to be of the format 'DD/MM/YYYY', minor checks for compliance to the format will be carried out before returning an error.
+#' @param coll_date date of collection, expected to be of the format 'MM/DD/YYYY', minor checks for compliance to the format will be carried out before returning an error.
 #' @param det_date date of determination, same format and processes as above. 
+#' @returns coll_date ISO 8601, det_date ISO 8601, month, day, year, coll_date_text, det_date_text columns for printing onto the label
 date_parser <- function(x, coll_date, det_date){
   
-    if(missing(det_date)) {
-        
-      
-    } else {
-       
-      
-    }
+  coll_date_q <- enquo(coll_date)
+  det_date_q <- enquo(det_date)
   
+  mdy2dmy <- function(x){format(as.Date(x, format = "%m/%d/%Y"), "%d/%m/%Y")}
+  
+  x_dmy <- x |> 
+    mutate(across(.cols = c(!!coll_date_q, !!det_date_q), mdy2dmy,
+           .names = "{col}_dmy"), .before = ncol(.)) |>
+    mutate(across(.cols = c(!!coll_date_q, !!det_date_q), ~ lubridate::month(x),
+           .names = "{col}_mo"))
+  
+  # add in collection dates here
+#    if(missing(det_date)) {
+#      with_date <- dplyr::mutate(x_dmy, coll_date_text = date2text(x_dmy, 'coll_date_dmy'))
+##    } else {
+#     with_date <-  dplyr::mutate(x_dmy, 
+#           coll_date_text = date2text(x_dmy, 'coll_date_dmy'),
+#           det_date_text  = date2text(x_dmy, 'coll_date_dmy'))
+#    }
+  
+  return(x_dmy)
 }
 
+```
 
-# FIRST CHECK IF FORMAT IS CORRECT ... 
-IsDate <- function(mydate, date.format = "%m/%d/%y") {
-  tryCatch(!is.na(as.Date(mydate, date.format)),  
-           error = function(err) {FALSE})  
-}
+```{r}
 
-date <- c('12/11/2003','07/09/2023', '13/01/2016')
-IsDate(date)
+fourtet <- data.frame(col_date = c('12/23/2003','07/09/2023', '1/13/2016'),
+                   #   det_date = c('12/25/2003','07/09/2023', '1/13/2016'),
+                      tet = c('abc', 'def', 'ggg'))
 
-
-#' take ISO 8601 date and make it written herbarium label format
-#' 
-#' @param x a data frame with dates
-#' @param y the data frame holding Internationally formatted dates (day, month, year)
-date2text <- function(x, col2text) {
-  x$col2text <- as.Date(x[, col2text], format = "%d/%m/%Y")
-  m <- as.numeric(format(x$col2text, "%m"))
-  
-  text <- paste0(format(x$col2text, "%d"), # just grab day of month here
-                 ' ',
-                 month.abb[m], # grab the abbrevation for the month here
-                 ', ',
-                 format(x$col2text, "%Y")) # grab the year here
-  
-  return(text)
-  
-}
-
-fourtet <- data.frame(date, tet = c('abc', 'def', 'ggg'))
-
-fourtet %>% 
-  mutate(dtest = date2text(., 'date'))
+date_parser(fourtet, coll_date = 'col_date')
 
 ```
 
@@ -99,5 +90,8 @@ places <- sf::st_read('../geodata/places/places.shp', quiet = T)
 out1 <- political_grabber(dummy_pts, 'collectionNo')
 out2 <- place_grabber(dummy_pts)
 out3 <- physical_grabber(dummy_pts)
+
+
+browseVignettes("ggtree")
 ```
 
