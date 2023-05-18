@@ -461,7 +461,14 @@ date_parser <- function(x, coll_date, det_date){
   det_date_q <- enquo(det_date)
   
   names_v <- c('_dmy', '_day', '_mo',  '_yr', '_text')
-  column_names <- c(paste0(coll_date, names_v), paste0(det_date, names_v) )
+  if(missing(det_date)){
+    column_names <- c(coll_date, paste0(coll_date, names_v))
+  } else {
+    column_names <- c(coll_date, 
+                      paste0(coll_date, names_v), 
+                        det_date, 
+                        paste0(det_date, names_v))
+  }
   
   x_dmy <- x |> 
     mutate(across(.cols = c(!!coll_date_q, !!det_date_q), lubridate::mdy, .names = "{.col}_dmy")) |>
@@ -470,7 +477,7 @@ date_parser <- function(x, coll_date, det_date){
            across(ends_with('_dmy'), ~ lubridate::year(.), .names = "{.col}_yr")) |>
     mutate(across(.cols = c(!!coll_date_q, !!det_date_q), date2text, .names = '{.col}_text')) |>
     rename_with( ~ stringr::str_remove(., '_dmy'), matches("_dmy_.*$")) |>
-    relocate(any_of(column_names), .before = last_col())
+    relocate(any_of(column_names), .before = geometry)
   
   return(x_dmy)
 }
@@ -521,6 +528,8 @@ dms2dd <- function(x, lat, long, dms){
     '°', round(parzer::pz_minute(x$longitude_dd), 2), 
     "'", round(parzer::pz_second(x$longitude_dd), 2)
   )
+  
+  x$longitude_dms <- gsub('-', "", x$longitude_dms)
   
   return(x)
   

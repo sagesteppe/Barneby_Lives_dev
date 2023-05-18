@@ -16,45 +16,44 @@ source('functions.R')
 ```{r dummy data}
 dummy_pts <- data.frame(
   collectionNo = paste0(rep('RCB', 1000), seq(1:1000)),
-  day = c(sample(1:31, size = 1000, replace = T)),
+  day = c(sample(1:30, size = 1000, replace = T)),
   month = c(sample(5:10, size = 1000, replace = T)),
   year = 2023,
   datum = sample(c('nad83', 'nad27', 'wgs84'), size = 1000, replace = T),
   longitude = runif(1000, min = -120, max = -100), 
   latitude = runif(1000, min = 35, max = 48)
-)
+) %>% 
+  mutate(col_date = paste(month, day, year, sep = "/"))
 
 ```
 
 ```{r coordinate parsing and make object spatial in wgs84}
 
 out <- dms2dd(dummy_pts)
-d <- coords2sf(out)
+out <- coords2sf(out)
 
 ```
-
 
 
 ```{r date parsing}
 
-fourtet <- data.frame(col_date = c('12/23/2003','07/09/2023', '1/13/2016'),
-                      det_date = c('12/25/2003','07/09/2023', '1/13/2016'),
-                      tet = c('abc', 'def', 'ggg'))
-
-date_parser(fourtet, coll_date = 'col_date', det_date = 'det_date')
+out <- date_parser(out, coll_date = 'col_date')
 
 ```
 
 
-
-
-```{r Acquire administrative geodata}
+```{r Acquire geodata}
 
 places <- sf::st_read('../geodata/places/places.shp', quiet = T)
 
 out1 <- political_grabber(dummy_pts, 'collectionNo')
 out2 <- place_grabber(dummy_pts)
 out3 <- physical_grabber(dummy_pts)
+
+```
+
+
+```{r gather taxonomic data}
 
 ```
 
