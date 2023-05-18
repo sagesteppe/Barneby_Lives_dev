@@ -19,20 +19,18 @@ dummy_pts <- data.frame(
   day = c(sample(1:31, size = 1000, replace = T)),
   month = c(sample(5:10, size = 1000, replace = T)),
   year = 2023,
+  datum = sample(c('nad83', 'nad27', 'wgs84'), size = 1000, replace = T),
   longitude = runif(1000, min = -120, max = -100), 
   latitude = runif(1000, min = 35, max = 48)
-) %>% sf::st_as_sf(coords = c(x = 'longitude', y = 'latitude'), crs = 4326, remove = F)
+)
 
 ```
 
-```{r coordinate parsing if required}
+```{r coordinate parsing and make object spatial in wgs84}
 
- out <- dms2dd(dummy_pts)
+out <- dms2dd(dummy_pts)
+d <- coords2sf(out)
 
- x <- x |>
-    dplyr::relocate(any_of(
-      c('longitude_dms', 'latitude_dms', 'latitude_dd', 'longitude_dd')), 
-    .before = last_col())
 ```
 
 
