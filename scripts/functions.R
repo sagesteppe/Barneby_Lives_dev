@@ -435,19 +435,16 @@ physical_grabber <- function(x) {
 #' take international format date and make it written herbarium label format
 #' 
 #' @param x a data frame with dates
-#' @param y the data frame holding Internationally formatted dates (day, month, year)
-date2text <- function(x, col2text) {
-  x$col2text <- as.Date(x[, col2text], format = "%d/%m/%Y")
-  m <- as.numeric(format(x$col2text, "%m"))
+date2text <- function(x) {
   
-  text <- paste0(format(x$col2text, "%d"), # just grab day of month here
+  x1 <- lubridate::mdy(x)
+  
+  text <- paste0(lubridate::day(x1), # just grab day of month here
                  ' ',
-                 month.abb[m], # grab the abbrevation for the month here
+                 lubridate::month(x1, abbr = T, label = T), # grab the abbreviation for the month here
                  ', ',
-                 format(x$col2text, "%Y")) # grab the year here
-  
+                 lubridate::year(x1)) # grab the year here
   return(text)
-  
 }
 
 
