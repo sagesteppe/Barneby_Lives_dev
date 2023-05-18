@@ -27,65 +27,12 @@ dummy_pts <- data.frame(
 
 ```{r coordinate parsing if required}
 
-library(parzer)
+ out <- dms2dd(dummy_pts)
 
-#' this function parses coordinates from DMS to decimal degrees
-#'
-#'@param x an input data frame to apply operations too
-#'@param lat a name of the column holding the latitude values
-#'@param long a name of the colymn holding the longitude values
-#'@param dms are coordinates in degrees minutes seconds? TRUE for yes, FALSE for decimal degrees
-dms2dd <- function(x, lat, long, dms){
-  
-  if(missing(lat)){
-    lat = colnames(dummy_pts)[grep('lat', colnames(dummy_pts))] }
-  if(missing(long)){
-    long = colnames(dummy_pts)[grep('long', colnames(dummy_pts))] }
-  
-  if(missing(dms)){
-    dms = long == parzer::parse_lon(long)
-  }
-  
-  if(dms == T){
-    x$latitude_dd = parzer::parse_lat(lat)
-    x$longitude_dd = parzer::pase_lon(long)
-  } else{
-    colnames(x)[which(names(x) == lat)] <- 'latitude_dd'
-    colnames(x)[which(names(x) == long)] <- 'latitude_dd'
-  }
-  
-#  x[,c('latitude_dd', 'longitude_dd')] <- 
-#    sapply(x[c('latitude_dd', 'latitude_dd')], as.numeric)
-  
- # if(x$longitude_dd > 0){longitude_dd * -1}; 
-#  if(x$latitude_dd < 0){latitude_dd * -1}
-  
-  # now overwrite the original DMS values in our exact format
-  
-  return(x)
-
-  latitude_dms = paste0(
-    'N ', parzer::pz_degree(x$latitude_dd),
-    '°', round(parzer::pz_minute(x$latitude_dd), 2),
-    "'", round(parzer::pz_second(x$latitude_dd), 2)
-  )
-
-  longitude_dms = paste0(
-    'W ', parzer::pz_degree(x$longitude_dd), 
-    '°', round(parzer::pz_minute(x$longitude_dd), 2), 
-    "'", round(parzer::pz_second(x$longitude_dd), 2)
-  )
-  
-}
-
-out <- dms2dd(dummy_pts)
-
-# str detect the lat column
-# str detect the long column
-# ensure input lat is North
-# ensure input long is West
-# str detect the datum column, else assume WGS84
-
+ x <- x |>
+    dplyr::relocate(any_of(
+      c('longitude_dms', 'latitude_dms', 'latitude_dd', 'longitude_dd')), 
+    .before = last_col())
 ```
 
 
