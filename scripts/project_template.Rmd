@@ -19,55 +19,78 @@ dummy_pts <- data.frame(
   day = c(sample(1:31, size = 1000, replace = T)),
   month = c(sample(5:10, size = 1000, replace = T)),
   year = 2023,
-  x = runif(1000, min = -120, max = -100), 
-  y = runif(1000, min = 35, max = 48)
-) %>% sf::st_as_sf(coords = c(x = 'x', y = 'y'), crs = 4326)
+  longitude = runif(1000, min = -120, max = -100), 
+  latitude = runif(1000, min = 35, max = 48)
+) %>% sf::st_as_sf(coords = c(x = 'longitude', y = 'latitude'), crs = 4326, remove = F)
 
 ```
 
+```{r coordinate parsing if required}
 
- first convert from american date format (m%d%year%) to ISO 8601 for both collection and determination date 
+library(parzer)
 
- second from ISO 8601 prepare notation dates for day of collection and date of determination in text format
-
-
-
-```{r Date parsing}
-
-
-#' create herbarium format dates for specimens
-#' 
-#' this function will return up to two additional columns with x. 'coll_date_text' a text format for the date of collection and 'det_date_text" a shorter text format date for identification
-#' @param x an (sf/tibble/) data frame with both the collection date
-#' and determination date
-#' @param coll_date date of collection, expected to be of the format 'MM/DD/YYYY', minor checks for compliance to the format will be carried out before returning an error.
-#' @param det_date date of determination, same format and processes as above. 
-#' @returns coll_date ISO 8601, det_date ISO 8601, month, day, year, coll_date_text, det_date_text columns for printing onto the label
-date_parser <- function(x, coll_date, det_date){
+#' this function parses coordinates from DMS to decimal degrees
+#'
+#'@param x an input data frame to apply operations too
+#'@param lat a name of the column holding the latitude values
+#'@param long a name of the colymn holding the longitude values
+#'@param dms are coordinates in degrees minutes seconds? TRUE for yes, FALSE for decimal degrees
+dms2dd <- function(x, lat, long, dms){
   
-  coll_date_q <- enquo(coll_date)
-  det_date_q <- enquo(det_date)
+  if(missing(lat)){
+    lat = colnames(dummy_pts)[grep('lat', colnames(dummy_pts))] }
+  if(missing(long)){
+    long = colnames(dummy_pts)[grep('long', colnames(dummy_pts))] }
   
-  names_v <- c('_dmy', '_day', '_mo',  '_yr', '_text')
-  column_names <- c(paste0(coll_date, names_v), paste0(det_date, names_v) )
+  if(missing(dms)){
+    dms = long == parzer::parse_lon(long)
+  }
   
-  mdy2dmy <- function(x){format(as.Date(x, format = "%m/%d/%Y"), "%d/%m/%Y")}
+  if(dms == T){
+    x$latitude_dd = parzer::parse_lat(lat)
+    x$longitude_dd = parzer::pase_lon(long)
+  } else{
+    colnames(x)[which(names(x) == lat)] <- 'latitude_dd'
+    colnames(x)[which(names(x) == long)] <- 'latitude_dd'
+  }
   
-   x_dmy <- x |> 
-    mutate(across(.cols = c(!!coll_date_q, !!det_date_q), lubridate::mdy, .names = "{.col}_dmy")) |>
-    mutate(across(ends_with('_dmy'), ~ lubridate::month(.), .names = "{.col}_mo"),
-           across(ends_with('_dmy'), ~ lubridate::day(.), .names = "{.col}_day"),
-           across(ends_with('_dmy'), ~ lubridate::year(.), .names = "{.col}_yr")) |>
-    mutate(across(.cols = c(!!coll_date_q, !!det_date_q), date2text, .names = '{.col}_text')) |>
-    rename_with( ~ stringr::str_remove(., '_dmy'), matches("_dmy_.*$")) |>
-    relocate(any_of(column_names), .before = last_col())
+#  x[,c('latitude_dd', 'longitude_dd')] <- 
+#    sapply(x[c('latitude_dd', 'latitude_dd')], as.numeric)
   
-  return(x_dmy)
+ # if(x$longitude_dd > 0){longitude_dd * -1}; 
+#  if(x$latitude_dd < 0){latitude_dd * -1}
+  
+  # now overwrite the original DMS values in our exact format
+  
+  return(x)
+
+  latitude_dms = paste0(
+    'N ', parzer::pz_degree(x$latitude_dd),
+    '°', round(parzer::pz_minute(x$latitude_dd), 2),
+    "'", round(parzer::pz_second(x$latitude_dd), 2)
+  )
+
+  longitude_dms = paste0(
+    'W ', parzer::pz_degree(x$longitude_dd), 
+    '°', round(parzer::pz_minute(x$longitude_dd), 2), 
+    "'", round(parzer::pz_second(x$longitude_dd), 2)
+  )
+  
 }
 
+out <- dms2dd(dummy_pts)
+
+# str detect the lat column
+# str detect the long column
+# ensure input lat is North
+# ensure input long is West
+# str detect the datum column, else assume WGS84
+
 ```
 
-```{r}
+
+
+```{r date parsing}
 
 fourtet <- data.frame(col_date = c('12/23/2003','07/09/2023', '1/13/2016'),
                       det_date = c('12/25/2003','07/09/2023', '1/13/2016'),
@@ -88,7 +111,5 @@ out1 <- political_grabber(dummy_pts, 'collectionNo')
 out2 <- place_grabber(dummy_pts)
 out3 <- physical_grabber(dummy_pts)
 
-
-browseVignettes("ggtree")
 ```
 
