@@ -37,7 +37,7 @@ try_again <- function(x) {
   only_binomial <- unlist(stringr::str_split(q, pattern = " "))
   only_binomial <- paste(only_binomial[1], only_binomial[2])
   
-  results <- search_powo(only_binomial)
+  results <- kewr::search_powo(only_binomial)
   return(results)
 }
 
@@ -104,7 +104,7 @@ result_grabber <- function(x) {
 #' notes: results are observed to fail for valid infraspecies on Kew's end, and they seem not
 #' to mention valid infraspecies. 
 powo_searcher <- function(x) {
-  query_results <- search_powo(x)
+  query_results <- kewr::search_powo(x)
   
   if (is.null(query_results[["results"]])) {
     second_try <- try_again(query_results)
@@ -164,11 +164,15 @@ autonym <- function(genus, epithet, infrarank, infraspecies){
 #' @param x a vector of species names
 spell_check <- function(x) {
   
+  sppLKPtab <- read.csv('../taxonomic_data/species_lookup_table.csv')
+  epiLKPtab <- read.csv('../taxonomic_data/epithet_lookup_table.csv')
+  genLKPtab <- read.csv('../taxonomic_data/genus_lookup_table.csv')
+  
   pieces <- unlist(stringr::str_split(x, pattern = " "))
   genus <- pieces[1] ; species <- pieces[2]
   binom <- paste(genus, species)
   
-  # infraspecies should be found without much hassle due to their length
+  # infra species should be found without much hassle due to their length
   if(length(pieces) == 4){
     infras <- na.omit(epiLKPtab)
     full_name <- paste(genus, species, 
@@ -189,8 +193,8 @@ spell_check <- function(x) {
   # species can become difficult due to their short  names, e.g. 'Poa annua'
   } else {
   
-    if (any(grep( x = cla$scientificName,pattern = binom, fixed = T))) {
-      return(data.frame(Query = x, Result = binom, Match = 'exact'))
+    if (any(grep( x = sppLKPtab$scientificName, pattern = binom, fixed = T))) {
+      return(data.frame(Query = x, Result = x, Match = 'exact'))
     } else{
       # try and determine which piece is incorrect.
       
@@ -200,7 +204,7 @@ spell_check <- function(x) {
       gen_strings <-
         dplyr::filter(genLKPtab, Grp == genus2char) |> dplyr::pull(strings)
       spe_strings <-
-        dplyr::filter(speLKPtab, Grp == species3char) |> dplyr::pull(strings)
+        dplyr::filter(sppLKPtab, Grp == species3char) |> dplyr::pull(strings)
       
       # check to see if both genus and species are clean
       if (any(grep(x = gen_strings, pattern = paste0('^', genus, '$')))) {
@@ -578,4 +582,23 @@ coords2sf <- function(x, datum){
     dplyr::mutate(datum = 'WGS84', .before = geometry)
   
   return(dat_list)
+}
+
+#' notify user if an entry had any results not found in POWO
+#' 
+#' @param x output of 'powo_searcher' after binding rows
+notFound <- function(x){
+  
+  library(crayon)
+  row_no <- unlist( apply(FUN = grep, X = x, MARGIN = 2, pattern = 'NOT FOUND') )
+  rows <- unique(row_no) # these rows had complications... 
+  not_found <- x[rows, 'query'] # these records were not found. 
+  
+  recs <- cat(
+    'The record: ' %+%
+      blue$underline$bold(not_found) %+%
+      blue$bold(' (row ') %+% blue$underline$bold(rows) %+% ') did not have all data retrieved.\n')
+  
+  message(recs)
+  
 }

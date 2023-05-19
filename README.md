@@ -40,3 +40,6 @@ Currently BarnebyLives! Is being run on a juiced up computer either in Rogers Pa
 
 *BarnebyLives! Was named after Rupert Charles Barneby, botanist extraordinaire, artist, socialite, and kind hearted human being. He is the hero the West needs not racist, misogynists, such as Hayduke. Hence, BarnebyLives!*
 
+<p align="center">
+!['Portrait of Rupert Barneby' by Dwight Ripley 1955](images/Portrait_of_Rupert_Barneby.png)
+</p>

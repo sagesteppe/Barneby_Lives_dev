@@ -44,28 +44,6 @@ write.csv(genLKPtab, '../taxonomic_data/genus_lookup_table.csv', row.names = F)
 lapply(c('Cryptantha glomerata', 'Sphenosciadium capitellatum'), powo_searcher)
 ```
 
-```{r}
-library(sf)
-
-dummy_pts <- data.frame(
-  collectionNo = paste0(rep('RCB', 20), seq(1:20)),
-  x = runif(20, min = -120, max = -85), 
-  y = runif(20, min = 35, max = 48)
-) %>% sf::st_as_sf(coords = c('x', 'y'), crs = 4269)
-
-
-states_sf <- st_read('../geodata/political/political.shp', quiet = T)
-
-dummy_pts_l <- split(dummy_pts, dummy_pts$collectionNo)
-
-out <- lapply(dummy_pts_l, map_maker, states_sf, '../results', collection_col = 'collectionNo')
-
-
-ggplot() + 
-    geom_sf(data = states_sf, fill = NA, color = 'grey15') + 
-    geom_sf(data = dummy_pts, size = 0.5)
-
-```
 
 
 
