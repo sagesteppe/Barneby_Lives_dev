@@ -46,9 +46,9 @@ out <- date_parser(out, coll_date = 'col_date')
 
 places <- sf::st_read('../geodata/places/places.shp', quiet = T)
 
-out1 <- political_grabber(dummy_pts, 'collectionNo')
-out2 <- place_grabber(dummy_pts)
-out3 <- physical_grabber(dummy_pts)
+out1 <- political_grabber(out, 'collectionNo')
+out2 <- place_grabber(out1)
+out3 <- physical_grabber(out2)
 
 ```
 

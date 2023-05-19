@@ -332,8 +332,8 @@ place_grabber <- function(x) {
   places <- sf::st_read('../geodata/places/places.shp', quiet = T)
   
   x <- sf::st_join(x, mountains)
-
-  nearest_place <- places[sf::st_nearest_feature(dummy_pts, places),]
+  
+  nearest_place <- places[sf::st_nearest_feature(x, places),]
   distance <- round(
     as.numeric(
       sf::st_distance(x, nearest_place, by_element = T)),
@@ -348,10 +348,13 @@ place_grabber <- function(x) {
     dplyr::rename(place = fetr_nm)
     
   x <- dplyr::bind_cols(x, places)|>
+    dplyr::mutate(MapName = str_remove(MapName, ' \\(nn\\)')) |>
     dplyr::mutate(area_from =
-                    paste0('From ', place, ' ', distance, ' km at ', azimuth, '°.'),
+                    paste0('From ', place, ' ', distance, ' km at ', azimuth, '°. ', 
+                           MapName, '.'),
                   .before = geometry) |>
-    dplyr::select(-place, -distance, -azimuth) 
+    dplyr::mutate(area_from = str_remove(area_from, ' NA[.]')) |>
+    dplyr::select(-place, -distance, -azimuth, -MapName) 
   
   return(x)
 }
@@ -417,9 +420,11 @@ physical_grabber <- function(x) {
   el_cols <- c('elevation_m', 'elevation_ft')
   values[el_cols] <- lapply(values[el_cols], scales::comma)
   
-  cols <- c('elevation_m', 'elevation_ft', 'aspect', 'slope', 'geomorphon', 'geology') 
+  cols <- c('elevation_m', 'elevation_ft', 'aspect', 'slope', 
+            'geomorphon', 'geology') 
   
   object <- dplyr::bind_cols(x, values) |> 
+    dplyr::select(-ID) |>
     dplyr::relocate(tidyselect::all_of(cols), .before = geometry) |> 
     dplyr::mutate(
       physical_environ = 
