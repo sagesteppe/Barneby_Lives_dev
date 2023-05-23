@@ -4,6 +4,8 @@
 #' @param dirout the output directory, including path, for the subset dataset to go
 #' @param grid spatvector defining the tiles, should contain a column containing grid cell names
 #' @param fnames name of column containing filenames in the grid
+#' @param example
+#' @param export 
 mason <- function(dirin, dirout, grid, fnames, ...){
 
   # identify the paths to the rasters
@@ -32,6 +34,8 @@ mason <- function(dirin, dirout, grid, fnames, ...){
 #' 
 #' several infraspecies fail from POWO, retry the query with just the base name
 #' @param x output from the first step of 'powo_searcher'
+#' @example
+#' @export 
 try_again <- function(x) {
   q <- x[['query']]
   only_binomial <- unlist(stringr::str_split(q, pattern = " "))
@@ -44,6 +48,8 @@ try_again <- function(x) {
 #' collect the results of a successful powo search
 #' 
 #' @param x a successful powo search query
+#' @example
+#' @export 
 result_grabber <- function(x) {
   # subset the appropriate data frame, there is one if clean data were entered,
   # and two if a synonym was entered.
@@ -103,6 +109,8 @@ result_grabber <- function(x) {
 #' @param x a vector of species names to submit, these should have clean spelling
 #' notes: results are observed to fail for valid infraspecies on Kew's end, and they seem not
 #' to mention valid infraspecies. 
+#' @example
+#' @export 
 powo_searcher <- function(x) {
   query_results <- kewr::search_powo(x)
   
@@ -146,6 +154,8 @@ powo_searcher <- function(x) {
 #' @param  epithet derived from result_grabber
 #' @param  infrarank derived from result_grabber
 #' @param  infraspecies derived from result_grabber
+#' @param example
+#' @param export
 autonym <- function(genus, epithet, infrarank, infraspecies){
   
   authority_hunt <- search_powo(paste(genus, epithet))
@@ -162,6 +172,8 @@ autonym <- function(genus, epithet, infrarank, infraspecies){
 #' check that genera and specific epithets are spelled (almost) correctly
 #' 
 #' @param x a vector of species names
+#' @param example
+#' @param export
 spell_check <- function(x) {
   
   sppLKPtab <- read.csv('../taxonomic_data/species_lookup_table.csv')
@@ -255,7 +267,8 @@ spell_check <- function(x) {
 #' @param x an sf dataframe of coordinates to make maps for, requires collection number and spatial attributes
 #' @param path a directory to store the map images in before merging
 #' @param collection_col column specify the collection number or other UNIQUE id for the collection
-
+#' @param example
+#' @param export
 map_maker <- function(x, states, path, collection_col){
   
   if(st_crs(x) == sf::st_crs(states)) {
@@ -281,6 +294,8 @@ map_maker <- function(x, states, path, collection_col){
 #' this function grabs information on the state, county, and township of collections
 #' @param x an sf data frame of collection points
 #' @param y a column which unambiguously identifies each collection
+#' @param example
+#' @param export
 political_grabber <- function(x, y) {
   
   y_quo <- rlang::enquo(y)
@@ -330,6 +345,8 @@ political_grabber <- function(x, y) {
 #' this function grabs information on the state, county, and township of collections
 #' @param x an sf data frame of collection points
 #' @param y a column which unambiguously identifies each collection
+#' @param example
+#' @param export
 place_grabber <- function(x) {
   
   mountains <- sf::st_read('../geodata/mountains/mountains.shp', quiet = T)
@@ -371,6 +388,8 @@ place_grabber <- function(x) {
 #' this function grabs information on the elevation, azimuth, geomorphon, and geology of the site
 #' @param x an sf data frame of collection points
 #' @param y a column which unambiguously identifies each collection
+#' @param example
+#' @param export
 physical_grabber <- function(x) {
   
   round_df <- function(df, digits) {
@@ -444,6 +463,8 @@ physical_grabber <- function(x) {
 #' take international format date and make it written herbarium label format
 #' 
 #' @param x a data frame with dates
+#' @param example
+#' @param export
 date2text <- function(x) {
   
   x1 <- lubridate::mdy(x)
@@ -464,6 +485,8 @@ date2text <- function(x) {
 #' @param coll_date date of collection, expected to be of the format 'MM/DD/YYYY', minor checks for compliance to the format will be carried out before returning an error.
 #' @param det_date date of determination, same format and processes as above. 
 #' @returns original data frame plus: x_dmy, x_day, x_month, x_year, x_text, det_date_text, columns for both parameters which are supplied as inputs
+#' @param example
+#' @param export
 date_parser <- function(x, coll_date, det_date){
   
   coll_date_q <- enquo(coll_date)
@@ -495,10 +518,13 @@ date_parser <- function(x, coll_date, det_date){
 
 #' this function parses coordinates from DMS to decimal degrees
 #'
-#'@param x an input data frame to apply operations too
-#'@param lat a name of the column holding the latitude values
-#'@param long a name of the colymn holding the longitude values
-#'@param dms are coordinates in degrees minutes seconds? TRUE for yes, FALSE for decimal degrees
+#' @param x an input data frame to apply operations too
+#' @param lat a name of the column holding the latitude values
+#' @param long a name of the colymn holding the longitude values
+#' @param dms are coordinates in degrees minutes seconds? TRUE for yes, FALSE for decimal degrees
+#' @param returns
+#' @param example
+#' @param export
 dms2dd <- function(x, lat, long, dms){
   
   # identify columns if they were not supplied
@@ -544,11 +570,21 @@ dms2dd <- function(x, lat, long, dms){
   
 }
 
-
 #' create an sf object row by row to reflect different datum
 #' 
 #' @param x a dataframe which has undergone dms2dd function
 #' @param datum a column, holding the datum values for each observation, works for WGS84, NAD83, NAD27
+#' @param returns an sf/tibble/dataframe of points in the same WGS84 coordinate reference system
+#' @param example mixed_datum <- data.frame(
+#'  datum = (rep(c('nad27', 'NAD83', 'wGs84'), each = 5)), 
+#'  longitude_dd = runif(15, min = -120, max = -100), 
+#'  latitude_dd = runif(1000, min = 35, max = 48)
+#'  )
+#' 
+#' wgs84_dat <- coords2sf( mixed_datum )
+#' str(wgs84_dat)
+#' st_crs(wgs84_dat)
+#' @param export 
 coords2sf <- function(x, datum){
   
   if(missing(datum)){ # identify datum information
@@ -586,7 +622,11 @@ coords2sf <- function(x, datum){
 
 #' notify user if an entry had any results not found in POWO
 #' 
+#' simple function to run on 'powo_searcher' results to show species not found which 
 #' @param x output of 'powo_searcher' after binding rows
+#' @param returns messages to consoles indicating search terms, and there status if failed to be found. This desirable because 'powo_searcher' squashes these errors. 
+#' @param example 
+#' @param export 
 notFound <- function(x){
   
   library(crayon)
