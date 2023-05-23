@@ -60,24 +60,6 @@ tres <- lapply(tout$Result, powo_searcher) %>%
 
 notFound(tres)
 
-
-notFound <- function(x){
-  
-  library(crayon)
-  
-  row_no <- unlist( apply(FUN = grep, X = x, MARGIN = 2, pattern = 'NOT FOUND') )
-  rows <- unique(row_no) # these rows had complications... 
-  not_found <- x[rows, 'query'] # these records were not found. 
-  
-  recs <- cat(
-  'The record: ' %+%
-  blue$underline$bold(not_found) %+%
-  blue$bold(' (row ') %+% blue$underline$bold(rows) %+% ') did not have all data retrieved.\n')
-  
-  message(recs)
-  
-}
-
 ```
 
 ```{r make herbarium label maps, eval = F}

@@ -34,7 +34,6 @@ mason <- function(dirin, dirout, grid, fnames, ...){
 #' 
 #' several infra species fail from POWO, retry the query with just the base name. This not accessed directly by the user but used inside 'powo_searcher'
 #' @param x output from the first step of 'powo_searcher'
-#' @example 
 #' @export  
 try_again <- function(x) {
   q <- x[['query']]
@@ -49,7 +48,6 @@ try_again <- function(x) {
 #' 
 #' this function is used within 'powo_searcher' to retrieve the results from a successful POWO query. 
 #' @param x a successful powo search query
-#' @example
 #' @export 
 result_grabber <- function(x) {
   # subset the appropriate data frame, there is one if clean data were entered,
@@ -110,7 +108,10 @@ result_grabber <- function(x) {
 #' @param x a vector of species names to submit, these should have clean spelling
 #' notes: results are observed to fail for valid infraspecies on Kew's end, and they seem not
 #' to mention valid infraspecies. 
-#' @example
+#' @example 
+#' pow_results <- lapply(c('Linnaea borealis', 'Astragalus purshii', 'Pinus ponderosa'), powo_searcher) |>
+#'   dplyr::bind_rows()
+#' head(pow_results)
 #' @export 
 powo_searcher <- function(x) {
   query_results <- kewr::search_powo(x)
@@ -150,12 +151,11 @@ powo_searcher <- function(x) {
 
 #' retrieve author results for autonyms
 #' 
-#' this function is interal to result_grabber
+#' this function is internal to result_grabber, it ensures that an author is collected from the KEW API for infra-species which have autonyms. 
 #' @param  genus derived from result_grabber
 #' @param  epithet derived from result_grabber
 #' @param  infrarank derived from result_grabber
 #' @param  infraspecies derived from result_grabber
-#' @param example 
 #' @param export 
 autonym <- function(genus, epithet, infrarank, infraspecies){
   
@@ -168,12 +168,16 @@ autonym <- function(genus, epithet, infrarank, infraspecies){
   
   name_authority <- paste(genus, epithet, authority, infrarank, infraspecies)
   return(list(name_authority, authority))
+  
 }
 
 #' check that genera and specific epithets are spelled (almost) correctly
 #' 
 #' @param x a vector of species names
 #' @param example
+#' names_vec <- c('Astagalus purshii', 'Linnaeus borealius', 'Heliumorus multifora')
+#' spelling <- spell_check(names_vec)
+#' spelling 
 #' @param export
 spell_check <- function(x) {
   
@@ -261,7 +265,6 @@ spell_check <- function(x) {
     }
   }
 }
-
 
 #' make a quick county dot map to display the location of the collection
 #' 
@@ -633,12 +636,25 @@ coords2sf <- function(x, datum){
   return(dat_list)
 }
 
+
+
+names_vec <- taxize::names_list(rank = 'species', size = 10)
+pow_results <- lapply(names_vec, powo_searcher) |>
+     dplyr::bind_rows()
+pow_results[,1:5]
+notFound(pow_results)
+
 #' notify user if an entry had any results not found in POWO
 #' 
 #' simple function to run on 'powo_searcher' results to show species not found which 
 #' @param x output of 'powo_searcher' after binding rows
 #' @param returns messages to consoles indicating search terms, and there status if failed to be found. This desirable because 'powo_searcher' squashes these errors. 
 #' @param example 
+#' names_vec <- taxize::names_list(rank = 'species', size = 10) # 10 random species from taxize, usually 1 or 2 species are not found in Plants of the world online
+#' pow_results <- lapply(names_vec, powo_searcher) |> 
+#'   dplyr::bind_rows() 
+#' pow_results[,1:5] # if there is not a family which is 'NOT FOUND', reshuffle the random species from taxize. 
+#' notFound(pow_results) # little message. 
 #' @param export 
 notFound <- function(x){
   
