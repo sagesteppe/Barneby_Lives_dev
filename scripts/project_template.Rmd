@@ -64,12 +64,6 @@ notFound(tres)
 
 ```{r make herbarium label maps, eval = F}
 
-dummy_pts <- data.frame(
-  collectionNo = paste0(rep('RCB', 20), seq(1:20)),
-  x = runif(20, min = -120, max = -85), 
-  y = runif(20, min = 35, max = 48)
-) %>% sf::st_as_sf(coords = c('x', 'y'), crs = 4269)
-
 states_sf <- st_read('../geodata/political/political.shp', quiet = T)
 
 dummy_pts_l <- split(dummy_pts, dummy_pts$collectionNo)
