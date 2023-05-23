@@ -271,7 +271,7 @@ spell_check <- function(x) {
 #' @param x an sf dataframe of coordinates to make maps for, requires collection number and spatial attributes
 #' @param path a directory to store the map images in before merging
 #' @param collection_col column specify the collection number or other UNIQUE id for the collection
-#' @param example
+#' @param example 
 #' @param export
 map_maker <- function(x, states, path, collection_col){
   
@@ -298,7 +298,7 @@ map_maker <- function(x, states, path, collection_col){
 #' this function grabs information on the state, county, and township of collections
 #' @param x an sf data frame of collection points
 #' @param y a column which unambiguously identifies each collection
-#' @param example
+#' @param example see the package vignette
 #' @param export
 political_grabber <- function(x, y) {
   
@@ -349,7 +349,7 @@ political_grabber <- function(x, y) {
 #' this function grabs information on the state, county, and township of collections
 #' @param x an sf data frame of collection points
 #' @param y a column which unambiguously identifies each collection
-#' @param example
+#' @param example see the package vignette
 #' @param export
 place_grabber <- function(x) {
   
@@ -392,7 +392,7 @@ place_grabber <- function(x) {
 #' this function grabs information on the elevation, azimuth, geomorphon, and geology of the site
 #' @param x an sf data frame of collection points
 #' @param y a column which unambiguously identifies each collection
-#' @param example
+#' @param example see the package vignette
 #' @param export
 physical_grabber <- function(x) {
   
@@ -469,6 +469,7 @@ physical_grabber <- function(x) {
 #' first50dates <- paste0(sample(3:9, size = 50, replace = T), '-', 
 #'    sample(1:29, size = 50, replace  = T), '-', 
 #'    rep(2023, times = 50 ))
+#'    
 #' head(first50dates)
 #' first50dates <- date2text(first50dates)
 #' head(first50dates)
@@ -535,6 +536,7 @@ date_parser <- function(x, coll_date, det_date){
 #'   longitude_dd = runif(15, min = -120, max = -100), 
 #'   latitude_dd = runif(15, min = 35, max = 48)
 #' )
+#' 
 #' coords_formatted <- dms2dd( coords )
 #' head(coords_formatted)
 #' colnames(coords_formatted)
@@ -635,14 +637,6 @@ coords2sf <- function(x, datum){
   
   return(dat_list)
 }
-
-
-
-names_vec <- taxize::names_list(rank = 'species', size = 10)
-pow_results <- lapply(names_vec, powo_searcher) |>
-     dplyr::bind_rows()
-pow_results[,1:5]
-notFound(pow_results)
 
 #' notify user if an entry had any results not found in POWO
 #' 
