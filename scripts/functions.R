@@ -4,7 +4,7 @@
 #' @param dirout the output directory, including path, for the subset dataset to go
 #' @param grid spatvector defining the tiles, should contain a column containing grid cell names
 #' @param fnames name of column containing filenames in the grid
-#' @param example
+#' @param example 
 #' @param export 
 mason <- function(dirin, dirout, grid, fnames, ...){
 
@@ -32,10 +32,10 @@ mason <- function(dirin, dirout, grid, fnames, ...){
 
 #' try to download from Kew again, with just the binomial
 #' 
-#' several infraspecies fail from POWO, retry the query with just the base name
+#' several infra species fail from POWO, retry the query with just the base name. This not accessed directly by the user but used inside 'powo_searcher'
 #' @param x output from the first step of 'powo_searcher'
-#' @example
-#' @export 
+#' @example 
+#' @export  
 try_again <- function(x) {
   q <- x[['query']]
   only_binomial <- unlist(stringr::str_split(q, pattern = " "))
@@ -47,6 +47,7 @@ try_again <- function(x) {
 
 #' collect the results of a successful powo search
 #' 
+#' this function is used within 'powo_searcher' to retrieve the results from a successful POWO query. 
 #' @param x a successful powo search query
 #' @example
 #' @export 
@@ -154,8 +155,8 @@ powo_searcher <- function(x) {
 #' @param  epithet derived from result_grabber
 #' @param  infrarank derived from result_grabber
 #' @param  infraspecies derived from result_grabber
-#' @param example
-#' @param export
+#' @param example 
+#' @param export 
 autonym <- function(genus, epithet, infrarank, infraspecies){
   
   authority_hunt <- search_powo(paste(genus, epithet))
@@ -458,12 +459,16 @@ physical_grabber <- function(x) {
   return(object)
 }
 
-
-
-#' take international format date and make it written herbarium label format
+#' take mdy format date and make it written herbarium label format
 #' 
 #' @param x a data frame with dates
-#' @param example
+#' @param example 
+#' first50dates <- paste0(sample(3:9, size = 50, replace = T), '-', 
+#'    sample(1:29, size = 50, replace  = T), '-', 
+#'    rep(2023, times = 50 ))
+#' head(first50dates)
+#' first50dates <- date2text(first50dates)
+#' head(first50dates)
 #' @param export
 date2text <- function(x) {
   
@@ -515,23 +520,29 @@ date_parser <- function(x, coll_date, det_date){
 }
 
 
-
 #' this function parses coordinates from DMS to decimal degrees
 #'
 #' @param x an input data frame to apply operations too
 #' @param lat a name of the column holding the latitude values
 #' @param long a name of the colymn holding the longitude values
 #' @param dms are coordinates in degrees minutes seconds? TRUE for yes, FALSE for decimal degrees
-#' @param returns
-#' @param example
-#' @param export
+#' @param returns dataframe(/tibble) with coordinates unambiguously labeled as being in both degress, minutes, seconds (_dms) and decimal degrees (_dd). 
+#' @param example 
+#'  coords <- data.frame(
+#'   longitude_dd = runif(15, min = -120, max = -100), 
+#'   latitude_dd = runif(15, min = 35, max = 48)
+#' )
+#' coords_formatted <- dms2dd( coords )
+#' head(coords_formatted)
+#' colnames(coords_formatted)
+#' @param export 
 dms2dd <- function(x, lat, long, dms){
   
   # identify columns if they were not supplied
   if(missing(lat)){
-    lat = colnames(dummy_pts)[grep('lat', colnames(dummy_pts))] }
+    lat = colnames(x)[grep('lat', colnames(x))] }
   if(missing(long)){
-    long = colnames(dummy_pts)[grep('long', colnames(dummy_pts))] }
+    long = colnames(x)[grep('long', colnames(x))] }
   
   # test for DMS format if not supplied
   suppressWarnings(  if(missing(dms)){
@@ -569,7 +580,7 @@ dms2dd <- function(x, lat, long, dms){
   return(x)
   
 }
-
+ 
 #' create an sf object row by row to reflect different datum
 #' 
 #' @param x a dataframe which has undergone dms2dd function
@@ -578,7 +589,7 @@ dms2dd <- function(x, lat, long, dms){
 #' @param example mixed_datum <- data.frame(
 #'  datum = (rep(c('nad27', 'NAD83', 'wGs84'), each = 5)), 
 #'  longitude_dd = runif(15, min = -120, max = -100), 
-#'  latitude_dd = runif(1000, min = 35, max = 48)
+#'  latitude_dd = runif(15, min = 35, max = 48)
 #'  )
 #' 
 #' wgs84_dat <- coords2sf( mixed_datum )
@@ -587,8 +598,10 @@ dms2dd <- function(x, lat, long, dms){
 #' @param export 
 coords2sf <- function(x, datum){
   
+  library(magrittr)
+  
   if(missing(datum)){ # identify datum information
-    datum = colnames(dummy_pts)[grep('datum', colnames(dummy_pts))] }
+    datum = colnames(x)[grep('datum', colnames(x))] }
   
   if(length(datum) == 0){x$datum = 'WGS84'} # if column doesn't exist create
   
@@ -609,9 +622,9 @@ coords2sf <- function(x, datum){
   
   # separate all points by there datum
   dat_list <- split(x, f = x$datum)
-  dat_list <- purrr::map(dat_list, . %>%  
+  dat_list <- purrr::map(dat_list, . |>  
                            sf::st_as_sf(., coords = c(x = 'longitude_dd', y = 'latitude_dd'), 
-                                        crs = .$crs[1], remove = F) %>% 
+                                        crs = .$crs[1], remove = F) |> 
                            sf::st_transform(4326)) |>
     dplyr::bind_rows() %>% 
     dplyr::select(-crs) %>% 
