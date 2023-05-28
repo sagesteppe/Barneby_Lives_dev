@@ -38,6 +38,6 @@ If the datasheet which is submitted to BarnebyLives! contains text in a cell, th
 
 Currently BarnebyLives! Is being run on a juiced up computer either in Rogers Park Chicago or Reno. The amount of data which it queries is very large. Please let me know if you have a query and I will run it for you. If you only collect from a smaller portion of the West, e.g. a certain state, or FS/BLM Unit/Field Office, you should be able to set up a local instance. Although, the documentation for such an endeavor is nascent the endeavor is simple, see "crop2boundary" for the workflow. 
 
-*BarnebyLives! Was named after Rupert Charles Barneby, botanist extraordinaire, artist, socialite, and kind hearted human being. He is the hero the West needs not racist, misogynists, such as Hayduke. Hence, BarnebyLives!*
+*BarnebyLives! Was named after Rupert Charles Barneby, botanist extraordinaire, artist, socialite, and kind hearted human being.
 
 ![Portrait of Rupert Barneby by Dwight Ripley 1955](images/Portrait_of_Rupert_Barneby.png)
