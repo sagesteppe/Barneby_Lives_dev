@@ -530,7 +530,7 @@ date_parser <- function(x, coll_date, det_date){
 #' @param lat a name of the column holding the latitude values
 #' @param long a name of the colymn holding the longitude values
 #' @param dms are coordinates in degrees minutes seconds? TRUE for yes, FALSE for decimal degrees
-#' @param returns dataframe(/tibble) with coordinates unambiguously labeled as being in both degress, minutes, seconds (_dms) and decimal degrees (_dd). 
+#' @param returns dataframe(/tibble) with coordinates unambiguously labeled as being in both degrees, minutes, seconds (_dms) and decimal degrees (_dd). 
 #' @param example 
 #'  coords <- data.frame(
 #'   longitude_dd = runif(15, min = -120, max = -100), 
