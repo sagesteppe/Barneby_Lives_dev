@@ -58,7 +58,6 @@ In order to not bog people's computers down with opening and storing many large 
 library(tidyverse)
 library(sf)
 #library(parzer)
-library(tigris)
 #library(WorldFlora)
 library(elevatr)
 library(googlesheets4)

@@ -1,10 +1,10 @@
 #' gather physical characteristics of the site
 #' 
-#' this function grabs information on the elevation, azimuth, geomorphon, and geology of the site
+#' @description this function grabs information on the elevation, azimuth, geomorphon, and geology of the site
 #' @param x an sf data frame of collection points
 #' @param y a column which unambiguously identifies each collection
-#' @param example see the package vignette
-#' @param export
+#' @example see the package vignette
+#' @export
 physical_grabber <- function(x) {
   
   round_df <- function(df, digits) {

@@ -1,10 +1,13 @@
 #' make a quick county dot map to display the location of the collection
 #' 
+#' @description use sf to create a 20th centtury style 'dot map' which features the state
+#' boundary and county lines.
+#' 
 #' @param x an sf dataframe of coordinates to make maps for, requires collection number and spatial attributes
 #' @param path a directory to store the map images in before merging
 #' @param collection_col column specify the collection number or other UNIQUE id for the collection
-#' @param example 
-#' @param export
+#' @example 
+#' @export
 map_maker <- function(x, states, path, collection_col){
   
   if(st_crs(x) == sf::st_crs(states)) {

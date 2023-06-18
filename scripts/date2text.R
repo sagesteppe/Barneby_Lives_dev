@@ -1,5 +1,7 @@
 #' take mdy format date and make it written herbarium label format
 #' 
+#' @description This will ensure that dates are formatted in a manner which makes
+#' them readily interpretable to researchers worldwide.
 #' @param x a data frame with dates
 #' @param example 
 #' first50dates <- paste0(sample(3:9, size = 50, replace = T), '-', 
