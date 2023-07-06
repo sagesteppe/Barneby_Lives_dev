@@ -1,12 +1,10 @@
-
-
 #' gather political site information
 #' 
 #' this function grabs information on the state, county, and township of collections
 #' @param x an sf data frame of collection points
 #' @param y a column which unambiguously identifies each collection
-#' @param example see the package vignette
-#' @param export
+#' @example see the package vignette
+#' @export
 political_grabber <- function(x, y) {
   
   y_quo <- rlang::enquo(y)

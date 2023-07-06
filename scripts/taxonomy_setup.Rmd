@@ -37,7 +37,6 @@ epiLKPtab <- unique(cla, by = 'specificEpithet')[
 write.csv(sppLKPtab, '../taxonomic_data/species_lookup_table.csv', row.names = F)
 write.csv(epiLKPtab, '../taxonomic_data/epithet_lookup_table.csv', row.names = F)
 write.csv(genLKPtab, '../taxonomic_data/genus_lookup_table.csv', row.names = F)
-
 ```
 
 
