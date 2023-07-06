@@ -21,7 +21,8 @@ source('functions.R')
 cla <- data.table::fread('../taxonomic_data_raw/WFO_Backbone/classification.txt', na.strings = "")
 
 sppLKPtab <- cla[, c('scientificName', 'specificEpithet', 'infraspecificEpithet', 'verbatimTaxonRank')]
-sppLKPtab <- filter(sppLKPtab, is.na(verbatimTaxonRank) | verbatimTaxonRank != "f.")
+sppLKPtab <- filter(sppLKPtab, is.na(verbatimTaxonRank) | verbatimTaxonRank != "f.") %>% 
+  mutate(Grp = str_extract(specificEpithet, '[a-z]{3}')) 
 
 genLKPtab <- unique(cla, by = 'genus')[taxonomicStatus == 'Accepted','genus'] %>% 
   arrange(genus) %>% 
