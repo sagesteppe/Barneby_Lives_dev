@@ -270,10 +270,7 @@ taxize::classification("", db = "pow")
 
 
 
-
-
 **distance from named place**
-
 
 
 ```{r}

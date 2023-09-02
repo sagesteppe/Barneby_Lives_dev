@@ -162,12 +162,14 @@ Searches for synonym to species
 POW_names <- lapply(data$Full_name, powo_searcher) |>
   bind_rows()
 
-data <- bind_cols(data, POW_names) %>% 
-  relocate(starts_with('POW_'), .before = geometry)
+data <- bind_cols(data, POW_names)
 
 dplyr::select(data, starts_with('POW')) |>
   sf::st_drop_geometry() |>
   utils::head()
+
+data <- powNAce(data)
+
 ```
 
 The final process in the taxonomic step is to ensure that the spellings of any species noted in the *vegetation*, or *associates* fields are accurate. These *will not* then be submitted to Kew, as the fields could quickly overwhelm the API. 
@@ -186,7 +188,6 @@ This will require interactive alterations from the user.
 SoS_gkey = Sys.getenv("Sos_gkey")
 
 directions2site <- directions_grabber(data, api_key = SoS_gkey)
-
 ```
 
 
@@ -201,7 +202,6 @@ googledata <- sf::st_drop_geometry(directions2site) %>%
 write_sheet( ss = '1iOQBNeGqRJ3yhA-Sujas3xZ2Aw5rFkktUKv3N_e4o8M', 
              sheet = 'Processed - Examples', data = googledata) 
 
-?gs4_create
 ```
 
 

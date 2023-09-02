@@ -1,0 +1,68 @@
+--- 
+title: BarnebyLives an R package to create herbarium specimen labels
+author:  |
+    | Reed Clark Benkendorf$^1$^[Correspondence: rbenkendorf@chicagobotanic.org],  Nyree Zerega$^1$$^,$$^2$,  Jeremie B. Fant$^1$$^,$$^2$
+    |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
+    |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
+abstract:  |  
+  **Premise:** Depositing quality specimens to herbaria is a time intensive task. Many institutions have reduced the amount of funding for herbaria, and universities have reduced the amount of education dedicated to curatorial tasks and specimen deposition. Despite this, the continual generation of herbaria specimens are essential for research in ecology and evolution. In order to faciliate the continued growth of herbaria BarnebyLives was developed as tool to supplement collection notes, perform geographic and, taxonomic informatic processes, enact spell checks and produce labels.    
+  **Methods and Results:** BarnebyLives uses geospatial data from the U.S. Census Bureau to provide political jurisdiction information, and data from other sources, including the United States Geological Survey, to supplement collection notes by providing information on abiotic site conditions. It uses inhouse spell checks to verify the spelling of a collection at all taxonomic ranks, the IPNI standard author database to check standard author abbreviations, and the Royal Botanic Garden Kews 'Plants of the World Online' to check for nomenclatural innovations. Optionally the package writes driving directions to sites using Google Maps. Finally the package outputs data in a tabular format for review by the user to accept or confirm changes,      
+  **Conclusions:** BarnebyLives provides accurate political and physical information, reduces typos, provides users the most current taxonomic opinions, generates driving directions to sites, and produces aesthetically appealing labels and shipping manifests in a matter of minutes.     
+keywords: |
+  Herbarium, collections, natural history museums, geospatial, automation, R
+output:
+  pdf_document: default
+  toc: no
+  word_document: default
+csl: "../citations/american-journal-of-botany.csl"
+bibliography: ../citations/citations.bib
+link-citations: yes
+fig_caption: yes
+always_allow_html: yes
+header-includes:
+- \usepackage{endfloat}
+- \usepackage{setspace}\doublespacing
+- \usepackage{lineno}
+- \linenumbers
+- \usepackage[width=\textwidth]{caption}
+- \usepackage{wrapfig}
+--- 
+
+Herbaria house billions of specimens worldwide. They serve as an essential component of all taxonomic, and phylogenetic studies as well as an enormous number of ecological studies. Recent innovations in computing, digitization and data distribution, DNA sequencing, and the development of myriad analytic approaches have brought about a resurgence in museum based study. However, concerns regarding the rate of acquisition of new specimens exist...
+
+The submittal of specimens to herbaria is a time consuming process, especially for younger collectors with limited experience. 
+While many young collectors, who are capable of using dichotomous keys to identify their collections, exist they face difficulties navigating several aspects of data collection. 
+This scenario results in the delay of deposition of many specimens, and undoubtedly the deposition of many specimens at all.
+Problems which face young collectors generally include the lack of dedicated time awarded to them at a seasons end to process specimens, and the lack of education on several cartographic and natural history attributes.
+
+The successful generation of an herbarium specimen includes many steps which are easy to take for granted. 
+For example, while the acquisition of political information for a collection site appears simple, it is only so if the collector has the adequate resources at their disposal. 
+Given the association of boundaries with topographically complex areas (e.g. watersheds) it often requires topographic maps, which are no longer widespread - resulting in many having difficulties interpreting them, or transcription of coordinates into a Geographic Information System (e.g. ArcMap, which is relatively expensive at 100$ year), or more likely Google Maps by individual site. 
+This lack of topographic maps compounds the issues of young collectors being unable to come up with appropriate site names. 
+
+More evidently difficult tasks involve taxonomy and the rapid rate at which taxonomic names have changed since the publication of many Floras. 
+
+
+# METHODS AND RESULTS
+
+Here we showcase the reduction in errors attributtal to BarnebyLives 
+
+\begin{wrapfigure}{l}{0.4\textwidth}
+  \centering
+    \includegraphics[width=0.4\textwidth]{../graphics/plots/flowchart.png}
+  \caption{Specified benchmarks at all ESDs which included all three metrics and derived imputed value}
+\end{wrapfigure}
+
+# CONCLUSIONS
+
+# ACKNOWLEDGEMENTS
+
+# DATA AVAILABILITY STATEMENT
+The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives), and the stable version is available on CRAN. The package includes three real use-case vignettes (tutorials) on usage. One vignette "setting_up_files" explores setting up a instance for a certain geographic area. Another vignette "running_pipeline" showcases the usage of the package for processing data entered on a spreadsheet. A final vignette "creating_labels" shows the usage of an R, and Bash script launched from RStudio to produce print-ready labels. 
+
+# ORCID
+
+Jeremie Fant https://orcid.org/0000-0001-9276-1111
+
+# REFERENCES
+
