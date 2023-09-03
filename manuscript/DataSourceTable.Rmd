@@ -1,0 +1,67 @@
+---
+title: "DataSourcesTable"
+author: "steppe"
+date: "2023-09-02"
+output: html_document
+---
+
+
+```{r echo = F, warning = F, message=F}
+library(knitr)
+library(kableExtra)
+library(gt)
+library(tidyverse)
+```
+
+
+```{r Create Table}
+
+local_data <- data.frame(
+  Variable = c(
+    'County', 'State', 'Ownership', 
+    'TRS', 'Place Names', 'Mountains',
+    'Elevation', 'Slope', 'Aspect',
+    'Geomorphons', 'Surficial Geology', 'Taxonomic Spellings', 
+    'Author Abbreviations'
+    ),
+    Usage = c(
+    'Political', 'Political', 'Political',
+    'Political', 'Site Name', 'Site Name', 
+    'Site Characteristics', 'Site Characteristics', 'Site Characteristics', 
+    'Site Characteristics', 'Site Characteristics', 'Spell Checks', 
+    'Spell Checks'
+    ),
+    Source = c(
+    'US Census Bureau', 'US Census Bureau', 'US Geological Survey',
+    'US Geological Survey', 'US Geological Survey', 'EarthEnv', 
+    'Open Topography', 'Open Topography', 'Open Topography',
+    'Open Topography', 'World Flora Online', 'US Geological Survey',
+    'IPNI'
+    ),
+  Name = c(
+    'Counties', 'States', 'Protected Areas Database', 
+    'Public Land Survey System', 'Geographic Names Information System', 'GMBA Mountain Inventory v2',
+    'Geomorpho90m - Elevation', 'Geomorpho90m - Slope', 'Geomorpho90m - Aspect',
+    'Geomorpho90m - Geomorphons', 'State Geologic Map Compilation', 'World Flora Online',
+    'International Plant Names Index'
+    ),
+  Data_Model = c(
+    'Vector', 'Vector', 'Vector',
+    'Vector', 'Vector', 'Vector',
+    'Raster', 'Raster', 'Raster', 
+    'Raster', 'Vector', 'Tabular',
+    'Tabular'
+    ),
+  Subset_Size = c(
+    0.073, 0.0, 0.435,
+    0.816, 0.081, 0.004,
+    4.2, 4.6, 4.1,
+    0.455, 0.708, 0.002,
+    0.001
+  )
+)
+
+```
+
+
+

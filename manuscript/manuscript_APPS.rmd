@@ -28,9 +28,20 @@ header-includes:
 - \usepackage{wrapfig}
 --- 
 
-Herbaria house billions of specimens worldwide. They serve as an essential component of all taxonomic, and phylogenetic studies as well as an enormous number of ecological studies. Recent innovations in computing, digitization and data distribution, DNA sequencing, and the development of myriad analytic approaches have brought about a resurgence in museum based study. However, concerns regarding the rate of acquisition of new specimens exist...
+Worldwide herbaria house roughly 400 million plant specimens (Thiers 2019).
+These specimens were largely collected with the goal of describing the taxonomic diversity of the plant kingdom, and the floristic diversity of the world (Greve et al. 2016). 
+As research goals in the biological sciences shifted away from describing, documenting, and understanding earths biodiversity in the late 20th century, the rate of accessioning new collections to herbaria diminished (Prather 2004, Pyke & Erlich 2010).
+Among other factors, this lead to a decline in the amount of funding allocated to collections based research, and the number of staff maintaining and accessioning new collections (Funk 2014). 
+Fortunately, renewed interest in collections have brought them back to the forefront of plant sciences ( Ronsted et al. 2020).  
+
+Recent innovations in computing, specimen digitization, data sharing, DNA sequencing, and statistics have brought about a renaissance in herbarium based studies (Greve et al. 2016, James et al. 2019, Brewer et al. 2019, Ronsted et al. 2020). 
+Current uses of specimen based data extend far beyond their traditional roles in systematics, and studies utilizing collections are regularly carried out to better understand .... of plants (). 
+However, we anticipate that collections will gain their most widespread appreciation and utilization as desires to revitalize the role of natural history in ecology via it's combination with novel approaches, such as remote sensing, meta-barcoding, and landscape studies and emerging in ecology and environmental science (Fevo et al. 2021).
+
+However, we now stand at a time where we recognize the need for more specimens, but are in a difficult position to share knowledge of collecting and depositing specimens (Daru et al 2017)
 
 The submittal of specimens to herbaria is a time consuming process, especially for younger collectors with limited experience. 
+
 While many young collectors, who are capable of using dichotomous keys to identify their collections, exist they face difficulties navigating several aspects of data collection. 
 This scenario results in the delay of deposition of many specimens, and undoubtedly the deposition of many specimens at all.
 Problems which face young collectors generally include the lack of dedicated time awarded to them at a seasons end to process specimens, and the lack of education on several cartographic and natural history attributes.
@@ -54,6 +65,9 @@ Here we showcase the reduction in errors attributtal to BarnebyLives
 \end{wrapfigure}
 
 # CONCLUSIONS
+
+# AUTHOR CONTRIBUTIONS
+The project was conceptualized by R.C.B. The program was written by R.C.B Data collection and analysis were performed by R.C.B. R.C.B. wrote the manuscript with input from all other authors. All authors approved the final version of the manuscript.
 
 # ACKNOWLEDGEMENTS
 
