@@ -17,8 +17,10 @@ digraph boxes_and_circle {
       subgraph cluster_geospatial { style=dashed; color= 'white'; 
         node [color = '#ffa600']
   
-          'Raw Spreadsheet' -> 'Clean Coordinates' 
+          'Raw Spreadsheet' -> 'Convert Coordinates\nfrom DMS to DD' 
               [label = '     dms2dd', fontsize = 26, penwidth = 6]
+          'Convert Coordinates\nfrom DMS to DD' -> 'Clean Coordinates' 
+              [label = '     autofill_checker', fontsize = 26, penwidth = 6]
           'Clean Coordinates' -> 'Geospatial Data' 
               [label = '     coords2sf', fontsize = 26, penwidth = 6]
           'Geospatial Data' -> 'Political\nBoundaries' 
@@ -60,14 +62,19 @@ digraph boxes_and_circle {
               [label = '     field_lengths', fontsize = 26, penwidth = 6]
           'Check Field Lengths' -> 'Date Formatting' 
               [label = '     date_parser', fontsize = 26, penwidth = 6]
+
       }
       
       node [color = '#C94277']
-          'Date Formatting' -> 'Processed Spreadsheet' 
+          'Date Formatting' -> 'Processed\nSpreadsheet' 
               [penwidth = 6]
-              
-          'Processed Spreadsheet' -> 'Manual Review' 
+          'Processed\nSpreadsheet' -> 'Manual Review' 
               [penwidth = 6]
+                            
+          'Date Formatting' -> 'Geodata' 
+              [label = '     geodata_writer', fontsize = 26, penwidth = 6, style=dashed]
+          'Geodata' -> 'Manual Review'
+              [penwidth = 6, style = dashed]
       
           # Printed Materials
       subgraph cluster_printing {style=dashed; color='white'; 

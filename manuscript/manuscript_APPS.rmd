@@ -66,97 +66,101 @@ More evidently difficult tasks involve taxonomy and the rapid rate at which taxo
 
 ```{r load libraries}
 library(tidyverse) # data operations
-library(sf) # spatial data
+# devtools::install_github('sagesteppe/BarnebyLives')
 library(BarnebyLives) # for helping accession collections
 ```
 
 
 ```{r import example data and gather some summaries}
 
-test_data <- read.csv('data/test_data.csv', na.strings = "") %>% 
-  drop_na(longitude) %>% 
-  drop_na(latitude) %>% 
-  drop_na(date_digital) %>% 
-  st_as_sf(coords = c('longitude', 'latitude'), crs = 4326) 
+data <- read.csv('data/test_data.csv', na.strings = "") %>% 
+  drop_na(c('longitude', 'latitude', 'date_digital'))
 
-n_families <- test_data %>% 
-  st_drop_geometry() %>% 
+n_families <- data %>% 
   group_by(family) %>% 
   count() %>% 
   nrow() # 74 families
 
-n_spp <- test_data %>% 
-  st_drop_geometry() %>% 
+n_spp <- data %>% 
   group_by(binomial) %>% 
   count() %>% 
   nrow() # 616 species
 
-n_infraspecies <- test_data %>% 
-  st_drop_geometry() %>% 
+n_infraspecies <- data %>% 
   drop_na(infraspecies) %>% 
   group_by(binomial, infraspecies) %>% 
   count() %>% 
   nrow() # 66 distinct infraspecies
 
-n_sp_authors <- test_data %>% 
-  st_drop_geometry() %>% 
+n_sp_authors <- data %>% 
   drop_na(authority) %>% 
   count() # 557 groups of authors
 
-n_infra_sp_auths <- test_data %>% 
-  st_drop_geometry() %>% 
+n_infra_sp_auths <- data %>% 
   drop_na(authority1) %>% 
   group_by(binomial, infraspecies) %>% 
   count() %>% 
   nrow() # 22 distinct infra species author groups
+
 ```
+
+
 ```{r Run pipeline with all steps and benchmarking, eval = F}
 
-system.time({ # if neccessary convert coordinates in degrees minutes second to decimal degrees
+time_dms2dd <- system.time({ # if necessary convert coordinates in degrees minutes second to decimal degrees
   data <- dms2dd(data, dms = F)
+})
+
+time_autofill_checker <- system.time({ # has the spreadsheet software auto-incremented coordinate values?
+  data <- autofill_checker(data)
 })
 
 time_coords2sf <- system.time({ # create a spatial (simple features) object
   data <- coords2sf(data)
 })
 
+p2geo <- '/media/steppe/hdd/Barneby_Lives-dev/geodata'
+
 time_political_grabber <- system.time({ # grab political information for collection
-  political_grabber(data, y = 'Collection_number', path = p)
+  data <- political_grabber(data, y = 'Collection_number', path = p2geo)
 })
 
 time_physical_grabber <- system.time({ # grab sites physical information
-  data <- physical_grabber(data, path = p)
-})
+  data <- physical_grabber(data, path = p2geo)
+}) # not finding slope and aspect
 
 time_site_writer <- system.time({ # write site location notes
-  data <- site_writer(data, path = p)
+  data <- site_writer(data, path = p2geo)
 })
 
-time_directions_grabber <- system.time({ # write directions to sites
-  SoS_gkey = Sys.getenv("Sos_gkey")
-  data <- directions_grabber(data, api_key = SoS_gkey)
-})
+# time_directions_grabber <- system.time({ # write directions to sites
+#   SoS_gkey = Sys.getenv("Sos_gkey")
+#   data <- directions_grabber(data, api_key = SoS_gkey)
+# })
+
+
+p2tax <- '/media/steppe/hdd/Barneby_Lives-dev/taxonomic_data'
 
 time_spell_check <- system.time({ # ensure appropriate spellings at taxonomic levels
-  data <- spell_check(data, path = p)
+  data <- spell_check(data, path = p2tax)
 })
 
 time_author_check <- system.time({ # ensure authorities are spelled-noted correctly
-  data <- author_check(data, path = p)
+  data <- author_check(data, path = p2tax)
 })
 
-time_powo_searcher <- system.time({ # search for synonyms from plants of the world online
+# time_powo_searcher <- system.time({ # search for synonyms from plants of the world online
   
-names <- sf::st_drop_geometry(data) %>% 
-  pull(Full_name)
+# names <- sf::st_drop_geometry(data) %>% 
+#   pull(Full_name)
 
-pow_res <- lapply(names,
-      powo_searcher) %>% 
-  bind_rows()
-data <- bind_cols(data, pow_res)
+# pow_res <- lapply(names,
+#       powo_searcher) %>% 
+ #  bind_rows()
+# data <- bind_cols(data, pow_res)
 
-rm(names, pow_res)
-})
+# rm(names, pow_res)
+# })
 
 time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
   data <- associate_dropper(data)
