@@ -1,7 +1,7 @@
 --- 
 title: BarnebyLives an R package to create herbarium specimen labels
 author:  |
-    | Reed Clark Benkendorf$^1$^[Correspondence: rbenkendorf@chicagobotanic.org],  Nyree Zerega$^1$$^,$$^2$,  Jeremie B. Fant$^1$$^,$$^2$
+    | Reed Clark Benkendorf$^1$^[Correspondence: rbenkendorf@chicagobotanic.org],  Nyree Zerega$^1$$^,$$^2$, Pat Herendeen$^1$$^,$$^2$, Jeremie B. Fant$^1$$^,$$^2$
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
 abstract:  |  
@@ -9,7 +9,7 @@ abstract:  |
   **Methods and Results:** BarnebyLives uses geospatial data from the U.S. Census Bureau to provide political jurisdiction information, and data from other sources, including the United States Geological Survey, to supplement collection notes by providing information on abiotic site conditions. It uses inhouse spell checks to verify the spelling of a collection at all taxonomic ranks, the IPNI standard author database to check standard author abbreviations, and the Royal Botanic Garden Kews 'Plants of the World Online' to check for nomenclatural innovations. Optionally the package writes driving directions to sites using Google Maps. Finally the package outputs data in a tabular format for review by the user to accept or confirm changes,      
   **Conclusions:** BarnebyLives provides accurate political and physical information, reduces typos, provides users the most current taxonomic opinions, generates driving directions to sites, and produces aesthetically appealing labels and shipping manifests in a matter of minutes.     
 keywords: |
-  Herbarium, collections, natural history museums, geospatial, automation, R
+  Herbarium, collections, natural history museum, geospatial, automation, R, software
 output:
   pdf_document: default
   toc: no
@@ -28,23 +28,25 @@ header-includes:
 - \usepackage{wrapfig}
 --- 
 
-Worldwide herbaria house roughly 400 million plant specimens (Thiers 2019).
-These specimens were largely collected with the goal of describing the taxonomic diversity of the plant kingdom, and the floristic diversity of the world (Greve et al. 2016). 
-As research goals in the biological sciences shifted away from describing, documenting, and understanding earths biodiversity in the late 20th century, the rate of accessioning new collections to herbaria diminished (Prather 2004, Pyke & Erlich 2010).
-Among other factors, this lead to a decline in the amount of funding allocated to collections based research, and the number of staff maintaining and accessioning new collections (Funk 2014). 
-Fortunately, renewed interest in collections have brought them back to the forefront of plant sciences ( Ronsted et al. 2020).  
+```{r}
+knitr::opts_chunk$set(echo=F, warning = F, message = F)
+```
 
-Recent innovations in computing, specimen digitization, data sharing, DNA sequencing, and statistics have brought about a renaissance in herbarium based studies (Greve et al. 2016, James et al. 2019, Brewer et al. 2019, Ronsted et al. 2020). 
-Current uses of specimen based data extend far beyond their traditional roles in systematics, and studies utilizing collections are regularly carried out to better understand .... of plants (). 
-However, we anticipate that collections will gain their most widespread appreciation and utilization as desires to revitalize the role of natural history in ecology via it's combination with novel approaches, such as remote sensing, meta-barcoding, and landscape studies and emerging in ecology and environmental science (Fevo et al. 2021).
+Nearly 400 million specimens are housed in herbaria around the world (@thiers2021herbaria).
+These specimens were collected with the goal of describing the plant kingdoms taxonomic diversity, and documenting the worlds floristic diversity (@greve2016realising). 
+The rate of accessioning new collections to herbaria diminished in the 20th centry as research goals in the biological sciences shifted away from describing, documenting, and understanding earths biodiversity (@prather2004decline, @pyke2010biological).
+Which, among other factors, lead to a decline in the amount of funding allocated to collections based research, and the number of staff maintaining and accessioning new collections (@funk2014erosion). 
+Fortunately, renewed interest in collections have brought herbaria back to the forefront of plant sciences (@ronsted2020integrative).  
 
-However, we now stand at a time where we recognize the need for more specimens, but are in a difficult position to share knowledge of collecting and depositing specimens (Daru et al 2017)
+Recent innovations in computing, specimen digitization, data sharing, DNA sequencing, and statistics have brought about a renaissance in herbarium based studies (@greve2016realising, @james2018herbarium, @brewer2019factors, @ronsted2020integrative). 
+Current uses of specimen based data extend far beyond their traditional roles in systematics and floristics, and studies utilizing collections are regularly carried out to better understand .... of plants (). 
+However, we anticipate that collections will gain their most widespread utilization as natural history is being revitalized in ecology, via novel approaches, such as remote sensing, meta-barcoding, and ... (@tosa2021rapid).
 
-The submittal of specimens to herbaria is a time consuming process, especially for younger collectors with limited experience. 
-
-While many young collectors, who are capable of using dichotomous keys to identify their collections, exist they face difficulties navigating several aspects of data collection. 
-This scenario results in the delay of deposition of many specimens, and undoubtedly the deposition of many specimens at all.
-Problems which face young collectors generally include the lack of dedicated time awarded to them at a seasons end to process specimens, and the lack of education on several cartographic and natural history attributes.
+However, we now stand at a time where we recognize the need for more specimens, but are in a difficult position where the skills of collecting and processing specimens have declined amongst young persons (Daru et al 2017).
+The submittal of specimens to herbaria is a, well documented albeit time consuming process, especially for younger collectors with limited experience in the process. 
+While many young collectors, who are capable of using dichotomous keys to reliably identify their collections, exist we have observed that they face difficulties navigating several aspects of data collection. 
+This scenario results in not only the delay in the deposition of many specimens, but undoubtedly the deposition of many collections at all.
+Problems which young collectors face generally include the lack of dedicated time awarded to them at a seasons end to process specimens, and the lack of formal education on cartography, natural history, and taxonomy at most universities.
 
 The successful generation of an herbarium specimen includes many steps which are easy to take for granted. 
 For example, while the acquisition of political information for a collection site appears simple, it is only so if the collector has the adequate resources at their disposal. 
@@ -56,13 +58,126 @@ More evidently difficult tasks involve taxonomy and the rapid rate at which taxo
 
 # METHODS AND RESULTS
 
-Here we showcase the reduction in errors attributtal to BarnebyLives 
-
 \begin{wrapfigure}{l}{0.4\textwidth}
   \centering
     \includegraphics[width=0.4\textwidth]{../graphics/plots/flowchart.png}
   \caption{Specified benchmarks at all ESDs which included all three metrics and derived imputed value}
 \end{wrapfigure}
+
+```{r load libraries}
+library(tidyverse) # data operations
+library(sf) # spatial data
+library(BarnebyLives) # for helping accession collections
+```
+
+
+```{r import example data and gather some summaries}
+
+test_data <- read.csv('data/test_data.csv', na.strings = "") %>% 
+  drop_na(longitude) %>% 
+  drop_na(latitude) %>% 
+  drop_na(date_digital) %>% 
+  st_as_sf(coords = c('longitude', 'latitude'), crs = 4326) 
+
+n_families <- test_data %>% 
+  st_drop_geometry() %>% 
+  group_by(family) %>% 
+  count() %>% 
+  nrow() # 74 families
+
+n_spp <- test_data %>% 
+  st_drop_geometry() %>% 
+  group_by(binomial) %>% 
+  count() %>% 
+  nrow() # 616 species
+
+n_infraspecies <- test_data %>% 
+  st_drop_geometry() %>% 
+  drop_na(infraspecies) %>% 
+  group_by(binomial, infraspecies) %>% 
+  count() %>% 
+  nrow() # 66 distinct infraspecies
+
+n_sp_authors <- test_data %>% 
+  st_drop_geometry() %>% 
+  drop_na(authority) %>% 
+  count() # 557 groups of authors
+
+n_infra_sp_auths <- test_data %>% 
+  st_drop_geometry() %>% 
+  drop_na(authority1) %>% 
+  group_by(binomial, infraspecies) %>% 
+  count() %>% 
+  nrow() # 22 distinct infra species author groups
+```
+```{r Run pipeline with all steps and benchmarking, eval = F}
+
+system.time({ # if neccessary convert coordinates in degrees minutes second to decimal degrees
+  data <- dms2dd(data, dms = F)
+})
+
+time_coords2sf <- system.time({ # create a spatial (simple features) object
+  data <- coords2sf(data)
+})
+
+time_political_grabber <- system.time({ # grab political information for collection
+  political_grabber(data, y = 'Collection_number', path = p)
+})
+
+time_physical_grabber <- system.time({ # grab sites physical information
+  data <- physical_grabber(data, path = p)
+})
+
+time_site_writer <- system.time({ # write site location notes
+  data <- site_writer(data, path = p)
+})
+
+time_directions_grabber <- system.time({ # write directions to sites
+  SoS_gkey = Sys.getenv("Sos_gkey")
+  data <- directions_grabber(data, api_key = SoS_gkey)
+})
+
+time_spell_check <- system.time({ # ensure appropriate spellings at taxonomic levels
+  data <- spell_check(data, path = p)
+})
+
+time_author_check <- system.time({ # ensure authorities are spelled-noted correctly
+  data <- author_check(data, path = p)
+})
+
+time_powo_searcher <- system.time({ # search for synonyms from plants of the world online
+  
+names <- sf::st_drop_geometry(data) %>% 
+  pull(Full_name)
+
+pow_res <- lapply(names,
+      powo_searcher) %>% 
+  bind_rows()
+data <- bind_cols(data, pow_res)
+
+rm(names, pow_res)
+})
+
+time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
+  data <- associate_dropper(data)
+})
+
+time_date_parser <- system.time({ # parse dates into museum formats
+  data <- date_parser(input, coll_date = 'Date_digital', det_date = 'Determined_date')
+})
+
+time_geodata_writer <- system.time({ # write out collection as GoogleEarth object
+  geodata_writer(data, path = 'someplace', 
+               filename = 'Herbarium_Collections_2023',
+               filetype = 'kml')
+})
+
+```
+
+
+
+Here we showcase the reduction in errors which are associated with the implementation of BarnebyLives.
+
 
 # CONCLUSIONS
 
@@ -70,6 +185,7 @@ Here we showcase the reduction in errors attributtal to BarnebyLives
 The project was conceptualized by R.C.B. The program was written by R.C.B Data collection and analysis were performed by R.C.B. R.C.B. wrote the manuscript with input from all other authors. All authors approved the final version of the manuscript.
 
 # ACKNOWLEDGEMENTS
+The Bureau of Land Management are graciously acknowledged as providers of funding to R.C.B for the majority of his specimen collection activities. Two anonymous peer reviewers who increased the quality of this manuscript are thanked. Co-collectors who collected specimens used in this study are thanked: Dani Yashinovitz, Dakota Becerra, Hannah Lovell, Hubert Szczygiel, Caitlin Miller.
 
 # DATA AVAILABILITY STATEMENT
 The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives), and the stable version is available on CRAN. The package includes three real use-case vignettes (tutorials) on usage. One vignette "setting_up_files" explores setting up a instance for a certain geographic area. Another vignette "running_pipeline" showcases the usage of the package for processing data entered on a spreadsheet. A final vignette "creating_labels" shows the usage of an R, and Bash script launched from RStudio to produce print-ready labels. 

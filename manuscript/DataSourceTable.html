@@ -357,7 +357,9 @@ display: none;
 </div>
 
 
-<pre class="r"><code>local_data &lt;- data.frame(
+<pre class="r"><code>footnote = &#39;*Counties and States are merged into the same dataset while setting up the package. The value for &quot;County&quot; includes State.&#39;
+
+local_data &lt;- data.frame(
   Variable = c(
     &#39;County&#39;, &#39;State&#39;, &#39;Ownership&#39;, 
     &#39;TRS&#39;, &#39;Place Names&#39;, &#39;Mountains&#39;,
@@ -366,41 +368,608 @@ display: none;
     &#39;Author Abbreviations&#39;
     ),
     Usage = c(
-    &#39;Political&#39;, &#39;Political&#39;, &#39;Political&#39;,
-    &#39;Political&#39;, &#39;Site Name&#39;, &#39;Site Name&#39;, 
-    &#39;Site Characteristics&#39;, &#39;Site Characteristics&#39;, &#39;Site Characteristics&#39;, 
-    &#39;Site Characteristics&#39;, &#39;Site Characteristics&#39;, &#39;Spell Checks&#39;, 
-    &#39;Spell Checks&#39;
+    &#39;Political&#39;, &#39;&#39;, &#39;&#39;,
+    &#39;&#39;, &#39;Site Name&#39;, &#39;Site Name&#39;, 
+    &#39;Site Characteristics&#39;, &#39;&#39;, &#39;&#39;, 
+    &#39;&#39;, &#39;&#39;, &#39;Spell Checks&#39;, 
+    &#39;&#39;
     ),
     Source = c(
-    &#39;US Census Bureau&#39;, &#39;US Census Bureau&#39;, &#39;US Geological Survey&#39;,
-    &#39;US Geological Survey&#39;, &#39;US Geological Survey&#39;, &#39;EarthEnv&#39;, 
-    &#39;Open Topography&#39;, &#39;Open Topography&#39;, &#39;Open Topography&#39;,
-    &#39;Open Topography&#39;, &#39;World Flora Online&#39;, &#39;US Geological Survey&#39;,
+    &#39;US Census Bureau&#39;, &#39;&#39;, &#39;US Geological Survey&#39;,
+    &#39;&#39;, &#39;&#39;, &#39;EarthEnv&#39;, 
+    &#39;Open Topography&#39;, &#39;&#39;, &#39;&#39;,
+    &#39;&#39;, &#39;US Geological Survey&#39;, &#39;World Flora Online&#39;,
     &#39;IPNI&#39;
     ),
   Name = c(
     &#39;Counties&#39;, &#39;States&#39;, &#39;Protected Areas Database&#39;, 
     &#39;Public Land Survey System&#39;, &#39;Geographic Names Information System&#39;, &#39;GMBA Mountain Inventory v2&#39;,
-    &#39;Geomorpho90m - Elevation&#39;, &#39;Geomorpho90m - Slope&#39;, &#39;Geomorpho90m - Aspect&#39;,
+    &#39;Geomorpho90m - Elevation&#39;, &#39;Geomorpho90 - Slope&#39;, &#39;Geomorpho90m - Aspect&#39;,
     &#39;Geomorpho90m - Geomorphons&#39;, &#39;State Geologic Map Compilation&#39;, &#39;World Flora Online&#39;,
     &#39;International Plant Names Index&#39;
     ),
   Data_Model = c(
-    &#39;Vector&#39;, &#39;Vector&#39;, &#39;Vector&#39;,
-    &#39;Vector&#39;, &#39;Vector&#39;, &#39;Vector&#39;,
-    &#39;Raster&#39;, &#39;Raster&#39;, &#39;Raster&#39;, 
-    &#39;Raster&#39;, &#39;Vector&#39;, &#39;Tabular&#39;,
-    &#39;Tabular&#39;
+    &#39;Vector&#39;, &#39;&#39;, &#39;&#39;,
+    &#39;&#39;, &#39;&#39;, &#39;&#39;,
+    &#39;Raster&#39;, &#39;&#39;, &#39;&#39;, 
+    &#39;&#39;, &#39;Vector&#39;, &#39;Text&#39;,
+    &#39;&#39;
     ),
   Subset_Size = c(
-    0.073, 0.0, 0.435,
-    0.816, 0.081, 0.004,
-    4.2, 4.6, 4.1,
-    0.455, 0.708, 0.002,
-    0.001
+    &#39;0.073&#39;, &#39;0.0*&#39;, &#39;0.435&#39;,
+    &#39;0.816&#39;, &#39;0.081&#39;, &#39;0.004&#39;,
+    &#39;4.2&#39;, &#39;4.6&#39;, &#39;4.1&#39;,
+    &#39;0.455&#39;, &#39;0.708&#39;, &#39;0.002&#39;,
+    &#39;0.001&#39;
   )
-)</code></pre>
+)
+
+local_data %&gt;% 
+  gt() %&gt;% 
+  fmt_markdown(columns = everything()) %&gt;% 
+  tab_header(
+      title = &#39;Data Sources for Package&#39;) %&gt;%
+  tab_style(style = cell_text(weight = &quot;bold&quot;),
+            locations = cells_column_labels()) %&gt;% 
+  cols_align(align = &quot;center&quot; ) %&gt;% 
+  cols_label(
+      Data_Model = &quot;Data Model&quot;,
+      Subset_Size = &quot;Size (GiB)&quot;) %&gt;% 
+  tab_footnote(footnote) %&gt;% 
+  
+  tab_options(heading.background.color = &quot;#94524A&quot;,
+              heading.border.lr.color=&#39;#2F0A28&#39;, 
+              table.background.color=&#39;#eff4ec&#39;,
+              row.striping.background_color = &#39;black&#39;,
+              footnotes.background.color = &#39;#A27E6F&#39;,
+              heading.padding = 0)</code></pre>
+<div id="cduvzvinus" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#cduvzvinus table {
+font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+#cduvzvinus thead, #cduvzvinus tbody, #cduvzvinus tfoot, #cduvzvinus tr, #cduvzvinus td, #cduvzvinus th {
+border-style: none;
+}
+#cduvzvinus p {
+margin: 0;
+padding: 0;
+}
+#cduvzvinus .gt_table {
+display: table;
+border-collapse: collapse;
+line-height: normal;
+margin-left: auto;
+margin-right: auto;
+color: #333333;
+font-size: 16px;
+font-weight: normal;
+font-style: normal;
+background-color: #EFF4EC;
+width: auto;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #A8A8A8;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #A8A8A8;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+}
+#cduvzvinus .gt_caption {
+padding-top: 4px;
+padding-bottom: 4px;
+}
+#cduvzvinus .gt_title {
+color: #FFFFFF;
+font-size: 125%;
+font-weight: initial;
+padding-top: 0px;
+padding-bottom: 0px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-color: #EFF4EC;
+border-bottom-width: 0;
+}
+#cduvzvinus .gt_subtitle {
+color: #FFFFFF;
+font-size: 85%;
+font-weight: initial;
+padding-top: -1px;
+padding-bottom: 1px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-color: #EFF4EC;
+border-top-width: 0;
+}
+#cduvzvinus .gt_heading {
+background-color: #94524A;
+text-align: center;
+border-bottom-color: #EFF4EC;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #2F0A28;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #2F0A28;
+}
+#cduvzvinus .gt_bottom_border {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#cduvzvinus .gt_col_headings {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+}
+#cduvzvinus .gt_col_heading {
+color: #333333;
+background-color: #EFF4EC;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 6px;
+padding-left: 5px;
+padding-right: 5px;
+overflow-x: hidden;
+}
+#cduvzvinus .gt_column_spanner_outer {
+color: #333333;
+background-color: #EFF4EC;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+padding-top: 0;
+padding-bottom: 0;
+padding-left: 4px;
+padding-right: 4px;
+}
+#cduvzvinus .gt_column_spanner_outer:first-child {
+padding-left: 0;
+}
+#cduvzvinus .gt_column_spanner_outer:last-child {
+padding-right: 0;
+}
+#cduvzvinus .gt_column_spanner {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 5px;
+overflow-x: hidden;
+display: inline-block;
+width: 100%;
+}
+#cduvzvinus .gt_spanner_row {
+border-bottom-style: hidden;
+}
+#cduvzvinus .gt_group_heading {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+color: #333333;
+background-color: #EFF4EC;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+text-align: left;
+}
+#cduvzvinus .gt_empty_group_heading {
+padding: 0.5px;
+color: #333333;
+background-color: #EFF4EC;
+font-size: 100%;
+font-weight: initial;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: middle;
+}
+#cduvzvinus .gt_from_md > :first-child {
+margin-top: 0;
+}
+#cduvzvinus .gt_from_md > :last-child {
+margin-bottom: 0;
+}
+#cduvzvinus .gt_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+margin: 10px;
+border-top-style: solid;
+border-top-width: 1px;
+border-top-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+overflow-x: hidden;
+}
+#cduvzvinus .gt_stub {
+color: #333333;
+background-color: #EFF4EC;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cduvzvinus .gt_stub_row_group {
+color: #333333;
+background-color: #EFF4EC;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+vertical-align: top;
+}
+#cduvzvinus .gt_row_group_first td {
+border-top-width: 2px;
+}
+#cduvzvinus .gt_row_group_first th {
+border-top-width: 2px;
+}
+#cduvzvinus .gt_summary_row {
+color: #333333;
+background-color: #EFF4EC;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cduvzvinus .gt_first_summary_row {
+border-top-style: solid;
+border-top-color: #D3D3D3;
+}
+#cduvzvinus .gt_first_summary_row.thick {
+border-top-width: 2px;
+}
+#cduvzvinus .gt_last_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#cduvzvinus .gt_grand_summary_row {
+color: #333333;
+background-color: #EFF4EC;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cduvzvinus .gt_first_grand_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-style: double;
+border-top-width: 6px;
+border-top-color: #D3D3D3;
+}
+#cduvzvinus .gt_last_grand_summary_row_top {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: double;
+border-bottom-width: 6px;
+border-bottom-color: #D3D3D3;
+}
+#cduvzvinus .gt_striped {
+background-color: #000000;
+}
+#cduvzvinus .gt_table_body {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#cduvzvinus .gt_footnotes {
+color: #FFFFFF;
+background-color: #A27E6F;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#cduvzvinus .gt_footnote {
+margin: 0px;
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cduvzvinus .gt_sourcenotes {
+color: #333333;
+background-color: #EFF4EC;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#cduvzvinus .gt_sourcenote {
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#cduvzvinus .gt_left {
+text-align: left;
+}
+#cduvzvinus .gt_center {
+text-align: center;
+}
+#cduvzvinus .gt_right {
+text-align: right;
+font-variant-numeric: tabular-nums;
+}
+#cduvzvinus .gt_font_normal {
+font-weight: normal;
+}
+#cduvzvinus .gt_font_bold {
+font-weight: bold;
+}
+#cduvzvinus .gt_font_italic {
+font-style: italic;
+}
+#cduvzvinus .gt_super {
+font-size: 65%;
+}
+#cduvzvinus .gt_footnote_marks {
+font-size: 75%;
+vertical-align: 0.4em;
+position: initial;
+}
+#cduvzvinus .gt_asterisk {
+font-size: 100%;
+vertical-align: 0;
+}
+#cduvzvinus .gt_indent_1 {
+text-indent: 5px;
+}
+#cduvzvinus .gt_indent_2 {
+text-indent: 10px;
+}
+#cduvzvinus .gt_indent_3 {
+text-indent: 15px;
+}
+#cduvzvinus .gt_indent_4 {
+text-indent: 20px;
+}
+#cduvzvinus .gt_indent_5 {
+text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Data Sources for Package</td>
+    </tr>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="Variable">Variable</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="Usage">Usage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="Source">Source</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="Name">Name</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="Data Model">Data Model</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="Size (GiB)">Size (GiB)</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>County</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"><p>Political</p>
+</div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"><p>US Census Bureau</p>
+</div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>Counties</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"><p>Vector</p>
+</div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.073</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>State</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>States</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.0*</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Ownership</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"><p>US Geological Survey</p>
+</div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>Protected Areas Database</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.435</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>TRS</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>Public Land Survey System</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.816</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Place Names</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"><p>Site Name</p>
+</div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>Geographic Names Information System</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.081</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Mountains</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"><p>Site Name</p>
+</div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"><p>EarthEnv</p>
+</div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>GMBA Mountain Inventory v2</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.004</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Elevation</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"><p>Site Characteristics</p>
+</div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"><p>Open Topography</p>
+</div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>Geomorpho90m - Elevation</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"><p>Raster</p>
+</div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>4.2</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Slope</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>Geomorpho90 - Slope</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>4.6</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Aspect</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>Geomorpho90m - Aspect</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>4.1</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Geomorphons</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>Geomorpho90m - Geomorphons</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.455</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Surficial Geology</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"><p>US Geological Survey</p>
+</div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>State Geologic Map Compilation</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"><p>Vector</p>
+</div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.708</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Taxonomic Spellings</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"><p>Spell Checks</p>
+</div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"><p>World Flora Online</p>
+</div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>World Flora Online</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"><p>Text</p>
+</div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.002</p>
+</div></td></tr>
+    <tr><td headers="Variable" class="gt_row gt_center"><div class="gt_from_md"><p>Author Abbreviations</p>
+</div></td>
+<td headers="Usage" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Source" class="gt_row gt_center"><div class="gt_from_md"><p>IPNI</p>
+</div></td>
+<td headers="Name" class="gt_row gt_center"><div class="gt_from_md"><p>International Plant Names Index</p>
+</div></td>
+<td headers="Data_Model" class="gt_row gt_center"><div class="gt_from_md"></div></td>
+<td headers="Subset_Size" class="gt_row gt_center"><div class="gt_from_md"><p>0.001</p>
+</div></td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="6"> *Counties and States are merged into the same dataset while setting up the package. The value for &quot;County&quot; includes State.</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
 
 
 
