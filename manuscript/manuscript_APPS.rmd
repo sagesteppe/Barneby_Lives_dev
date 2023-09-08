@@ -1,7 +1,7 @@
 --- 
 title: BarnebyLives an R package to create herbarium specimen labels
 author:  |
-    | Reed Clark Benkendorf$^1$^[Correspondence: rbenkendorf@chicagobotanic.org],  Nyree Zerega$^1$$^,$$^2$, Pat Herendeen$^1$$^,$$^2$, Jeremie B. Fant$^1$$^,$$^2$
+    | Reed Clark Benkendorf$^1$^[Correspondence: rbenkendorf@chicagobotanic.org], Jeremie B. Fant$^1$$^,$$^2$
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
 abstract:  |  
@@ -28,7 +28,7 @@ header-includes:
 - \usepackage{wrapfig}
 --- 
 
-```{r}
+```{r echo = F}
 knitr::opts_chunk$set(echo=F, warning = F, message = F)
 ```
 
@@ -55,14 +55,15 @@ This lack of topographic maps compounds the issues of young collectors being una
 
 More evidently difficult tasks involve taxonomy and the rapid rate at which taxonomic names have changed since the publication of many Floras. 
 
+\begin{wrapfigure}{l}{0.35\textwidth}
+  \centering
+    \includegraphics[width=0.35\textwidth]{../graphics/plots/flowchart-trim.png}
+  \caption{Specified benchmarks at all ESDs which included all three metrics and derived imputed value}
+\end{wrapfigure}
 
 # METHODS AND RESULTS
 
-\begin{wrapfigure}{l}{0.4\textwidth}
-  \centering
-    \includegraphics[width=0.4\textwidth]{../graphics/plots/flowchart.png}
-  \caption{Specified benchmarks at all ESDs which included all three metrics and derived imputed value}
-\end{wrapfigure}
+`r lorem::ipsum(paragraphs = 5)`
 
 ```{r load libraries}
 library(tidyverse) # data operations
@@ -74,31 +75,31 @@ library(BarnebyLives) # for helping accession collections
 ```{r import example data and gather some summaries}
 
 data <- read.csv('data/test_data.csv', na.strings = "") %>% 
-  drop_na(c('longitude', 'latitude', 'date_digital'))
+  drop_na(c('Longitude', 'Latitude', 'Date_digital'))
 
 n_families <- data %>% 
-  group_by(family) %>% 
+  group_by(Family) %>% 
   count() %>% 
   nrow() # 74 families
 
 n_spp <- data %>% 
-  group_by(binomial) %>% 
+  group_by(Binomial) %>% 
   count() %>% 
   nrow() # 616 species
 
 n_infraspecies <- data %>% 
-  drop_na(infraspecies) %>% 
-  group_by(binomial, infraspecies) %>% 
+  drop_na(Infraspecies) %>% 
+  group_by(Binomial, Infraspecies) %>% 
   count() %>% 
   nrow() # 66 distinct infraspecies
 
 n_sp_authors <- data %>% 
-  drop_na(authority) %>% 
+  drop_na(Binomial_authority) %>% 
   count() # 557 groups of authors
 
 n_infra_sp_auths <- data %>% 
-  drop_na(authority1) %>% 
-  group_by(binomial, infraspecies) %>% 
+  drop_na(Infraspecific_authority) %>% 
+  group_by(Binomial, Infraspecies) %>% 
   count() %>% 
   nrow() # 22 distinct infra species author groups
 
@@ -127,7 +128,7 @@ time_political_grabber <- system.time({ # grab political information for collect
 
 time_physical_grabber <- system.time({ # grab sites physical information
   data <- physical_grabber(data, path = p2geo)
-}) # not finding slope and aspect
+})
 
 time_site_writer <- system.time({ # write site location notes
   data <- site_writer(data, path = p2geo)
@@ -175,28 +176,37 @@ time_geodata_writer <- system.time({ # write out collection as GoogleEarth objec
                filename = 'Herbarium_Collections_2023',
                filetype = 'kml')
 })
-
+lorem
 ```
-
 
 
 Here we showcase the reduction in errors which are associated with the implementation of BarnebyLives.
 
+\begin{wrapfigure}{r}{0.45\textwidth}
+  \centering
+    \includegraphics[width=0.45\textwidth]{../graphics/tables/Screenshot-DataSources.png}
+  \caption{Sources of Data required for operations}
+\end{wrapfigure}
 
+\newpage
 # CONCLUSIONS
+
+`r lorem::ipsum(paragraphs = 3)`
 
 # AUTHOR CONTRIBUTIONS
 The project was conceptualized by R.C.B. The program was written by R.C.B Data collection and analysis were performed by R.C.B. R.C.B. wrote the manuscript with input from all other authors. All authors approved the final version of the manuscript.
 
 # ACKNOWLEDGEMENTS
-The Bureau of Land Management are graciously acknowledged as providers of funding to R.C.B for the majority of his specimen collection activities. Two anonymous peer reviewers who increased the quality of this manuscript are thanked. Co-collectors who collected specimens used in this study are thanked: Dani Yashinovitz, Dakota Becerra, Hannah Lovell, Hubert Szczygiel, Caitlin Miller.
+The Bureau of Land Management are graciously acknowledged as providers of funding to R.C.B for the majority of his specimen collection activities. Two anonymous peer reviewers who increased the quality of this manuscript are thanked. Co-collectors who collected specimens used in this study are thanked: Dani Yashinovitz, Dakota Becerra, Hannah Lovell, Caitlin Miller & Hubert Szczygiel. 
 
 # DATA AVAILABILITY STATEMENT
-The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives), and the stable version is available on CRAN. The package includes three real use-case vignettes (tutorials) on usage. One vignette "setting_up_files" explores setting up a instance for a certain geographic area. Another vignette "running_pipeline" showcases the usage of the package for processing data entered on a spreadsheet. A final vignette "creating_labels" shows the usage of an R, and Bash script launched from RStudio to produce print-ready labels. 
+The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives), and the stable version is available on CRAN. The package includes three real use-case vignettes (tutorials) on usage. One vignette "setting_up_files" explores setting up a instance for a certain geographic area. Another vignette "running_pipeline" showcases the usage of the package for processing data entered on a spreadsheet. A final vignette "creating_labels" shows the usage of an R, and Bash script launched from RStudio to produce print-ready labels. All data used in this mansucript are available at: https://github.com/sagesteppe/Barneby_Lives_dev/manuscript
 
 # ORCID
 
 Jeremie Fant https://orcid.org/0000-0001-9276-1111
 
+\newpage 
+\small
 # REFERENCES
 
