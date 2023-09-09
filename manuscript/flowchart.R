@@ -25,10 +25,20 @@ digraph boxes_and_circle {
               [label = '     coords2sf', fontsize = 26, penwidth = 6]
           'Geospatial Data' -> 'Political\nBoundaries' 
               [label = '     political_grabber', fontsize = 26, penwidth = 6]
-          'Political\nBoundaries' -> 'Site\nCharacteristics'
+          'Political\nBoundaries' -> 'Site Characteristics' 
               [label = '     physical_grabber', fontsize = 26, penwidth = 6]
-          'Site\nCharacteristics' -> 'Site Name' 
+          'Site Characteristics' -> 'Site Name' 
               [label = '     site_writer', fontsize = 26, penwidth = 6]
+              
+              
+          'Raw Spreadsheet' -> 'Seperate\nname'
+              [label = '     split_binomial', fontsize = 26, penwidth = 6, style = dashed]
+          'Raw Spreadsheet' -> 'Check for\nautofill values' 
+              [label = '     autofill_checker', fontsize = 26, penwidth = 6, style = dashed]
+          'Seperate\nname' -> 'Convert Coordinates\nfrom DMS to DD' 
+              [penwidth = 6, style = dashed]
+          'Check for\nautofill values' -> 'Convert Coordinates\nfrom DMS to DD' 
+              [penwidth = 6, style = dashed]
               
           'Geospatial Data' -> 'Directions'
               [label = '     directions_grabber', fontsize = 26, penwidth =6, style=dashed]
@@ -40,14 +50,16 @@ digraph boxes_and_circle {
       subgraph cluster_taxonomy { style=dashed; color= 'white'; 
         node [color = '#176B87']
   
-          'Site Name' -> 'Spell Check (Collection)' 
+          'Site Name' -> 'Spell Check (Binomial)' 
               [label = '     spell_check', fontsize = 26, penwidth = 6]
-          'Spell Check (Collection)' -> 'Spell Check\n(Authorities)' 
+          'Spell Check (Binomial)' -> 'Spell Check (Family)' 
+              [label = '     spell_check_family', fontsize = 26, penwidth = 6]
+          'Spell Check (Family)' -> 'Spell Check\n(Authorities)' 
               [label = '     author_check', fontsize = 26, penwidth = 6]
           'Spell Check\n(Authorities)' -> 'Spell Check\n(Associated Species)' 
               [label = '    associates_check', fontsize = 26, penwidth = 6]
               
-          'Spell Check (Collection)' -> 'Synonym\nCheck' 
+          'Spell Check (Binomial)' -> 'Synonym\nCheck' 
               [label = '    powo_searcher', fontsize = 26, penwidth = 6, style=dashed]
            'Synonym\nCheck' -> 'Spell Check\n(Associated Species)'  [penwidth = 6, style=dashed]
       }

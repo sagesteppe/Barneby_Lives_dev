@@ -1,11 +1,11 @@
 --- 
-title: BarnebyLives an R package to create herbarium specimen labels
+title: BarnebyLives an R package to create herbarium specimen labels and digital data sheets
 author:  |
     | Reed Clark Benkendorf$^1$^[Correspondence: rbenkendorf@chicagobotanic.org], Jeremie B. Fant$^1$$^,$$^2$
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
 abstract:  |  
-  **Premise:** Depositing quality specimens to herbaria is a time intensive task. Many institutions have reduced the amount of funding for herbaria, and universities have reduced the amount of education dedicated to curatorial tasks and specimen deposition. Despite this, the continual generation of herbaria specimens are essential for research in ecology and evolution. In order to faciliate the continued growth of herbaria BarnebyLives was developed as tool to supplement collection notes, perform geographic and, taxonomic informatic processes, enact spell checks and produce labels.    
+  **Premise:** Depositing specimens to herbaria is a time consuming task. Many institutions have reduced the amount of funding for herbaria, and universities have reduced the amount of education dedicated to curatorial tasks and specimen deposition. Despite this, the continual generation of herbaria specimens are essential for research in ecology and evolution. In order to faciliate the continued growth of herbaria BarnebyLives was developed as tool to supplement collection notes, perform geographic and, taxonomic informatic processes, enact spell checks and produce labels.    
   **Methods and Results:** BarnebyLives uses geospatial data from the U.S. Census Bureau to provide political jurisdiction information, and data from other sources, including the United States Geological Survey, to supplement collection notes by providing information on abiotic site conditions. It uses inhouse spell checks to verify the spelling of a collection at all taxonomic ranks, the IPNI standard author database to check standard author abbreviations, and the Royal Botanic Garden Kews 'Plants of the World Online' to check for nomenclatural innovations. Optionally the package writes driving directions to sites using Google Maps. Finally the package outputs data in a tabular format for review by the user to accept or confirm changes,      
   **Conclusions:** BarnebyLives provides accurate political and physical information, reduces typos, provides users the most current taxonomic opinions, generates driving directions to sites, and produces aesthetically appealing labels and shipping manifests in a matter of minutes.     
 keywords: |
@@ -26,6 +26,7 @@ header-includes:
 - \linenumbers
 - \usepackage[width=\textwidth]{caption}
 - \usepackage{wrapfig}
+- \usepackage[export]{adjustbox}
 --- 
 
 ```{r echo = F}
@@ -34,19 +35,19 @@ knitr::opts_chunk$set(echo=F, warning = F, message = F)
 
 Nearly 400 million specimens are housed in herbaria around the world (@thiers2021herbaria).
 These specimens were collected with the goal of describing the plant kingdoms taxonomic diversity, and documenting the worlds floristic diversity (@greve2016realising). 
-The rate of accessioning new collections to herbaria diminished in the 20th centry as research goals in the biological sciences shifted away from describing, documenting, and understanding earths biodiversity (@prather2004decline, @pyke2010biological).
+The rate of accessioning new collections to herbaria diminished in the 20th century as research goals in the biological sciences shifted away from describing, documenting, and understanding earths biodiversity (@prather2004decline, @pyke2010biological, @daru2018widespread).
 Which, among other factors, lead to a decline in the amount of funding allocated to collections based research, and the number of staff maintaining and accessioning new collections (@funk2014erosion). 
-Fortunately, renewed interest in collections have brought herbaria back to the forefront of plant sciences (@ronsted2020integrative).  
+Fortunately, renewed interest in collections have brought herbaria of all sizes back to the forefront of plant sciences (@ronsted2020integrative, @marsico2020small).  
 
 Recent innovations in computing, specimen digitization, data sharing, DNA sequencing, and statistics have brought about a renaissance in herbarium based studies (@greve2016realising, @james2018herbarium, @brewer2019factors, @ronsted2020integrative). 
-Current uses of specimen based data extend far beyond their traditional roles in systematics and floristics, and studies utilizing collections are regularly carried out to better understand .... of plants (). 
-However, we anticipate that collections will gain their most widespread utilization as natural history is being revitalized in ecology, via novel approaches, such as remote sensing, meta-barcoding, and ... (@tosa2021rapid).
+Current uses of specimen based data extend far beyond their traditional roles in systematics and floristics, and studies utilizing collections are regularly carried out to better understand the ecological niches, phenological processes, and interactions of plants (@ronsted2020integrative). 
+However, we anticipate that collections will gain their most widespread utilization as natural history is being revitalized in ecology, via novel approaches, such as remote sensing, meta-barcoding, community science, electronic sensing (@tosa2021rapid).
 
-However, we now stand at a time where we recognize the need for more specimens, but are in a difficult position where the skills of collecting and processing specimens have declined amongst young persons (Daru et al 2017).
+However, we now stand at a time where we recognize the need for more specimens, but are in a difficult position where the skills of collecting and processing specimens, and time allocated for collecting, have declined among young persons (@daru2018widespread, @mishler2020spatial).
 The submittal of specimens to herbaria is a, well documented albeit time consuming process, especially for younger collectors with limited experience in the process. 
 While many young collectors, who are capable of using dichotomous keys to reliably identify their collections, exist we have observed that they face difficulties navigating several aspects of data collection. 
 This scenario results in not only the delay in the deposition of many specimens, but undoubtedly the deposition of many collections at all.
-Problems which young collectors face generally include the lack of dedicated time awarded to them at a seasons end to process specimens, and the lack of formal education on cartography, natural history, and taxonomy at most universities.
+Problems which young collectors face generally include both the lack of dedicated time awarded to them at a seasons end to process specimens, and a general lack of formal education on cartography, natural history, taxonomy, and plant systematics.
 
 The successful generation of an herbarium specimen includes many steps which are easy to take for granted. 
 For example, while the acquisition of political information for a collection site appears simple, it is only so if the collector has the adequate resources at their disposal. 
@@ -57,7 +58,7 @@ More evidently difficult tasks involve taxonomy and the rapid rate at which taxo
 
 \begin{wrapfigure}{l}{0.35\textwidth}
   \centering
-    \includegraphics[width=0.35\textwidth]{../graphics/plots/flowchart-trim.png}
+    \includegraphics[max size={\textwidth}{\textheight}]{../graphics/plots/flowchart-trim.png}
   \caption{Specified benchmarks at all ESDs which included all three metrics and derived imputed value}
 \end{wrapfigure}
 
@@ -67,15 +68,19 @@ More evidently difficult tasks involve taxonomy and the rapid rate at which taxo
 
 ```{r load libraries}
 library(tidyverse) # data operations
-# devtools::install_github('sagesteppe/BarnebyLives')
+# devtools::install_github('sagesteppe/BarnebyLives', force = TRUE)
 library(BarnebyLives) # for helping accession collections
 ```
 
+## Usage
+BarnebyLives is run entirely from within Rstudio. Data may be read in from: Excel, software which can process Comma-separated Values (CSV's) such as LibreOffice, OpenOffice (or Excel), or via the cloud on Googlesheets. The latter two options are documented here and in package vignettes. BarnebyLives is atypical of R packages in that it requires a considerable amount of data to operate (Table 1). Virtually all of the on-disk memory associated with these data are for storing geospatial information, setting up a local instance of the program - at whichever scale a user desires (see Figure XX) is available in the package documentation. Functions which require the on-disk data require a path to the data as an argument. 
+We anticipate most personal BarnebyLives instances will be less than several gigabytes, and the processing takes relatively little RAM, hence we believe installations can work on hardware as small as Chromebooks, or have the data stored entirely on thumb-drives. The final steps of Barnebylives, generating the labels require working installations of Rmarkdown, a TeX driver (e.g. pdflatex, lualatex, xelatex), and the open source command line tools pdfjam and pdftk. While these steps are run through bash, we have wrapped them in a R functions which bypass the need to enter the commands to a terminal.
 
 ```{r import example data and gather some summaries}
 
 data <- read.csv('data/test_data.csv', na.strings = "") %>% 
-  drop_na(c('Longitude', 'Latitude', 'Date_digital'))
+  drop_na(c('Longitude', 'Latitude', 'Date_digital')) %>% 
+  unite(col = 'Scientific_name', Binomial:Infraspecific_authority, na.rm=TRUE, sep = " ", remove = F)
 
 n_families <- data %>% 
   group_by(Family) %>% 
@@ -95,7 +100,8 @@ n_infraspecies <- data %>%
 
 n_sp_authors <- data %>% 
   drop_na(Binomial_authority) %>% 
-  count() # 557 groups of authors
+  count() %>% # 557 groups of authors
+  pull()
 
 n_infra_sp_auths <- data %>% 
   drop_na(Infraspecific_authority) %>% 
@@ -105,8 +111,14 @@ n_infra_sp_auths <- data %>%
 
 ```
 
+### Herbarium Collections
+The package was finalized using the primary authors collections from 2023. The testing of the package within this manuscript was performed using a subset of their collections from 2018-2022, *all* of which are un-accessioned. Only collections which had identifications to the level of species or lower, and transcribed collection dates and coordinates were used. This results in a data set of XX records for testing, from XX sites located across Western North America FIGURE XX. In total `r n_spp` species (with `r n_sp_authors` authorships), with `r n_infraspecies` infraspecies (`r n_infra_sp_auths` authorships) in `r n_families` families were used for testing. 
 
 ```{r Run pipeline with all steps and benchmarking, eval = F}
+
+time_split_binomials <- system.time({ # split up names into their components
+  data <- split_binomial(data, 'Scientific_name')
+})
 
 time_dms2dd <- system.time({ # if necessary convert coordinates in degrees minutes second to decimal degrees
   data <- dms2dd(data, dms = F)
@@ -134,53 +146,94 @@ time_site_writer <- system.time({ # write site location notes
   data <- site_writer(data, path = p2geo)
 })
 
-# time_directions_grabber <- system.time({ # write directions to sites
-#   SoS_gkey = Sys.getenv("Sos_gkey")
-#   data <- directions_grabber(data, api_key = SoS_gkey)
-# })
-
-
 p2tax <- '/media/steppe/hdd/Barneby_Lives-dev/taxonomic_data'
 
-time_spell_check <- system.time({ # ensure appropriate spellings at taxonomic levels
+time_spell_check <- system.time({ # ensure appropriate spellings of the species
   data <- spell_check(data, path = p2tax)
+})
+
+time_family_spell_check <- system.time({ # ensure appropriate spelling of the family
+  data <- family_spell_check(data, path = p2tax)
 })
 
 time_author_check <- system.time({ # ensure authorities are spelled-noted correctly
   data <- author_check(data, path = p2tax)
 })
 
-# time_powo_searcher <- system.time({ # search for synonyms from plants of the world online
-  
-# names <- sf::st_drop_geometry(data) %>% 
-#   pull(Full_name)
-
-# pow_res <- lapply(names,
-#       powo_searcher) %>% 
- #  bind_rows()
-# data <- bind_cols(data, pow_res)
-
-# rm(names, pow_res)
-# })
-
 time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
-  data <- associate_dropper(data)
+  data <- associate_dropper(data, 'Full_name')
 })
 
 time_date_parser <- system.time({ # parse dates into museum formats
-  data <- date_parser(input, coll_date = 'Date_digital', det_date = 'Determined_date')
+  data <- date_parser(data, coll_date = 'Date_digital')
 })
 
 time_geodata_writer <- system.time({ # write out collection as GoogleEarth object
-  geodata_writer(data, path = 'someplace', 
+  geodata_writer(data, path = '~/Documents/BL', 
                filename = 'Herbarium_Collections_2023',
                filetype = 'kml')
 })
-lorem
+
 ```
 
+```{r Run the API services, eval = F}
 
-Here we showcase the reduction in errors which are associated with the implementation of BarnebyLives.
+# we keep these processes in a discrete chunk set not to evaluate so as to not overwhelm
+# the services. Google does charge if the number of queries per month is high.
+
+time_powo_searcher <- system.time({ # search for synonyms from plants of the world online
+  
+ names <- sf::st_drop_geometry(data) %>% 
+   pull(Full_name)
+
+ pow_res <- lapply(names,
+       powo_searcher) %>% 
+       bind_rows()
+ data <- bind_cols(data, pow_res)
+
+ rm(names, pow_res)
+}) # has been run
+
+saveRDS(time_powo_searcher, file = 'data/processed/time_powo_searcher')
+saveRDS(data, file = 'data/processed/data_w_POWO_search')
+
+time_directions_grabber <- system.time({ # write directions to sites
+  SoS_gkey = Sys.getenv("Sos_gkey")
+  data <- directions_grabber(data, api_key = SoS_gkey)
+})
+
+saveRDS(time_directions_grabber, file = 'data/processed/time_directions_grabber')
+saveRds(data, file = 'data/processed/data_w_Google_Maps')
+```
+
+```{r Total Time of operations}
+
+time_powo_searcher <- readRDS(file = 'data/processed/time_powo_searcher')
+
+time_trials <- data.frame(as.matrix(do.call(rbind, mget(ls(pattern = '^time'))))) %>% 
+  rownames_to_column('Function') %>% 
+  select(-user.child, -sys.child) %>% 
+  mutate(Function = str_remove(Function, 'time_')) %>% 
+  mutate(Module = case_when(
+    Function %in% c('associate_dropper', 'split_binomials', 'date_parser') ~ 'Style',
+    Function %in% c('autofill_checker', 'coords2sf', 'dms2dd', 'physical_grabber', 
+                    'political_grabber', 'site_writer') ~ 'Geospatial', 
+    Function %in% c('spell_check', 'family_spell_check', 'author_check',  'powo_searcher') ~ 'Taxonomic',
+    Function %in% c('time_label_maker', 'time_shipping_manifest', 'time_label_assembly') ~ 'Labels'
+  ))
+  
+# save these as RDS so operations do not need to be run each time document knits
+
+rm(time_trials)
+
+# rm(ls(pattern = '^time'))
+```
+
+It took roughly four (XX exact) minutes to run all local steps of BarnebyLives, and a further XX minutes to search Plants of the World Online, and XX to search Google Maps for site directions.
+Nearly all of this time was attributable to the spatial operations (spatial:, taxonomic:, style:) The POWO online search is likely capable of being carried out much faster, xx, if one decreases the pauses (which are by default relatively long) between each query, a tactic used to avoid adversely impacting the website.
+The generation of labels is the most time intensive process and consumed around XX minutes for the rendering, XX to combine individual labels four per single sheet of landscape orientated paper, and XX to combine the XX sheets to a single Portable Document Format (PDF).  
+
+Even on data which had been manually cleaned and error-checked by a human BarnebyLives was able to reduce transcription errors, identify typos, make nomenclatural suggestions, and reformat text elements for downsteam use. 
 
 \begin{wrapfigure}{r}{0.45\textwidth}
   \centering
@@ -190,20 +243,18 @@ Here we showcase the reduction in errors which are associated with the implement
 
 \newpage
 # CONCLUSIONS
-
-`r lorem::ipsum(paragraphs = 3)`
+BarnebyLives is a tool which is able to rapidly acquire relevant geographic, and taxonomic data. It is also capable of performing specialized spell checks, and assorted curatorial tasks to produce both digital and analog data. The package relies on no licensed Software, such as the Microsoft suite, and is suitable for install on all major operating systems (Windows, Mac, Linux), with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal.
 
 # AUTHOR CONTRIBUTIONS
 The project was conceptualized by R.C.B. The program was written by R.C.B Data collection and analysis were performed by R.C.B. R.C.B. wrote the manuscript with input from all other authors. All authors approved the final version of the manuscript.
 
 # ACKNOWLEDGEMENTS
-The Bureau of Land Management are graciously acknowledged as providers of funding to R.C.B for the majority of his specimen collection activities. Two anonymous peer reviewers who increased the quality of this manuscript are thanked. Co-collectors who collected specimens used in this study are thanked: Dani Yashinovitz, Dakota Becerra, Hannah Lovell, Caitlin Miller & Hubert Szczygiel. 
+The Bureau of Land Management are graciously acknowledged as providers of funding to R.C.B for the majority of his specimen collection activities. Two anonymous peer reviewers who increased the quality of this manuscript are thanked. Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz, Dakota Becerra, Hannah Lovell, Caitlin Miller & Hubert Szczygiel. 
 
 # DATA AVAILABILITY STATEMENT
 The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives), and the stable version is available on CRAN. The package includes three real use-case vignettes (tutorials) on usage. One vignette "setting_up_files" explores setting up a instance for a certain geographic area. Another vignette "running_pipeline" showcases the usage of the package for processing data entered on a spreadsheet. A final vignette "creating_labels" shows the usage of an R, and Bash script launched from RStudio to produce print-ready labels. All data used in this mansucript are available at: https://github.com/sagesteppe/Barneby_Lives_dev/manuscript
 
 # ORCID
-
 Jeremie Fant https://orcid.org/0000-0001-9276-1111
 
 \newpage 
