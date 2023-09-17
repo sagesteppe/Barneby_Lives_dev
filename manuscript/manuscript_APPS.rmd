@@ -1,5 +1,5 @@
 --- 
-title: BarnebyLives an R package to create herbarium specimen labels and digital data sheets
+title: BarnebyLives':' an R package to create herbarium specimen labels and digital data sheets
 author:  |
     | Reed Clark Benkendorf$^1$^[Correspondence: rbenkendorf@chicagobotanic.org], Jeremie B. Fant$^1$$^,$$^2$
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
@@ -54,13 +54,17 @@ For example, while the acquisition of political information for a collection sit
 Given the association of boundaries with topographically complex areas (e.g. watersheds) it often requires topographic maps, which are no longer widespread - resulting in many having difficulties interpreting them, or transcription of coordinates into a Geographic Information System (e.g. ArcMap, which is relatively expensive at 100$ year), or more likely Google Maps by individual site. 
 This lack of topographic maps compounds the issues of young collectors being unable to come up with appropriate site names. 
 
-More evidently difficult tasks involve taxonomy and the rapid rate at which taxonomic names have changed since the publication of many Floras. 
+Here we provide a description of the BarnebyLives R package. 
+BarnebyLives was named for plant taxonomist extraordinaire Rupert Charles Barneby (1911-200), whom published over 6,500 pages of text, described over 750 taxa, and is notable for balancing his studies at the Willian & Lynda Steere Herbarium at the New York Botanical Garden with annual collection trips in Western North America from 1937-1970, and sporadically until his passing (@welsh2001rupert). 
+Select accolades of Rupert include the Asa Gray Award from the American Society of Plant Taxonomists (ASPT) in 1989, the 1991 Engler Silver Medal from the International Association of Plant Taxonomists (IAPT), as well as being one of eight recipients of the International Botanical Congresses's (IBC) Millenium Botany Award (1999) (@welsh2001rupert).
 
 \begin{wrapfigure}{l}{0.35\textwidth}
   \centering
     \includegraphics[max size={\textwidth}{\textheight}]{../graphics/plots/flowchart-trim.png}
-  \caption{Specified benchmarks at all ESDs which included all three metrics and derived imputed value}
+  \caption{Recommended workflow.}
 \end{wrapfigure}
+
+More evidently difficult tasks involve taxonomy and the rapid rate at which taxonomic names have changed since the publication of many Floras. 
 
 # METHODS AND RESULTS
 
@@ -68,13 +72,21 @@ More evidently difficult tasks involve taxonomy and the rapid rate at which taxo
 
 ```{r load libraries}
 library(tidyverse) # data operations
-# devtools::install_github('sagesteppe/BarnebyLives', force = TRUE)
+# devtools::install_github('sagesteppe/BarnebyLives')
 library(BarnebyLives) # for helping accession collections
 ```
 
 ## Usage
-BarnebyLives is run entirely from within Rstudio. Data may be read in from: Excel, software which can process Comma-separated Values (CSV's) such as LibreOffice, OpenOffice (or Excel), or via the cloud on Googlesheets. The latter two options are documented here and in package vignettes. BarnebyLives is atypical of R packages in that it requires a considerable amount of data to operate (Table 1). Virtually all of the on-disk memory associated with these data are for storing geospatial information, setting up a local instance of the program - at whichever scale a user desires (see Figure XX) is available in the package documentation. Functions which require the on-disk data require a path to the data as an argument. 
-We anticipate most personal BarnebyLives instances will be less than several gigabytes, and the processing takes relatively little RAM, hence we believe installations can work on hardware as small as Chromebooks, or have the data stored entirely on thumb-drives. The final steps of Barnebylives, generating the labels require working installations of Rmarkdown, a TeX driver (e.g. pdflatex, lualatex, xelatex), and the open source command line tools pdfjam and pdftk. While these steps are run through bash, we have wrapped them in a R functions which bypass the need to enter the commands to a terminal.
+BarnebyLives is run entirely from within Rstudio. 
+Data may be read in from any common spreadsheet management system or database connection such as Excel, LibreOffice, OpenOffice, or via the cloud on Googlesheets. 
+The latter two options are documented here and in package vignettes, detailed descriptions of the required and suggested input columns are located on the Github page (https://github.com/sagesteppe/BarnebyLives *'Input Data Column Names'*) and over 100 real-world examples are on a Google Sheets accessible from the page.
+BarnebyLives is atypical of R packages in that it requires a considerable amount of data to operate (Table 1).
+Virtually all of the on-disk memory associated with these data are for storing geo-spatial information, setting up a local instance of the program - at whichever scale a user desires (see Figure XX) is available in the package documentation. Functions which require the on-disk data require a path to the data as an argument. 
+Manually supplying the argument allows for the users to judiciously decide a storage location suitable for there needs.  
+We anticipate most personal BarnebyLives instances will be less than several gigabytes, and the processing takes relatively little RAM, hence we believe installations can work on hardware as small as Chromebooks, or have the data stored entirely on thumb-drives.
+The final steps of Barnebylives, generating the labels require working installations of Rmarkdown, a LaTeX installation (e.g. pdflatex, lualatex, xelatex), and the open source command line tools pdfjam and pdftk.
+While these steps are run through bash, we have wrapped them in a R functions which bypass the need to enter the commands to a terminal.
+Several commands in BarnebyLives require the output from previous functions, and a workflow which satisfies these requirements is presented in FIGURE XX. 
 
 ```{r import example data and gather some summaries}
 
@@ -109,10 +121,23 @@ n_infra_sp_auths <- data %>%
   count() %>% 
   nrow() # 22 distinct infra species author groups
 
+# number of collection sites
+
+n_sites <- data %>% 
+  distinct(Latitude, Longitude) %>% 
+  nrow()
+
 ```
 
+\begin{wrapfigure}{r}{0.35\textwidth}
+  \centering
+    \includegraphics[width=0.35\textwidth]{../graphics/plots/collections_map-trim.png}
+  \caption{The spatial extent (orange), and herbarium collection sites (burgundy) tested in this manuscript.}
+\end{wrapfigure}
+
 ### Herbarium Collections
-The package was finalized using the primary authors collections from 2023. The testing of the package within this manuscript was performed using a subset of their collections from 2018-2022, *all* of which are un-accessioned. Only collections which had identifications to the level of species or lower, and transcribed collection dates and coordinates were used. This results in a data set of XX records for testing, from XX sites located across Western North America FIGURE XX. In total `r n_spp` species (with `r n_sp_authors` authorships), with `r n_infraspecies` infraspecies (`r n_infra_sp_auths` authorships) in `r n_families` families were used for testing. 
+
+The package was finalized using the primary authors collections from 2023. The testing of the package within this manuscript was performed using a subset of their collections from 2018-2022, *all* of which are un-accessioned. Only collections which had identifications to the level of species or lower, and transcribed collection dates and coordinates were used. This results in a data set of `r nrow(data)` records for testing, from `r n_sites` sites located across Western North America FIGURE XX. In total `r n_spp` species (with `r n_sp_authors` authorships), with `r n_infraspecies` infraspecies (`r n_infra_sp_auths` authorships) in `r n_families` families were used for testing. 
 
 ```{r Run pipeline with all steps and benchmarking, eval = F}
 
@@ -152,9 +177,15 @@ time_spell_check <- system.time({ # ensure appropriate spellings of the species
   data <- spell_check(data, path = p2tax)
 })
 
+time_spell_check <- system.time({ # ensure appropriate spellings of the species
+  sc_res <- spell_check(data$Binomial, path = p2tax)
+})
+
 time_family_spell_check <- system.time({ # ensure appropriate spelling of the family
   data <- family_spell_check(data, path = p2tax)
 })
+
+data$Family == data$Family
 
 time_author_check <- system.time({ # ensure authorities are spelled-noted correctly
   data <- author_check(data, path = p2tax)
@@ -174,6 +205,7 @@ time_geodata_writer <- system.time({ # write out collection as GoogleEarth objec
                filetype = 'kml')
 })
 
+rm(p2geo, p2tax)
 ```
 
 ```{r Run the API services, eval = F}
@@ -203,12 +235,13 @@ time_directions_grabber <- system.time({ # write directions to sites
 })
 
 saveRDS(time_directions_grabber, file = 'data/processed/time_directions_grabber')
-saveRds(data, file = 'data/processed/data_w_Google_Maps')
+saveRDS(data, file = 'data/processed/data_w_Google_Maps')
 ```
 
-```{r Total Time of operations}
+```{r Total Time of operations, eval = F}
 
 time_powo_searcher <- readRDS(file = 'data/processed/time_powo_searcher')
+time_directions_grabber <- readRDS('data/processed/time_directions_grabber')
 
 time_trials <- data.frame(as.matrix(do.call(rbind, mget(ls(pattern = '^time'))))) %>% 
   rownames_to_column('Function') %>% 
@@ -217,23 +250,129 @@ time_trials <- data.frame(as.matrix(do.call(rbind, mget(ls(pattern = '^time'))))
   mutate(Module = case_when(
     Function %in% c('associate_dropper', 'split_binomials', 'date_parser') ~ 'Style',
     Function %in% c('autofill_checker', 'coords2sf', 'dms2dd', 'physical_grabber', 
-                    'political_grabber', 'site_writer') ~ 'Geospatial', 
+                    'political_grabber', 'site_writer', 'geodata_writer', 'directions_grabber') ~ 'Geospatial', 
     Function %in% c('spell_check', 'family_spell_check', 'author_check',  'powo_searcher') ~ 'Taxonomic',
     Function %in% c('time_label_maker', 'time_shipping_manifest', 'time_label_assembly') ~ 'Labels'
-  ))
+    ),
+    Group = if_else(Function %in% c('powo_searcher', 'directions_grabber'), 'Online', 'Local')
+  ) 
   
 # save these as RDS so operations do not need to be run each time document knits
+saveRDS(time_trials, file = 'data/processed/time_trials')
 
 rm(time_trials)
-
-# rm(ls(pattern = '^time'))
+rm(list=ls(pattern = 'time'))
 ```
 
-It took roughly four (XX exact) minutes to run all local steps of BarnebyLives, and a further XX minutes to search Plants of the World Online, and XX to search Google Maps for site directions.
-Nearly all of this time was attributable to the spatial operations (spatial:, taxonomic:, style:) The POWO online search is likely capable of being carried out much faster, xx, if one decreases the pauses (which are by default relatively long) between each query, a tactic used to avoid adversely impacting the website.
+```{r load in time trials}
+time_trials <- readRDS('data/processed/time_trials')
+tt_local <- time_trials[time_trials$Group=='Local',]
+```
+
+It took roughly three minutes (`r sum( time_trials[time_trials$Group=='Local', 'elapsed'])`s) minutes to run all local steps of BarnebyLives, and a further 15 minutes (`r time_trials[time_trials$Function=='powo_searcher', 'elapsed']`s) to search Plants of the World Online, and `r time_trials[time_trials$Function=='directions_grabber', 'elapsed']` to search Google Maps and write directions to sites.
+Nearly all of the local run time is attributable to the spatial operations (spatial: `r sum(tt_local[tt_local$Module=='Geospatial', 'elapsed'])`s, style: `r sum(tt_local[tt_local$Module=='Style', 'elapsed'])`, taxonomic: `r sum(tt_local[tt_local$Module=='Taxonomic', 'elapsed'])`). 
 The generation of labels is the most time intensive process and consumed around XX minutes for the rendering, XX to combine individual labels four per single sheet of landscape orientated paper, and XX to combine the XX sheets to a single Portable Document Format (PDF).  
 
-Even on data which had been manually cleaned and error-checked by a human BarnebyLives was able to reduce transcription errors, identify typos, make nomenclatural suggestions, and reformat text elements for downsteam use. 
+```{r}
+rm(time_trials, tt_local)
+```
+
+## Results
+
+```{r import results}
+data_p <- readRDS(file = 'data/processed/data_w_POWO_search')
+
+drop_na(data_p, Binomial_authority) %>% 
+  nrow() # nearly all relating to the absence/presence of a period
+
+drop_na(data_p, Infra_auth_issues) %>% 
+  nrow() # nearly all relating to the absence/presence of a period
+
+drop_na(data_p, Long_AutoFill_Flag) %>% 
+  nrow() # 4 auto fill cases
+
+drop_na(data_p, Lat_AutoFill_Flag) %>% 
+  nrow() # 2 autofill cases
+
+## Family spell check; this is a comparision of my input spelling, and the results
+## of the family spell check function
+
+Family_in_positions <- data %>% 
+  drop_na(Family)
+Family_in <- Family_in_positions %>% 
+  filter(Collection_number %in% data_p$Collection_number) %>% 
+  arrange(Collection_number) %>% 
+  pull(Family)
+
+Family_out <- data_p %>% 
+  filter(Collection_number %in% Family_in_positions$Collection_number) %>% 
+  pull(Family)
+Family_in[ which( Family_in != Family_out ) ]
+
+
+## Family Level Results
+# these species were found by POW, and according to POW, the species are in the f
+# following families. 
+data_p %>% 
+  sf::st_drop_geometry() %>% 
+  filter(POW_Family != 'NOT FOUND') %>% 
+  filter(POW_Family != Family) %>% 
+  select(Collection_number, Full_name, Family, POW_Family) %>% 
+  mutate(Situation = 
+    case_when(
+      Family == 'Hydrophyllaceae' ~ 'Preferred', 
+      Family %in% c('Plantaginaceae', 'Athyriaceae') ~ 'Outdated',
+      Family %in% c('Saxifragaceae', 'Solanaceae') ~ 'Submitter_Incorrect', 
+      Family == 'Bataceae' ~ 'Internal Error', 
+      .default = 'Typo'
+    ))
+
+data_p %>% 
+  sf::st_drop_geometry() %>% 
+  filter(POW_Genus == 'NOT FOUND') %>% 
+  select(Collection_number, Full_name, Genus, POW_Genus) 
+
+# how many of my genera were mis-spelled??
+data_p %>% 
+  sf::st_drop_geometry() %>% 
+  filter(POW_Genus != 'NOT FOUND') %>% 
+  filter(POW_Genus != Genus) 
+
+# the mismatch between POW genus and not
+data_p %>% 
+  sf::st_drop_geometry() %>% 
+  filter(POW_Genus != 'NOT FOUND') %>% 
+  filter(POW_Genus != Genus) %>% 
+  select(Collection_number, Full_name, Genus, POW_Genus) %>% 
+  mutate(Situation = 
+    case_when(
+      Genus %in% c('Pleuraphis', 'Glandularia') ~ 'Preferred', # check Pleuraphis, i am confused on this still....
+      Genus %in% c('Oenothera', 'Cryptantha', 'Ivesia', 'Lotus', 'Polygala', 'Minuartia',
+                    'Pseudostellaria', 'Achnatherum', 'Scirpus', 'Peritoma', 'Arenaria', 
+                    'Spartina', 'Polygonum', 'Atriplex', 'Cymopterus', 'Trisetum', 'Bahia', 
+                   'Oryzopsis', 'Potentilla', 'Pascopyrum'
+                    ) ~ 'Outdated',
+      Genus %in% c('Vaccinium', 'Eleocharis') ~ 'Internal Error',
+      .default = 'Typo'
+    ),
+    Situation = if_else(Full_name == 'Oenothera caespitosa Nutt.', 'Internal Error', Situation))
+
+data_p %>% 
+  filter(Binomial_authority != POW_Name_authority)
+
+data_p %>% 
+  sf::st_drop_geometry() %>% 
+  filter(Epithet != POW_Epithet ) %>% 
+  select(Collection_number, Full_name, Epithet, POW_Epithet) 
+
+# NEED TO WORK ON INPUT DATA, INCONSISTENT USE OF AUTHORSHIP IN THE FIRST COLUMN
+data_p %>% 
+  sf::st_drop_geometry() %>% 
+  filter(Full_name != POW_Full_name) %>% 
+  select(Collection_number, Full_name, Binomial, POW_Full_name) 
+```
+
+Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. The number of family misspellings were XX (% percent), the number of misspelled genera were XX (% percent), the number of misspelled binomials were XX (% percent). The number of author abbreviations which were not in the appropriate format were XX (% percent), generally the presence or absence of a period were the issue. Plants of the World Online was able to identify XX new names for the submitted taxa, XX of which the author adopted. XX records were appropriately flagged for issues with auto fill incrementation of the longitude value, and three of these records were also auto-flagged for increases in latitude values (% of records).
 
 \begin{wrapfigure}{r}{0.45\textwidth}
   \centering
@@ -246,7 +385,7 @@ Even on data which had been manually cleaned and error-checked by a human Barneb
 BarnebyLives is a tool which is able to rapidly acquire relevant geographic, and taxonomic data. It is also capable of performing specialized spell checks, and assorted curatorial tasks to produce both digital and analog data. The package relies on no licensed Software, such as the Microsoft suite, and is suitable for install on all major operating systems (Windows, Mac, Linux), with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal.
 
 # AUTHOR CONTRIBUTIONS
-The project was conceptualized by R.C.B. The program was written by R.C.B Data collection and analysis were performed by R.C.B. R.C.B. wrote the manuscript with input from all other authors. All authors approved the final version of the manuscript.
+The project was conceptualized by R.C.B. The program was written by R.C.B. Data collection and analysis were performed by R.C.B. R.C.B. wrote the manuscript with input from all other authors. All authors approved the final version of the manuscript.
 
 # ACKNOWLEDGEMENTS
 The Bureau of Land Management are graciously acknowledged as providers of funding to R.C.B for the majority of his specimen collection activities. Two anonymous peer reviewers who increased the quality of this manuscript are thanked. Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz, Dakota Becerra, Hannah Lovell, Caitlin Miller & Hubert Szczygiel. 
@@ -255,9 +394,14 @@ The Bureau of Land Management are graciously acknowledged as providers of fundin
 The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives), and the stable version is available on CRAN. The package includes three real use-case vignettes (tutorials) on usage. One vignette "setting_up_files" explores setting up a instance for a certain geographic area. Another vignette "running_pipeline" showcases the usage of the package for processing data entered on a spreadsheet. A final vignette "creating_labels" shows the usage of an R, and Bash script launched from RStudio to produce print-ready labels. All data used in this mansucript are available at: https://github.com/sagesteppe/Barneby_Lives_dev/manuscript
 
 # ORCID
-Jeremie Fant https://orcid.org/0000-0001-9276-1111
+Jeremie Fant https://orcid.org/0000-0001-9276-1111  
 
-\newpage 
 \small
 # REFERENCES
 
+<div id="refs"></div>
+
+# SUPPORTING INFORMATION
+Additional supporting information can be found online in the Supporting Information section at the end of this article. 
+
+**Appendix S1.** A table of all time trials for each function.
