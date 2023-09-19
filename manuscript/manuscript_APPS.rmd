@@ -92,7 +92,7 @@ Several commands in BarnebyLives require the output from previous functions, and
 
 data <- read.csv('data/test_data.csv', na.strings = "") %>% 
   drop_na(c('Longitude', 'Latitude', 'Date_digital')) %>% 
-  unite(col = 'Scientific_name', Binomial:Infraspecific_authority, na.rm=TRUE, sep = " ", remove = F)
+  unite(col = 'Scientific_name', c(Binomial, Infrarank, Infraspecies), na.rm=TRUE, sep = " ", remove = F)
 
 n_families <- data %>% 
   group_by(Family) %>% 
@@ -174,18 +174,12 @@ time_site_writer <- system.time({ # write site location notes
 p2tax <- '/media/steppe/hdd/Barneby_Lives-dev/taxonomic_data'
 
 time_spell_check <- system.time({ # ensure appropriate spellings of the species
-  data <- spell_check(data, path = p2tax)
-})
-
-time_spell_check <- system.time({ # ensure appropriate spellings of the species
-  sc_res <- spell_check(data$Binomial, path = p2tax)
+  sct <- spell_check(data, column = 'Full_name', path = p2tax)
 })
 
 time_family_spell_check <- system.time({ # ensure appropriate spelling of the family
   data <- family_spell_check(data, path = p2tax)
 })
-
-data$Family == data$Family
 
 time_author_check <- system.time({ # ensure authorities are spelled-noted correctly
   data <- author_check(data, path = p2tax)
@@ -269,7 +263,7 @@ time_trials <- readRDS('data/processed/time_trials')
 tt_local <- time_trials[time_trials$Group=='Local',]
 ```
 
-It took roughly three minutes (`r sum( time_trials[time_trials$Group=='Local', 'elapsed'])`s) minutes to run all local steps of BarnebyLives, and a further 15 minutes (`r time_trials[time_trials$Function=='powo_searcher', 'elapsed']`s) to search Plants of the World Online, and `r time_trials[time_trials$Function=='directions_grabber', 'elapsed']` to search Google Maps and write directions to sites.
+It took roughly three minutes (`r sum( time_trials[time_trials$Group=='Local', 'elapsed'])`s) minutes to run all local steps of BarnebyLives, and a further 16 minutes (`r time_trials[time_trials$Function=='powo_searcher', 'elapsed']`s) to search Plants of the World Online, and `r time_trials[time_trials$Function=='directions_grabber', 'elapsed']` to search Google Maps and write directions to sites.
 Nearly all of the local run time is attributable to the spatial operations (spatial: `r sum(tt_local[tt_local$Module=='Geospatial', 'elapsed'])`s, style: `r sum(tt_local[tt_local$Module=='Style', 'elapsed'])`, taxonomic: `r sum(tt_local[tt_local$Module=='Taxonomic', 'elapsed'])`). 
 The generation of labels is the most time intensive process and consumed around XX minutes for the rendering, XX to combine individual labels four per single sheet of landscape orientated paper, and XX to combine the XX sheets to a single Portable Document Format (PDF).  
 
@@ -288,10 +282,10 @@ drop_na(data_p, Binomial_authority) %>%
 drop_na(data_p, Infra_auth_issues) %>% 
   nrow() # nearly all relating to the absence/presence of a period
 
-drop_na(data_p, Long_AutoFill_Flag) %>% 
+long_flag <- drop_na(data_p, Long_AutoFill_Flag) %>% 
   nrow() # 4 auto fill cases
 
-drop_na(data_p, Lat_AutoFill_Flag) %>% 
+lat_flag <- drop_na(data_p, Lat_AutoFill_Flag) %>% 
   nrow() # 2 autofill cases
 
 ## Family spell check; this is a comparision of my input spelling, and the results
@@ -372,7 +366,7 @@ data_p %>%
   select(Collection_number, Full_name, Binomial, POW_Full_name) 
 ```
 
-Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. The number of family misspellings were XX (% percent), the number of misspelled genera were XX (% percent), the number of misspelled binomials were XX (% percent). The number of author abbreviations which were not in the appropriate format were XX (% percent), generally the presence or absence of a period were the issue. Plants of the World Online was able to identify XX new names for the submitted taxa, XX of which the author adopted. XX records were appropriately flagged for issues with auto fill incrementation of the longitude value, and three of these records were also auto-flagged for increases in latitude values (% of records).
+Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. The number of family misspellings were XX (% percent), the number of misspelled genera were XX (% percent), the number of misspelled binomials were XX (% percent). The number of author abbreviations which were not in the appropriate format were XX (% percent), in nearly all cases the presence or absence of a period were the issue. Plants of the World Online was able to identify XX new names for the submitted taxa, XX of which the author adopted. `r long_flag` records were appropriately flagged for issues with auto fill incrementation of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values (% of records).
 
 \begin{wrapfigure}{r}{0.45\textwidth}
   \centering
