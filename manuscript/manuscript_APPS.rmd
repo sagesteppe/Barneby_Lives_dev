@@ -70,14 +70,18 @@ More evidently difficult tasks involve taxonomy and the rapid rate at which taxo
 
 `r lorem::ipsum(paragraphs = 5)`
 
+```{r install package}
+devtools::install_github('sagesteppe/BarnebyLives')
+```
+
+
 ```{r load libraries}
 library(tidyverse) # data operations
-# devtools::install_github('sagesteppe/BarnebyLives')
 library(BarnebyLives) # for helping accession collections
 ```
 
 ## Usage
-BarnebyLives is run entirely from within Rstudio. 
+All steps of BarnebyLives except for label generation are run from within Rstudio. 
 Data may be read in from any common spreadsheet management system or database connection such as Excel, LibreOffice, OpenOffice, or via the cloud on Googlesheets. 
 The latter two options are documented here and in package vignettes, detailed descriptions of the required and suggested input columns are located on the Github page (https://github.com/sagesteppe/BarnebyLives *'Input Data Column Names'*) and over 100 real-world examples are on a Google Sheets accessible from the page.
 BarnebyLives is atypical of R packages in that it requires a considerable amount of data to operate (Table 1).
@@ -194,7 +198,7 @@ time_date_parser <- system.time({ # parse dates into museum formats
 })
 
 time_geodata_writer <- system.time({ # write out collection as GoogleEarth object
-  geodata_writer(data, path = '~/Documents/BL', 
+  geodata_writer(data, path = 'data/processed', 
                filename = 'Herbarium_Collections_2023',
                filetype = 'kml')
 })
@@ -263,9 +267,10 @@ time_trials <- readRDS('data/processed/time_trials')
 tt_local <- time_trials[time_trials$Group=='Local',]
 ```
 
-It took roughly three minutes (`r sum( time_trials[time_trials$Group=='Local', 'elapsed'])`s) minutes to run all local steps of BarnebyLives, and a further 16 minutes (`r time_trials[time_trials$Function=='powo_searcher', 'elapsed']`s) to search Plants of the World Online, and `r time_trials[time_trials$Function=='directions_grabber', 'elapsed']` to search Google Maps and write directions to sites.
-Nearly all of the local run time is attributable to the spatial operations (spatial: `r sum(tt_local[tt_local$Module=='Geospatial', 'elapsed'])`s, style: `r sum(tt_local[tt_local$Module=='Style', 'elapsed'])`, taxonomic: `r sum(tt_local[tt_local$Module=='Taxonomic', 'elapsed'])`). 
-The generation of labels is the most time intensive process and consumed around XX minutes for the rendering, XX to combine individual labels four per single sheet of landscape orientated paper, and XX to combine the XX sheets to a single Portable Document Format (PDF).  
+It took roughly *six* minutes (`r sum( time_trials[time_trials$Group=='Local', 'elapsed'])`s) to run all local steps of BarnebyLives, and roughly 20 minutes (`r time_trials[time_trials$Function=='powo_searcher', 'elapsed']`s) to search Plants of the World Online, and `r time_trials[time_trials$Function=='directions_grabber', 'elapsed']` to search Google Maps and write directions to sites.
+Most of the local run time is attributable to the spatial (spatial: `r sum(tt_local[tt_local$Module=='Geospatial', 'elapsed'])`s), and taxonomic operations (`r sum(tt_local[tt_local$Module=='Taxonomic', 'elapsed'])`), style: `r sum(tt_local[tt_local$Module=='Style', 'elapsed'])`. 
+The spell check operation of the scientific name accounted for nearly all of the time (`r sum(tt_local[tt_local$Function=='spell_check', 'elapsed'])`) spent performing local taxonomic operations.
+The generation of labels consumed around XX minutes for the rendering, XX to combine individual labels four per single sheet of landscape orientated paper, and XX to combine the XX sheets to a single Portable Document Format (PDF).  
 
 ```{r}
 rm(time_trials, tt_local)
@@ -274,7 +279,8 @@ rm(time_trials, tt_local)
 ## Results
 
 ```{r import results}
-data_p <- readRDS(file = 'data/processed/data_w_POWO_search')
+data_p <- readRDS(file = 'data/processed/data_w_POWO_search') %>% 
+  sf::st_drop_geometry()
 
 drop_na(data_p, Binomial_authority) %>% 
   nrow() # nearly all relating to the absence/presence of a period
@@ -291,7 +297,7 @@ lat_flag <- drop_na(data_p, Lat_AutoFill_Flag) %>%
 ## Family spell check; this is a comparision of my input spelling, and the results
 ## of the family spell check function
 
-Family_in_positions <- data %>% 
+Family_in_positions <- data_p %>% 
   drop_na(Family)
 Family_in <- Family_in_positions %>% 
   filter(Collection_number %in% data_p$Collection_number) %>% 
@@ -359,11 +365,6 @@ data_p %>%
   filter(Epithet != POW_Epithet ) %>% 
   select(Collection_number, Full_name, Epithet, POW_Epithet) 
 
-# NEED TO WORK ON INPUT DATA, INCONSISTENT USE OF AUTHORSHIP IN THE FIRST COLUMN
-data_p %>% 
-  sf::st_drop_geometry() %>% 
-  filter(Full_name != POW_Full_name) %>% 
-  select(Collection_number, Full_name, Binomial, POW_Full_name) 
 ```
 
 Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. The number of family misspellings were XX (% percent), the number of misspelled genera were XX (% percent), the number of misspelled binomials were XX (% percent). The number of author abbreviations which were not in the appropriate format were XX (% percent), in nearly all cases the presence or absence of a period were the issue. Plants of the World Online was able to identify XX new names for the submitted taxa, XX of which the author adopted. `r long_flag` records were appropriately flagged for issues with auto fill incrementation of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values (% of records).
