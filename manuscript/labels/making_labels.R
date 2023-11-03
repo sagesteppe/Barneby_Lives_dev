@@ -28,4 +28,4 @@ time_label_gen <- system.time({
   )
 })
 
-saveRDS(time_label_gen, file = '../data/processed/time_powo_searcher')
+saveRDS(time_label_gen, file = '../data/processed/time_label_gen')

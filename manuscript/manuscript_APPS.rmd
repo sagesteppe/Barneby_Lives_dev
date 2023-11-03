@@ -357,8 +357,8 @@ data_p %>%
     ),
     Situation = if_else(Full_name == 'Oenothera caespitosa Nutt.', 'Internal Error', Situation))
 
-data_p %>% 
-  filter(Binomial_authority != POW_Name_authority)
+#data_p %>% 
+#  filter(Binomial_authority != POW_Name_authority)
 
 data_p %>% 
   sf::st_drop_geometry() %>% 
