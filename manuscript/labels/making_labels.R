@@ -15,7 +15,7 @@ p <- '/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw'
 
 folds <- c('skeleton.Rmd')
 
-data <- readRDS('../data/processed/data_w_Google_Maps') |>
+collections <- readRDS('../data/processed/data_w_Google_Maps') |>
   sf::st_drop_geometry() 
 time_label_gen <- system.time({
   purrr::walk(

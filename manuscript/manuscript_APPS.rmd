@@ -265,12 +265,19 @@ rm(list=ls(pattern = 'time'))
 ```{r load in time trials}
 time_trials <- readRDS('data/processed/time_trials')
 tt_local <- time_trials[time_trials$Group=='Local',]
+time_label_gen <- readRDS('../data/processed/time_label_gen')
 ```
+
+```{sh, count number of files in directory}
+cd labels/processed
+ls -1 | wc -l
+```
+
 
 It took roughly *six* minutes (`r sum( time_trials[time_trials$Group=='Local', 'elapsed'])`s) to run all local steps of BarnebyLives, and roughly 20 minutes (`r time_trials[time_trials$Function=='powo_searcher', 'elapsed']`s) to search Plants of the World Online, and `r time_trials[time_trials$Function=='directions_grabber', 'elapsed']` to search Google Maps and write directions to sites.
 Most of the local run time is attributable to the spatial (spatial: `r sum(tt_local[tt_local$Module=='Geospatial', 'elapsed'])`s), and taxonomic operations (`r sum(tt_local[tt_local$Module=='Taxonomic', 'elapsed'])`), style: `r sum(tt_local[tt_local$Module=='Style', 'elapsed'])`. 
 The spell check operation of the scientific name accounted for nearly all of the time (`r sum(tt_local[tt_local$Function=='spell_check', 'elapsed'])`) spent performing local taxonomic operations.
-The generation of labels consumed around XX minutes for the rendering, XX to combine individual labels four per single sheet of landscape orientated paper, and XX to combine the XX sheets to a single Portable Document Format (PDF).  
+The generation of labels consumed around `r time_label_gen` minutes for the rendering, XX to combine individual labels four per single sheet of landscape orientated paper, and XX to combine the XX sheets to a single Portable Document Format (PDF).  
 
 ```{r}
 rm(time_trials, tt_local)

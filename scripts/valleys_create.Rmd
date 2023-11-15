@@ -68,12 +68,19 @@ output1 <- output %>%
 
 ## subset to west
 
-states <- tigris::states() %>% 
-  filter(NAME %in% c('California', 'Nevada', 'Utah', 
-                     'Arizona', 'New Mexico', 'Colorado', 'Idaho', 'Washington', 'Oregon')) %>% 
+# states1 <- tigris::states() %>% 
+#  filter(NAME %in% c('California', 'Nevada', 'Utah', 
+#                     'Arizona', 'New Mexico', 'Colorado', 'Idaho', 'Washington', 'Oregon')) %>% 
+#  select(NAME)
+
+#out <- st_intersection(output1, states)
+# out <- select(out, -NAME)
+
+states1 <- tigris::states() %>% 
+  filter(NAME %in% c('Montana', 'Wyoming', 'Texas', 'Oklahoma', 'South Dakota', 'North Dakota', 'Kansas')) %>% 
   select(NAME)
 
-out <- st_intersection(output1, states)
+out <- st_intersection(output1, states1)
 out <- select(out, -NAME)
 
 ```
@@ -94,6 +101,8 @@ ggplot()+
 ```{r write out features, eval = F}
 
 st_write(gnis_sub, '../ValleysProject/data/places/places.shp')
-st_write(out, '../ValleysProject/data/valleys/valleys.shp', append = F)
+
+# st_write(out, '../ValleysProject/data/valleys/valleys.shp', append = F)
+st_write(out, '../ValleysProject/data/valleys/valleys-heartland.shp', append = F)
 ```
 
