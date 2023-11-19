@@ -5,11 +5,11 @@ author:  |
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
 abstract:  |  
-  **Premise:** Depositing specimens to herbaria is a time consuming task. Many institutions have reduced the amount of funding for herbaria, and universities have reduced the amount of education dedicated to curatorial tasks and specimen deposition. Despite this, the continual generation of herbaria specimens are essential for research in ecology and evolution. In order to faciliate the continued growth of herbaria BarnebyLives was developed as tool to supplement collection notes, perform geographic and, taxonomic informatic processes, enact spell checks and produce labels.    
+  **Premise:** Depositing specimens to herbaria is a time consuming task. Many institutions have reduced the amount of funding for herbaria, and universities have reduced the amount of education dedicated to curatorial tasks and specimen deposition. Despite this, the continual generation of herbaria specimens are essential for current and future research in evolution and ecology. In order to faciliate the continued growth of herbaria BarnebyLives was developed as tool to supplement collection notes, perform geographic and, taxonomic informatic processes, enact spell checks, produce labels, and submit digital data.    
   **Methods and Results:** BarnebyLives uses geospatial data from the U.S. Census Bureau to provide political jurisdiction information, and data from other sources, including the United States Geological Survey, to supplement collection notes by providing information on abiotic site conditions. It uses inhouse spell checks to verify the spelling of a collection at all taxonomic ranks, the IPNI standard author database to check standard author abbreviations, and the Royal Botanic Garden Kews 'Plants of the World Online' to check for nomenclatural innovations. Optionally the package writes driving directions to sites using Google Maps. Finally the package outputs data in a tabular format for review by the user to accept or confirm changes,      
   **Conclusions:** BarnebyLives provides accurate political and physical information, reduces typos, provides users the most current taxonomic opinions, generates driving directions to sites, and produces aesthetically appealing labels and shipping manifests in a matter of minutes.     
 keywords: |
-  Herbarium, collections, natural history museum, geospatial, automation, R, software
+  Herbarium, natural history museum, collections, geospatial, automation, R, software
 output:
   pdf_document: default
   toc: no
@@ -54,15 +54,15 @@ For example, while the acquisition of political information for a collection sit
 Given the association of boundaries with topographically complex areas (e.g. watersheds) it often requires topographic maps, which are no longer widespread - resulting in many having difficulties interpreting them, or transcription of coordinates into a Geographic Information System (e.g. ArcMap, which is relatively expensive at 100$ year), or more likely Google Maps by individual site. 
 This lack of topographic maps compounds the issues of young collectors being unable to come up with appropriate site names. 
 
-Here we provide a description of the BarnebyLives R package. 
-BarnebyLives was named for plant taxonomist extraordinaire Rupert Charles Barneby (1911-200), whom published over 6,500 pages of text, described over 750 taxa, and is notable for balancing his studies at the Willian & Lynda Steere Herbarium at the New York Botanical Garden with annual collection trips in Western North America from 1937-1970, and sporadically until his passing (@welsh2001rupert). 
-Select accolades of Rupert include the Asa Gray Award from the American Society of Plant Taxonomists (ASPT) in 1989, the 1991 Engler Silver Medal from the International Association of Plant Taxonomists (IAPT), as well as being one of eight recipients of the International Botanical Congresses's (IBC) Millenium Botany Award (1999) (@welsh2001rupert).
-
 \begin{wrapfigure}{l}{0.35\textwidth}
   \centering
     \includegraphics[max size={\textwidth}{\textheight}]{../graphics/plots/flowchart-trim.png}
   \caption{Recommended workflow.}
 \end{wrapfigure}
+
+Here we provide a description of the BarnebyLives R package. 
+BarnebyLives was named for plant taxonomist extraordinaire Rupert Charles Barneby (1911-2000), whom published over 6,500 pages of text, described over 750 taxa, and is notable for balancing his studies at the William & Lynda Steere Herbarium at the New York Botanical Garden with annual collection trips in Western North America from 1937-1970, and sporadically until his passing (@welsh2001rupert). 
+Select accolades of Rupert include the 1989 Asa Gray Award from the American Society of Plant Taxonomists (ASPT), the 1991 Engler Silver Medal from the International Association of Plant Taxonomists (IAPT), as well as being one of eight recipients of the International Botanical Congress's (IBC) Millennium Botany Award (1999) (@welsh2001rupert).
 
 More evidently difficult tasks involve taxonomy and the rapid rate at which taxonomic names have changed since the publication of many Floras. 
 
@@ -71,7 +71,7 @@ More evidently difficult tasks involve taxonomy and the rapid rate at which taxo
 `r lorem::ipsum(paragraphs = 5)`
 
 ```{r install package}
-devtools::install_github('sagesteppe/BarnebyLives')
+## devtools::install_github('sagesteppe/BarnebyLives')
 ```
 
 
@@ -141,7 +141,7 @@ n_sites <- data %>%
 
 ### Herbarium Collections
 
-The package was finalized using the primary authors collections from 2023. The testing of the package within this manuscript was performed using a subset of their collections from 2018-2022, *all* of which are un-accessioned. Only collections which had identifications to the level of species or lower, and transcribed collection dates and coordinates were used. This results in a data set of `r nrow(data)` records for testing, from `r n_sites` sites located across Western North America FIGURE XX. In total `r n_spp` species (with `r n_sp_authors` authorships), with `r n_infraspecies` infraspecies (`r n_infra_sp_auths` authorships) in `r n_families` families were used for testing. 
+The package was finalized using the primary authors collections from 2023. The testing of the package within this manuscript was performed using a subset of their collections from 2018-2022, *all* of which are un-accessioned. Only collections which had identifications to the level of species or lower, and transcribed collection dates and coordinates were used. This results in a data set of `r nrow(data)` records for testing, from `r n_sites` sites located across Western North America FIGURE XX. In total `r n_spp` species (with `r n_sp_authors` sets of authors), with `r n_infraspecies` infraspecies (`r n_infra_sp_auths` authors) in `r n_families` families were used for testing. 
 
 ```{r Run pipeline with all steps and benchmarking, eval = F}
 
@@ -265,19 +265,24 @@ rm(list=ls(pattern = 'time'))
 ```{r load in time trials}
 time_trials <- readRDS('data/processed/time_trials')
 tt_local <- time_trials[time_trials$Group=='Local',]
-time_label_gen <- readRDS('../data/processed/time_label_gen')
+
+time_label_gen <- readRDS('data/processed/time_label_gen')[['elapsed']]
+time_4perpage <- gsub('user.*$', '', readLines('labels/4labsperpage.txt'))[1]
+time_final <- gsub('user.*$', '', readLines('labels/process2final.txt'))[1]
+
+minutemen <- function(x){
+  lkp <- 1:60
+  names(lkp) <-  c('one', 'two', 'three', 'four', 'five', 'six', 
+         'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 13:60)
+  
+  names(lkp) [ round(x/60, digits = 0) ]
+}
 ```
 
-```{sh, count number of files in directory}
-cd labels/processed
-ls -1 | wc -l
-```
-
-
-It took roughly *six* minutes (`r sum( time_trials[time_trials$Group=='Local', 'elapsed'])`s) to run all local steps of BarnebyLives, and roughly 20 minutes (`r time_trials[time_trials$Function=='powo_searcher', 'elapsed']`s) to search Plants of the World Online, and `r time_trials[time_trials$Function=='directions_grabber', 'elapsed']` to search Google Maps and write directions to sites.
-Most of the local run time is attributable to the spatial (spatial: `r sum(tt_local[tt_local$Module=='Geospatial', 'elapsed'])`s), and taxonomic operations (`r sum(tt_local[tt_local$Module=='Taxonomic', 'elapsed'])`), style: `r sum(tt_local[tt_local$Module=='Style', 'elapsed'])`. 
-The spell check operation of the scientific name accounted for nearly all of the time (`r sum(tt_local[tt_local$Function=='spell_check', 'elapsed'])`) spent performing local taxonomic operations.
-The generation of labels consumed around `r time_label_gen` minutes for the rendering, XX to combine individual labels four per single sheet of landscape orientated paper, and XX to combine the XX sheets to a single Portable Document Format (PDF).  
+It took roughly `r minutemen(sum( time_trials[time_trials$Group=='Local', 'elapsed']))` minutes (`r sum( time_trials[time_trials$Group=='Local', 'elapsed'])`s) to run all local steps of BarnebyLives, and roughly `r minutemen(time_trials[time_trials$Function=='powo_searcher', 'elapsed'])` minutes (`r time_trials[time_trials$Function=='powo_searcher', 'elapsed']`s) to search Plants of the World Online, and `r time_trials[time_trials$Function=='directions_grabber', 'elapsed']`s to search Google Maps and write directions to sites.
+Most of the local run time is attributable to the spatial (spatial: `r sum(tt_local[tt_local$Module=='Geospatial', 'elapsed'])`s), and taxonomic operations (`r sum(tt_local[tt_local$Module=='Taxonomic', 'elapsed'])`s), style: `r sum(tt_local[tt_local$Module=='Style', 'elapsed'])`s. 
+The spell check operation of the scientific name accounted for nearly all of the time (`r sum(tt_local[tt_local$Function=='spell_check', 'elapsed'])`s) spent performing local taxonomic operations.
+The generation of labels consumed around `r minutemen(time_label_gen)` minutes (`r time_label_gen`s) for the rendering, `r time_4perpage`s to combine individual labels four per single sheet of landscape orientated paper, and `r time_final`s to combine the `r length(list.files('labels/processed'))` sheets to a single Portable Document Format (PDF).  
 
 ```{r}
 rm(time_trials, tt_local)
@@ -289,10 +294,10 @@ rm(time_trials, tt_local)
 data_p <- readRDS(file = 'data/processed/data_w_POWO_search') %>% 
   sf::st_drop_geometry()
 
-drop_na(data_p, Binomial_authority) %>% 
+no_binomial_auth_issues <- drop_na(data_p, Binomial_authority) %>% 
   nrow() # nearly all relating to the absence/presence of a period
 
-drop_na(data_p, Infra_auth_issues) %>% 
+no_infra_auth_issues <- drop_na(data_p, Infra_auth_issues) %>% 
   nrow() # nearly all relating to the absence/presence of a period
 
 long_flag <- drop_na(data_p, Long_AutoFill_Flag) %>% 
@@ -316,37 +321,38 @@ Family_out <- data_p %>%
   pull(Family)
 Family_in[ which( Family_in != Family_out ) ]
 
-
 ## Family Level Results
 # these species were found by POW, and according to POW, the species are in the f
 # following families. 
-data_p %>% 
+family_incongruence <- data_p %>% 
   sf::st_drop_geometry() %>% 
   filter(POW_Family != 'NOT FOUND') %>% 
   filter(POW_Family != Family) %>% 
   select(Collection_number, Full_name, Family, POW_Family) %>% 
   mutate(Situation = 
     case_when(
-      Family == 'Hydrophyllaceae' ~ 'Preferred', 
-      Family %in% c('Plantaginaceae', 'Athyriaceae') ~ 'Outdated',
-      Family %in% c('Saxifragaceae', 'Solanaceae') ~ 'Submitter_Incorrect', 
-      Family == 'Bataceae' ~ 'Internal Error', 
+      Family %in% c('Hydrophyllaceae', 'Namaceae') ~ 'Preferred', 
+      Family %in% c('Athyriaceae') ~ 'Outdated',
+      Family %in% c('Saxifragaceae', 'Plantaginaceae') ~ 'Submitter_Incorrect', 
+      Family %in% c('Bataceae', 'Ericaceae') ~ 'Internal_Error', 
       .default = 'Typo'
     ))
 
-data_p %>% 
+# how many of my genera were mis-spelled??
+genera_mispelled <- data_p %>% 
   sf::st_drop_geometry() %>% 
   filter(POW_Genus == 'NOT FOUND') %>% 
   select(Collection_number, Full_name, Genus, POW_Genus) 
 
-# how many of my genera were mis-spelled??
-data_p %>% 
+# how many of my genera were outdated?
+genus_incongruence <- data_p %>% 
   sf::st_drop_geometry() %>% 
   filter(POW_Genus != 'NOT FOUND') %>% 
-  filter(POW_Genus != Genus) 
+  filter(POW_Genus != Genus)  %>% 
+  select(Collection_number, Full_name, Genus, POW_Genus) 
 
 # the mismatch between POW genus and not
-data_p %>% 
+genus_mismatch <- data_p %>% 
   sf::st_drop_geometry() %>% 
   filter(POW_Genus != 'NOT FOUND') %>% 
   filter(POW_Genus != Genus) %>% 
@@ -359,22 +365,30 @@ data_p %>%
                     'Spartina', 'Polygonum', 'Atriplex', 'Cymopterus', 'Trisetum', 'Bahia', 
                    'Oryzopsis', 'Potentilla', 'Pascopyrum'
                     ) ~ 'Outdated',
-      Genus %in% c('Vaccinium', 'Eleocharis') ~ 'Internal Error',
+      Genus %in% c('Vaccinium', 'Eleocharis') ~ 'Internal_Error',
       .default = 'Typo'
     ),
-    Situation = if_else(Full_name == 'Oenothera caespitosa Nutt.', 'Internal Error', Situation))
+    Situation = if_else(Full_name == 'Oenothera caespitosa Nutt.', 'Internal_Error', Situation))
 
-#data_p %>% 
-#  filter(Binomial_authority != POW_Name_authority)
+binom_auth_difference <- data_p %>% 
+  filter(Binomial_authority != POW_Name_authority)
 
-data_p %>% 
+epithet_diff <- data_p %>% 
   sf::st_drop_geometry() %>% 
-  filter(Epithet != POW_Epithet ) %>% 
+  filter(Epithet != POW_Epithet, !Full_name %in% unique(genus_mismatch$Full_name )) %>% 
   select(Collection_number, Full_name, Epithet, POW_Epithet) 
 
 ```
 
-Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. The number of family misspellings were XX (% percent), the number of misspelled genera were XX (% percent), the number of misspelled binomials were XX (% percent). The number of author abbreviations which were not in the appropriate format were XX (% percent), in nearly all cases the presence or absence of a period were the issue. Plants of the World Online was able to identify XX new names for the submitted taxa, XX of which the author adopted. `r long_flag` records were appropriately flagged for issues with auto fill incrementation of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values (% of records).
+Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. While no families were misspelled, BL made `r nrow(family_incongruence)` suggestions on naming, `r sum(family_incongruence$Situation=='Typo', na.rm = T)` manually entered typos were found, it identified `r sum(family_incongruence$Situation=='Submitter_Incorrect', na.rm = T)` where an incorrect family was entered, and `r sum(family_incongruence$Situation=='Outdated', na.rm = T)` instance of an outdated circumscription applied. BL flagged `r sum(family_incongruence$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy, and flagged `r sum(family_incongruence$Situation=='Internal_Error', na.rm = T)` record in error. The number of flagged genera were XX (% percent), XX of these were misspelled, XX were outdated, XX 
+
+... XX were preferred by author.
+
+
+the number of misspelled binomials were XX (% percent).
+
+
+The number of author abbreviations which were not in the appropriate format were XX (% percent), in nearly all cases the presence or absence of a period were the issue. Plants of the World Online was able to identify XX new names for the submitted taxa, XX of which the author adopted. `r long_flag` records were appropriately flagged for issues with auto fill increment of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values (% of records).
 
 \begin{wrapfigure}{r}{0.45\textwidth}
   \centering
