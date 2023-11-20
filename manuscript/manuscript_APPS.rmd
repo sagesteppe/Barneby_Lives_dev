@@ -344,12 +344,6 @@ genera_mispelled <- data_p %>%
   filter(POW_Genus == 'NOT FOUND') %>% 
   select(Collection_number, Full_name, Genus, POW_Genus) 
 
-# how many of my genera were outdated?
-genus_incongruence <- data_p %>% 
-  sf::st_drop_geometry() %>% 
-  filter(POW_Genus != 'NOT FOUND') %>% 
-  filter(POW_Genus != Genus)  %>% 
-  select(Collection_number, Full_name, Genus, POW_Genus) 
 
 # the mismatch between POW genus and not
 genus_mismatch <- data_p %>% 
@@ -359,8 +353,9 @@ genus_mismatch <- data_p %>%
   select(Collection_number, Full_name, Genus, POW_Genus) %>% 
   mutate(Situation = 
     case_when(
-      Genus %in% c('Pleuraphis', 'Glandularia') ~ 'Preferred', # check Pleuraphis, i am confused on this still....
-      Genus %in% c('Oenothera', 'Cryptantha', 'Ivesia', 'Lotus', 'Polygala', 'Minuartia',
+      Genus %in% c('Glandularia', 'Oenothera', 'Chamerion') ~ 'Preferred',
+      # check Pleuraphis, i am confused on this still....
+      Genus %in% c('Cryptantha', 'Ivesia', 'Lotus', 'Polygala', 'Minuartia', 'Pleuraphis',
                     'Pseudostellaria', 'Achnatherum', 'Scirpus', 'Peritoma', 'Arenaria', 
                     'Spartina', 'Polygonum', 'Atriplex', 'Cymopterus', 'Trisetum', 'Bahia', 
                    'Oryzopsis', 'Potentilla', 'Pascopyrum'
@@ -375,20 +370,37 @@ binom_auth_difference <- data_p %>%
 
 epithet_diff <- data_p %>% 
   sf::st_drop_geometry() %>% 
-  filter(Epithet != POW_Epithet, !Full_name %in% unique(genus_mismatch$Full_name )) %>% 
-  select(Collection_number, Full_name, Epithet, POW_Epithet) 
-
+  filter(Epithet != POW_Epithet, !Full_name %in% 
+           unique(c( genera_mispelled$Full_name,  genus_mismatch$Full_name))) %>% 
+  select(Collection_number, Full_name, Epithet, POW_Genus, POW_Epithet, POW_Infraspecies) %>% 
+  distinct(Full_name, .keep_all = T) %>%  # do we record repeat collections ?
+  mutate(Situation = 
+           case_when(
+             Collection_number %in% c('1217') ~ 'Spelling',
+             Collection_number %in% c('1588', '2445', '2777', '1337', '2412', '2748', 
+                                      '2652', '2805', '2194', '2040', '2039', '2403', '2328') ~ 'Outdated',
+             Collection_number %in% c('2326', '2038') ~ 'Internal_Error' ,
+             Collection_number %in% c('2110') ~ 'Preferred'
+             
+           )
+  )
+  
+srm(Family_in, Family_out)
 ```
 
 Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. While no families were misspelled, BL made `r nrow(family_incongruence)` suggestions on naming, `r sum(family_incongruence$Situation=='Typo', na.rm = T)` manually entered typos were found, it identified `r sum(family_incongruence$Situation=='Submitter_Incorrect', na.rm = T)` where an incorrect family was entered, and `r sum(family_incongruence$Situation=='Outdated', na.rm = T)` instance of an outdated circumscription applied. BL flagged `r sum(family_incongruence$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy, and flagged `r sum(family_incongruence$Situation=='Internal_Error', na.rm = T)` record in error. The number of flagged genera were XX (% percent), XX of these were misspelled, XX were outdated, XX 
 
-... XX were preferred by author.
+BL was able to identify 41 misspellings ...
+BL made `r nrow(family_incongruence)` suggestions on naming, 
+where an incorrect family was entered, and `r sum(genus_mismatch$Situation=='Outdated', na.rm = T)` instance of an outdated circumscription applied. BL flagged `r sum(genus_mismatch$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy, and flagged `r sum(genus_mismatch$Situation=='Internal_Error', na.rm = T)` record in error.
 
-
-the number of misspelled binomials were XX (% percent).
-
+Excluding the previous records at the level of genus, BL flagged 75 binomials. Not all genera which where flagged in the previous step were identified in the last check, as BL may search for an epithet with a genus which was more similar to the non-target genus, and for which a binomial does not exist. 
 
 The number of author abbreviations which were not in the appropriate format were XX (% percent), in nearly all cases the presence or absence of a period were the issue. Plants of the World Online was able to identify XX new names for the submitted taxa, XX of which the author adopted. `r long_flag` records were appropriately flagged for issues with auto fill increment of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values (% of records).
+
+```{r}
+rm(genus_mismatch, genera_mispelled, family_incongruence)
+```
 
 \begin{wrapfigure}{r}{0.45\textwidth}
   \centering
