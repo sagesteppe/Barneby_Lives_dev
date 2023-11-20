@@ -41,7 +41,8 @@ Fortunately, renewed interest in collections have brought herbaria of all sizes 
 
 Recent innovations in computing, specimen digitization, data sharing, DNA sequencing, and statistics have brought about a renaissance in herbarium based studies (@greve2016realising, @james2018herbarium, @brewer2019factors, @ronsted2020integrative). 
 Current uses of specimen based data extend far beyond their traditional roles in systematics and floristics, and studies utilizing collections are regularly carried out to better understand the ecological niches, phenological processes, and interactions of plants (@ronsted2020integrative). 
-However, we anticipate that collections will gain their most widespread utilization as natural history is being revitalized in ecology, via novel approaches, such as remote sensing, meta-barcoding, community science, electronic sensing (@tosa2021rapid).
+Even within systematics, the ability to collect and analyze micro-morphological data has fostered revisionary studies in many groups providing synapomorphies which can be correlated to molecular results to improve the interpretation of monophyletic clades. 
+However, we anticipate that collections will gain their most widespread utilization as natural history is being revitalized in ecology, via novel approaches, such as remote sensing, meta-barcoding, community science, and electronic sensing (@tosa2021rapid).
 
 However, we now stand at a time where we recognize the need for more specimens, but are in a difficult position where the skills of collecting and processing specimens, and time allocated for collecting, have declined among young persons (@daru2018widespread, @mishler2020spatial).
 The submittal of specimens to herbaria is a, well documented albeit time consuming process, especially for younger collectors with limited experience in the process. 
@@ -181,6 +182,9 @@ time_spell_check <- system.time({ # ensure appropriate spellings of the species
   sct <- spell_check(data, column = 'Full_name', path = p2tax)
 })
 
+filter(sct, Match == 'fuzzy') %>% 
+  select(Scientific_name, 'SpellCk.scientificName')
+
 time_family_spell_check <- system.time({ # ensure appropriate spelling of the family
   data <- family_spell_check(data, path = p2tax)
 })
@@ -216,13 +220,15 @@ time_powo_searcher <- system.time({ # search for synonyms from plants of the wor
  names <- sf::st_drop_geometry(data) %>% 
    pull(Full_name)
 
- pow_res <- lapply(names,
+ pow_res1 <- lapply(names[1],
        powo_searcher) %>% 
        bind_rows()
  data <- bind_cols(data, pow_res)
 
  rm(names, pow_res)
 }) # has been run
+
+names
 
 saveRDS(time_powo_searcher, file = 'data/processed/time_powo_searcher')
 saveRDS(data, file = 'data/processed/data_w_POWO_search')
@@ -378,14 +384,15 @@ epithet_diff <- data_p %>%
            case_when(
              Collection_number %in% c('1217') ~ 'Spelling',
              Collection_number %in% c('1588', '2445', '2777', '1337', '2412', '2748', 
-                                      '2652', '2805', '2194', '2040', '2039', '2403', '2328') ~ 'Outdated',
-             Collection_number %in% c('2326', '2038') ~ 'Internal_Error' ,
+                                      '2652', '2805', '2194', '2040', '2039', '2403',
+                                      '2328', '2076') ~ 'Outdated',
+             Collection_number %in% c('2326', '2038', '1424', '2618', '2665', '2297') ~ 'Internal_Error',
              Collection_number %in% c('2110') ~ 'Preferred'
              
            )
   )
   
-srm(Family_in, Family_out)
+rm(Family_in, Family_out)
 ```
 
 Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. While no families were misspelled, BL made `r nrow(family_incongruence)` suggestions on naming, `r sum(family_incongruence$Situation=='Typo', na.rm = T)` manually entered typos were found, it identified `r sum(family_incongruence$Situation=='Submitter_Incorrect', na.rm = T)` where an incorrect family was entered, and `r sum(family_incongruence$Situation=='Outdated', na.rm = T)` instance of an outdated circumscription applied. BL flagged `r sum(family_incongruence$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy, and flagged `r sum(family_incongruence$Situation=='Internal_Error', na.rm = T)` record in error. The number of flagged genera were XX (% percent), XX of these were misspelled, XX were outdated, XX 

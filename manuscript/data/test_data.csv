@@ -385,7 +385,7 @@ Collection_number,Binomial,Binomial_authority,Infrarank,Infraspecies,Infraspecif
 2328,Mertensia fusiformis,Greene,,,,Boraginaceae,RMBL Pollen Vouchers,Gothic Townsite,Colorado,Gunnison,U.S.A.,38.95874,-106.99052,WGS 84,5.24.2021,Reed Clark Benkendorf,,Montana/Subalpine Parkland,Berberis repens,Disturbed residental areas of historic mine town,Mare Nazaire,S,,
 2329,Primula conjugens,(Greene) Mast & Reveal,,,,Primulaceae,Flora of Montana,Nez Perce Pass Trail,Idaho,Idaho,U.S.A.,45.72718,-114.527,WGS 84,5.30.2021,Reed Clark Benkendorf,,Upper Montane-lower subalpine dry meadows,"Pinus contorta, Claytonia lanceolata, Erythronium grandiflorum",Growing in shade and duff of P. contorta on cobbly soil,MMVP,S,,Early Flowering
 2330,Erythronium grandiflorum,Pursh,var.,grandiflorum,Pursh,Liliaceae,Flora of Montana,Nez Perce Pass Trail,Idaho,Idaho,U.S.A.,45.72662,-114.5242,WGS 84,5.30.2021,Reed Clark Benkendorf,,Upper Montane-lower subalpine dry meadows,"Claytonia lanceolata, Senecio sp., Carex sp.",Dry gravelly meadow,MMVP,SW,,Abundant > 5k plants along several km of trail
-2331,Viola macloskeyi F.E. Lloyd,F.E. Lloyd,,,,Violaceae,Flora of Montana,Howard Creek,Montana,Missoula,U.S.A.,46.77706,-114.525968,NAD 83,6.3.2021,Reed Clark Benkendorf,D. Yashinowitz,Carex nebrascensis,Polemonium occidentale,along minor channel just above bankfull,MMVP,,,
+2331,Viola macloskeyi,F.E. Lloyd,,,,Violaceae,Flora of Montana,Howard Creek,Montana,Missoula,U.S.A.,46.77706,-114.525968,NAD 83,6.3.2021,Reed Clark Benkendorf,D. Yashinowitz,Carex nebrascensis,Polemonium occidentale,along minor channel just above bankfull,MMVP,,,
 2332,Viola nephrophylla,Greene,,,,Violaceae,Flora of Montana,Howard Creek,Montana,Missoula,U.S.A.,46.77706,-114.525968,NAD 83,6.3.2021,Reed Clark Benkendorf,D. Yashinowitz,Carex nebrascensis,Polemonium occidentale,growing on slight hummocks in sedge meadow,MMVP,,,
 2333,Geum rivale,L.,,,,Rosaceae,Flora of Montana,Howard Creek,Montana,Missoula,U.S.A.,46.77706,-114.525968,NAD 83,6.3.2021,Reed Clark Benkendorf,D. Yashinowitz,Carex nebrascensis,Polemonium occidentale,sedge meadow,MMVP,,,Late Bud
 2337,Astragalus miser,,,,,Fabaceae,Flora of Montana,Kentucky Gulch,Montana,,U.S.A.,46.67059,-111.36509,WGS 84,6.10.2021,Reed Clark Benkendorf,,,"Mertensia oblongifolia, Erigeron compositus, Cerastium sp., Rumex sp., Phacelia hastata, Phacelia sericea","Meadow fringes adjacent to young lower montane forest , sloped ridgelines",MMVP,,,"Corolla white to lightly violet, lines on banner purple, keel often purple at tip."
@@ -395,7 +395,7 @@ Collection_number,Binomial,Binomial_authority,Infrarank,Infraspecies,Infraspecif
 2341,Oenothera serrulata,Nutt.,,,,Onagraceae,Flora of Montana,Charles Russel NWR area Junction FWS 352 & 469,Montana,Garfield,U.S.A.,47.68572,-106.8212,WGS 84,,Reed Clark Benkendorf,D. Yashinowitz,,,"Badlands, in thin white clay soils overlaying bedrock.",MMVP,n/a,0-1,Length of stamens equal the style
 2342,Tradescantia occidentalis,(Britton) Smyth,,,,Commelinaceae,Flora of Montana,,Montana,Garfield,U.S.A.,47.683612,-106.820479,WGS 84,,Reed Clark Benkendorf,D. Yashinowitz,,,"Mixed grass prairie, edge of roadbed above wash",MMVP,S,2-5,Tepals purple/indigo
 2625,Astragalus tenellus,,,,,Fabaceae,Flora of Montana,Kremlin Point,Montana,Hill,U.S.A.,48.61816,-109.98008,WGS 84,6.26.2021,Reed Clark Benkendorf,D. Yashinowitz,"Populus deltoides, Eleagnus angustifolia, Agropyron cristatum",,Sandy soils at bank full of reservoir,MMVP,N,5-10,Flowers all white
-2343,Astragalus adsurgens,Pall.,var,robustior,Hook.,Fabaceae,Flora of Montana,Kremlin Point,Montana,Hill,U.S.A.,48.61816,-109.98008,WGS 84,6.26.2021,Reed Clark Benkendorf,D. Yashinowitz,"Mixed grass prairie, Silver sage",,,MMVP,N,10,flowers lilca
+2343,Astragalus adsurgens,Pall.,var.,robustior,Hook.,Fabaceae,Flora of Montana,Kremlin Point,Montana,Hill,U.S.A.,48.61816,-109.98008,WGS 84,6.26.2021,Reed Clark Benkendorf,D. Yashinowitz,"Mixed grass prairie, Silver sage",,,MMVP,N,10,flowers lilca
 2344,Astragalus pectinatus,,,,,Fabaceae,Flora of Montana,Kremlin Point,Montana,Hill,U.S.A.,48.61816,-109.98008,WGS 84,6.26.2021,Reed Clark Benkendorf,D. Yashinowitz,"Mixed grass prairie, Silver sage",,,MMVP,N,10-20,fruit opaque and inflated
 2345,Erigeron ochroleucus,Nutt.,,,,Asteraceae,Flora of Montana,Kremlin Point,Montana,Hill,U.S.A.,48.61816,-109.98008,WGS 84,6.26.2021,Reed Clark Benkendorf,D. Yashinowitz,"Mixed grass prairie, Silver sage",,,MMVP,N,10-20,forming loose mats
 2346,Gaillardia aristata,Pursh,,,,Asteraceae,Flora of Montana,Kremlin Point,Montana,Hill,U.S.A.,48.61816,-109.98008,WGS 84,6.26.2021,Reed Clark Benkendorf,D. Yashinowitz,"Mixed grass prairie, Silver sage",,,MMVP,N,10-20,
@@ -464,10 +464,10 @@ Collection_number,Binomial,Binomial_authority,Infrarank,Infraspecies,Infraspecif
 2405,Salix drummondiana,Barratt ex Hook.,,,,Salicaceae,NWCA,,,,U.S.A.,47.04831,-112.38203,NAD83,06.09.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2483,Bromus inermis,Leyss,,,,Poaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2484,Erythranthe guttata,(Fisch. ex DC.) G.L. Nesom,,,,Phrymaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
-2485,Gentianella amarella,(L.) Borner,ssp,acuta,,Gentianaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
+2485,Gentianella amarella,(L.) Borner,ssp.,acuta,,Gentianaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2486,Galium boreale,L.,,,,Rubiaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
-2487,Rorippa palustris,(L.) Besser,ssp,hispida,(Desv.) Jonsell,Brassicaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
-2488,Elymus lanceolatus,(Scribn. & J.G. Sm.) Gould,ssp,riparius,(Scribn. & J.G. Sm.) Barkworth,Poaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
+2487,Rorippa palustris,(L.) Besser,ssp.,hispida,(Desv.) Jonsell,Brassicaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
+2488,Elymus lanceolatus,(Scribn. & J.G. Sm.) Gould,ssp.,riparius,(Scribn. & J.G. Sm.) Barkworth,Poaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2489,Bromus ciliatus,L.,,,,Poaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2490,Symphyotrichum foliaceum,(Lindl. ex DC.) G.L. Nesom,,,,Asteraceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2491,Canadanthus modestus,(Lindl.) G.L. Nesom,,,,Asteraceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
@@ -477,8 +477,8 @@ Collection_number,Binomial,Binomial_authority,Infrarank,Infraspecies,Infraspecif
 2495,Thlaspi arvense,L.,,,,Brassicaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2496,Moehringia lateriflora,(L.) Fenzl,,,,Caryophyllaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2497,Veronica americana,Schwein. ex. Benth.,,,,Plantaginaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
-2498,Vicia americana,Muhl. ex Willd.,var,americana,,Fabaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
-2499,Potentilla gracilis,Douglas ex Hook.,var,gracilis,,Rosaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
+2498,Vicia americana,Muhl. ex Willd.,var.,americana,,Fabaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
+2499,Potentilla gracilis,Douglas ex Hook.,var.,gracilis,,Rosaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2500,Platanthera dilatata,(Pursh) Lindl. ex L.C. Beck,,,,Orchidaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2501,Juncus saximontanus,A. Nelson,,,,Juncaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2502,Epilobium ciliatum,Raf.,,,,Onagraceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
@@ -495,7 +495,7 @@ Collection_number,Binomial,Binomial_authority,Infrarank,Infraspecies,Infraspecif
 2513,Galium triflorum,Michx.,,,,Rubiaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2514,Betula glandulosa,Michx.,,,,Betulaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2515,Geranium viscosissimum,Fisch. & C.A. Mey.,,,,Geraniaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
-2516,Pyrola asarifolia,Michx.,ssp,asarifolia,,Ericaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
+2516,Pyrola asarifolia,Michx.,ssp.,asarifolia,,Ericaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2517,Ranunculus aquatilis,L.,,,,Ranunculaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2518,Sparganium angustifolium,Michx.,,,,Typhaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2519,Glyceria striata,(Lam.) Hitchc.,,,,Poaceae,NWCA,,,,U.S.A.,47.46106,-112.84187,NAD83,07.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
@@ -530,9 +530,9 @@ Collection_number,Binomial,Binomial_authority,Infrarank,Infraspecies,Infraspecif
 2412,Elymus trachycaulus,(Link) Gould,,,,Poaceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,06.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2413,Rumex salicifolius,Weinm.,,,,Polygonaceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,06.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2414,Salix exigua,Nutt.,,,,Salicaceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,06.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
-2415,Lappula redowskiii,,var,redowskii,,Boraginaceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,06.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
+2415,Lappula redowskiii,,var.,redowskii,,Boraginaceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,06.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2416,Oreocarya glomerata,(Pursh) Greene,,,,Boraginaceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,06.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
-2417,Stanleya pinnata,(Pursh) Britton,var,integrifolia,(E. James) Rollins,Brassicaceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,06.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
+2417,Stanleya pinnata,(Pursh) Britton,var.,integrifolia,(E. James) Rollins,Brassicaceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,06.23.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2453,Atriplex argentea,Nutt.,,,,Amaranthaceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,07.07.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2532,Oenothera suffrutescens,(Ser.) W. L. Wagner & Hoch,,,,Onagraceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,07.07.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2533,Lactuca serriola,L.,,,,Asteraceae,NWCA,,,,U.S.A.,47.07379,-108.81149,NAD83,07.07.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
@@ -646,7 +646,7 @@ Collection_number,Binomial,Binomial_authority,Infrarank,Infraspecies,Infraspecif
 2555,Elymus canadensis,L.,,,,Poaceae,NWCA,,,,U.S.A.,47.61263,-108.56144,NAD83,08.05.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2534,Agrostis stolonifera,L.,,,,Poaceae,NWCA,,,,U.S.A.,47.542486,-113.743747,NAD83,07.08.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2535,Trifolium pratense,L.,,,,Fabaceae,NWCA,,,,U.S.A.,47.542486,-113.743747,NAD83,07.08.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
-2462,Rosa nutkana,C. Presl,ssp,macdougalii,,Rosaceae,NWCA,,,,U.S.A.,47.542486,-113.743747,NAD83,07.11.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
+2462,Rosa nutkana,C. Presl,ssp.,macdougalii,,Rosaceae,NWCA,,,,U.S.A.,47.542486,-113.743747,NAD83,07.11.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2463,Carex stipata,Muhl. ex Willd.,,,,Cyperaceae,NWCA,,,,U.S.A.,47.542486,-113.743747,NAD83,07.11.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2464,Myosotis laxa,Lehm.,,,,Boraginaceae,NWCA,,,,U.S.A.,47.542486,-113.743747,NAD83,07.11.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
 2465,Veronica scutellata,L.,,,,Plantaginaceae,NWCA,,,,U.S.A.,47.542486,-113.743747,NAD83,07.11.2021,Reed Clark Benkendorf,"Dani Yashinovitz, Dakota Becerra",,,,,,,
