@@ -6,10 +6,10 @@ author:  |
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
 abstract: |
   **Premise:** Depositing specimens to herbaria is a time consuming task. Many institutions have reduced the amount of funding for herbaria, and universities have reduced the amount of education dedicated to curatorial tasks and specimen deposition. Despite this, the continual generation of herbaria specimens are essential for current and future research in evolution and ecology. In order to faciliate the continued growth of herbaria BarnebyLives was developed as tool to supplement collection notes, perform geographic and, taxonomic informatic processes, enact spell checks, produce labels, and submit digital data.    
-  **Methods and Results:** BarnebyLives uses geospatial data from the U.S. Census Bureau to provide political jurisdiction information, and data from other sources, including the United States Geological Survey, to supplement collection notes by providing information on abiotic site conditions. It uses inhouse spell checks to verify the spelling of a collection at all taxonomic ranks, the IPNI standard author database to check standard author abbreviations, and the Royal Botanic Garden Kews 'Plants of the World Online' to check for nomenclatural innovations. Optionally the package writes driving directions to sites using Google Maps. Finally the package outputs data in a tabular format for review by the user to accept or confirm changes,      
+  **Methods and Results:** BarnebyLives uses geospatial data from the U.S. Census Bureau to provide political jurisdiction information, and data from other sources, including the United States Geological Survey, to supplement collection notes by providing information on abiotic site conditions. It uses inhouse spell checks to verify the spelling of a collection at all taxonomic ranks, the IPNI standard author database to check standard author abbreviations, and the Royal Botanic Garden Kews 'Plants of the World Online' to check for nomenclatural innovations. Optionally the package writes driving directions to sites using Google Maps. The package outputs data in a tabular format for review by the user to accept or confirm changes, before dynamically rendering labels.       
   **Conclusions:** BarnebyLives provides accurate political and physical information, reduces typos, provides users the most current taxonomic opinions, generates driving directions to sites, and produces aesthetically appealing labels and shipping manifests in a matter of minutes.     
 keywords: |
-  Herbarium, natural history museum, collections, geospatial, automation, R, software
+  herbariaum, natural history museum, collections, geospatial, automation, R, software 
 output:
   pdf_document: default
   toc: no
@@ -43,18 +43,13 @@ In fact innovations in computing, specimen digitization, data sharing, DNA seque
 The current uses of specimen based data extend far beyond their traditional roles in systematics and floristics, and studies utilizing collections are regularly carried out to better understand the ecological niches, phenological processes, and interactions of plants (@ronsted2020integrative). 
 Further we anticipate that collections are yet to gain their most widespread utilization as a revitalization of natural history appears underway in ecology, fostered via novel approaches such as remote and electronic sensing, meta-barcoding, and community science  (@tosa2021rapid). 
 While image or purely observational (rather than collections based) citizen science initializes (e.g. iNaturalist) have dovetailed to meet many needs of these studies specimens contain rich data which are not accessible via images. 
-Namely specimens have the ability to: provide samples of DNA, secondary metabolites, or proteins, notes on the status and composition of the biotic and abiotic settings at time of collection, material for measuring (micro-)morphological attributes, and seeds or pollen; forever ensuing specimens as the ultimate data source to center most efforts around.
+Namely specimens have the ability to: provide samples of DNA, secondary metabolites, or proteins, notes on the status and composition of the biotic and abiotic settings at time of collection, material for measuring (micro-)morphological attributes (@borges2020schrodinger), and seeds or pollen; eternally ensuing specimens as the ultimate data source to center most efforts around.
 
-
-
-However, while there is recognized need for more specimens the skills of collecting and processing specimens and the time allocated for collecting, have declined among young persons (@daru2018widespread, @mishler2020spatial). 
-The submittal of specimens to herbaria is a, well documented albeit time consuming process, especially for younger collectors with limited experience.  
-While many young collectors, who are capable of using dichotomous keys to reliably identify their collections, exist we have observed that they face difficulties navigating several aspects of data collection and preparing specimens for herbaria. 
-This scenario results in not only the delay in the deposition of many specimens, but undoubtedly in a failure for some specimens to ever be accessioned at all. 
-Problems which young collectors face generally include both the lack of dedicated time awarded to them at a seasons end to process specimens, and a general lack of formal education on cartography, natural history, taxonomy, and plant systematics.
-
-The successful generation of an herbarium specimen includes many steps which are easy to take for granted. 
-For example, while the acquisition of political information for a collection site appears simple, it is only so if the collector has the adequate resources at their disposal. 
+However, despite this renewed recognition of the utility of collections, efforts to continually grow them appear slow. 
+We conjecture this is in part because collecting and depositing specimens is a fundamentally slower process, especially for novice collectors, than simply taking photographs via well-developed apps (@daru2018widespread, @mishler2020spatial). 
+While many young botanists, capable of using dichotomous keys to reliably identify - and able to collect satisfactory - material exist, we have observed that they face difficulties navigating several aspects of data collection and preparation of labels for submission to herbaria. 
+Apparent problems include the lack of dedicated time at a field seasons end to process specimens, and a general lack of education on cartography and orienteering, natural history (e.g. geology, geomorphology), nomenclature and Latin, various computer programs (e.g. Microsoft Office suite), and increasingly - plant systematics. 
+In the absence of suitable mentors this assuredly results in not only the delay in the deposition of many specimens, but undoubtedly in a failure for many specimens to be accessioned at all, and increasingly ever collected. 
 
 \begin{wrapfigure}{l}{0.35\textwidth}
   \centering
@@ -62,14 +57,30 @@ For example, while the acquisition of political information for a collection sit
   \caption{Recommended workflow.}
 \end{wrapfigure}
 
-Given the association of boundaries with topographically complex areas (e.g. watersheds) it often requires topographic maps, which are no longer widespread - resulting in many having difficulties interpreting them, or transcription of coordinates into a Geographic Information System (e.g. ArcMap, which is relatively expensive at $100 year), or more likely Google Maps by individual site a time consuming process. 
-This lack of topographic maps compounds the issues of young collectors being unable to come up with appropriate site names. 
+The generation of an herbarium specimen includes many steps which are easy to take for granted. 
+For example while acquiring appropriate political information for a collection site appears simple, young collectors rarely have the adequate resources (printed topographic maps, or GIS software) at their disposal. 
+In topographically complex areas, where borders are often associated with hydrologic basins and the ridges defining them, collectors are liable to misinterpret their position. 
+Finding appropriate sites names is another problem which can rarely be solved without a printed map, as many software maps now consider many features which would serve as site names extraneous in the era of GPS. 
+The rate at which taxonomic innovations are occurring has left many Floras difficult for young users to interpret and has made it difficult for them to find more recently applied names.
+Upon finding a name they may find it frustrating to hear that while published, the proposal has been accepted by few practitioners and they have unwittingly offended certain curators. 
+Formatting a label correctly (e.g. abbreviations), if successful upon even setting up a mail merge, is a time consuming process and likely to introduce several errors in formatting. 
+Even if a collector navigates all of these hurdles successfully, the time allocated to each step is quite large. 
+Further each step of interfacing with different resources increases the opportunity for transcription errors. 
 
-Further issues relate to the typical problems of nomenclature, to wit the pace at which taxonomic innovations are now made and which many persons of all skill levels find difficult to keep up with...
+Here we provide a description of the BarnebyLives R package. 
+BarnebyLives aims to increase both the data quality of labels, and to speed up the process of producing them. 
+It rapidly provides political and administrative boundary information for a collection site using data from the U.S. Census Bureau (@walker2022tigris), the Public Land Survey System, and ownership details of public lands via the Protected-Areas Database (PAD-US) from (@usgs2024padus). 
+Site names are suggested via finding the closest unambiguously named place feature via the Geographic Name Information System (GNIS), and by precise calculation of the distance and azimuth from these localities to the collection site (@gnis2024). 
+Using the GMBA Mountain Inventory V. 2, a standardized named mountain data set with global coverage, which we have supplemented with over XXXX valleys allows for a relevant descriptor of the general region without any ambiguity (@snethlage2022hierarchical). 
+Spell checks on all scientific names (including associated species) are performed using a copy of the World Checklist of Vascular Plants, and the collected species may be searched via Kew's Plant of the World Online for relevant synonyms (@govaerts2021world, @powo2024). 
+Author abbreviations are verified using IPNI's Standard Author Abbreviation Checklist and also returned by Kew's Plants of the World Online to ensure proper abbreviation of authorities (@ipni2024, @powo2024). 
+Checks are performed to search for common issues associated with spreadsheets, or transcription, such as the auto-filling of coordinate and date columns. 
+After final review of the data generated by the package, it allows for the option to export spreadsheets which are usable for mass upload of data to multiple common herbarium databases, as well as the generation of herbarium labels. 
 
 Here we provide a description of the BarnebyLives R package. 
 BarnebyLives was named for plant taxonomist Rupert Charles Barneby (1911-2000), whom published over 6,500 pages of text, described over 750 taxa, and is notable for balancing his studies at the William & Lynda Steere Herbarium at the New York Botanical Garden with annual collection trips in Western North America from 1937-1970, and sporadically until his passing (@welsh2001rupert). 
-Select accolades of Rupert include the 1989 Asa Gray Award from the American Society of Plant Taxonomists (ASPT), the 1991 Engler Silver Medal from the International Association of Plant Taxonomists (IAPT), as well as being one of eight recipients of the International Botanical Congress's (IBC) Millennium Botany Award (1999) (@welsh2001rupert).
+Select accolades of Rupert include the 1989 Asa Gray Award from the American Society of Plant Taxonomists (ASPT), the 1991 Engler Silver Medal from the International Association of Plant Taxonomists (IAPT), as well as being one of eight recipients of the International Botanical Congress's (IBC) Millennium Botany Award (1999) (@welsh2001rupert). 
+Most importantly, Rupert was remembered as an individual entirely generous with there time to assist younger botanists with the more arcane aspects of field botany and taxonomy (@holmgren2017). 
 
 # METHODS AND RESULTS
 
@@ -90,7 +101,7 @@ BarnebyLives is atypical of R packages in that it requires a considerable amount
 Virtually all of the on-disk memory associated with these data are for storing geo-spatial information, setting up a local instance of the program - at whichever scale a user desires (see Figure XX) is available in the package documentation. 
 Functions which require the on-disk data require a path to the data as an argument. 
 Manually supplying the argument allows for the users to judiciously decide a storage location suitable for there needs.  
-We anticipate most personal BarnebyLives instances will be less than several gigabytes, and the processing takes relatively little RAM, hence we believe installations can work on hardware as small as Chromebooks, and have the data stored entirely on thumb-drives.
+We anticipate most personal BarnebyLives instances will be less than several gigabytes, and the processing takes relatively little RAM, hence we believe installations can work on hardware as small as Chromebooks, while having the data stored entirely on thumb-drives.
 The final steps of Barnebylives, generating the labels require working installations of Rmarkdown, a LaTeX installation (e.g. pdflatex, lualatex, xelatex), and the open source command line tools pdfjam and pdftk.
 While these steps are run through bash, we have wrapped them in a R functions which bypass the need to enter the commands to a terminal.
 Several commands in BarnebyLives require the output from previous functions, and a workflow which satisfies these requirements is presented in Figure 1. 
@@ -144,7 +155,10 @@ n_sites <- data %>%
 
 ### Herbarium Collections
 
-The package was finalized using the primary authors collections from 2023. The testing of the package within this manuscript was performed using a subset of their collections from 2018-2022, *all* of which are un-accessioned. Only collections which had identifications to the level of species or lower, and transcribed collection dates and coordinates were used. This results in a data set of `r nrow(data)` records for testing, from `r n_sites` sites located across Western North America (Figure 2). In total `r n_spp` species (with `r n_sp_authors` sets of authors), with `r n_infraspecies` infraspecies (`r n_infra_sp_auths` authors) in `r n_families` families were used for testing. 
+The package was finalized using the primary authors collections from 2023. 
+The testing of the package within this manuscript was performed using a subset of their collections from 2018-2022, *all* of which are un-accessioned. 
+Only collections which had identifications to the level of species or lower, and transcribed collection dates and coordinates were used. 
+This results in a data set of `r nrow(data)` records for testing, from `r n_sites` sites located across Western North America (Figure 2). In total `r n_spp` species (with `r n_sp_authors` sets of authors), with `r n_infraspecies` infraspecies (`r n_infra_sp_auths` authors) in `r n_families` families were used for testing. 
 
 ```{r Run pipeline with all steps and benchmarking, eval = F}
 
@@ -422,16 +436,29 @@ rm(genus_mismatch, genera_mispelled, family_incongruence)
 \end{wrapfigure}
 
 # CONCLUSIONS
-BarnebyLives is a tool which is able to rapidly acquire relevant geographic, and taxonomic data. It is also capable of performing specialized spell checks, and assorted curatorial tasks to produce both digital and analog data. The package relies on no licensed Software, such as the Microsoft suite, and is suitable for install on all major operating systems (Windows, Mac, Linux), with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal.
+BarnebyLives is a tool which is able to rapidly acquire relevant geographic, and taxonomic data. 
+It is also capable of performing specialized spell checks, and assorted curatorial tasks to produce both digital and analog data. 
+The package relies on no licensed Software, such as the Microsoft suite, and is suitable for install on all major operating systems (Windows, Mac, Linux), with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal.
 
 # AUTHOR CONTRIBUTIONS
-The project was conceptualized by R.C.B. The program was written by R.C.B. Data collection and analysis were performed by R.C.B. R.C.B. wrote the manuscript with input from all other authors. All authors approved the final version of the manuscript.
+The project was conceptualized by R.C.B. The program was written by R.C.B.
+Data collection and analysis were performed by R.C.B.
+R.C.B. wrote the manuscript with input from all other authors. 
+All authors approved the final version of the manuscript.
 
 # ACKNOWLEDGEMENTS
-The Bureau of Land Management are graciously acknowledged as providers of funding to R.C.B for the majority of his specimen collection activities. Two anonymous peer reviewers who increased the quality of this manuscript are thanked. Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz, Dakota Becerra, Hannah Lovell, Caitlin Miller & Hubert Szczygiel. 
+The Bureau of Land Management are graciously acknowledged as providers of funding to R.C.B for the majority of his specimen collection activities. 
+Two anonymous peer reviewers who increased the quality of this manuscript are thanked. 
+Sofia Garcia is acknowledged for creating the 'Valleys' data set which place naming in the package relies on. 
+Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz, Dakota Becerra, Hannah Lovell, Caitlin Miller & Hubert Szczygiel. 
 
 # DATA AVAILABILITY STATEMENT
-The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives), and the stable version is available on CRAN. The package includes three real use-case vignettes (tutorials) on usage. One vignette "setting_up_files" explores setting up a instance for a certain geographic area. Another vignette "running_pipeline" showcases the usage of the package for processing data entered on a spreadsheet. A final vignette "creating_labels" shows the usage of an R, and Bash script launched from RStudio to produce print-ready labels. All data used in this mansucript are available at: https://github.com/sagesteppe/Barneby_Lives_dev/manuscript
+The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives), and the stable version is available on CRAN. 
+The package includes three real use-case vignettes (tutorials) on usage. 
+One vignette "setting_up_files" explores setting up a instance for a certain geographic area. 
+Another vignette "running_pipeline" showcases the usage of the package for processing data entered on a spreadsheet. 
+A final vignette "creating_labels" shows the usage of an R, and Bash script launched from RStudio to produce print-ready labels. 
+All data used in this mansucript are available at: https://github.com/sagesteppe/Barneby_Lives_dev/manuscript
 
 # ORCID
 Reed Benkendorf https://orcid.org/0000-0003-3110-6687  
