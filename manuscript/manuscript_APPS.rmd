@@ -117,6 +117,12 @@ n_families <- data %>%
   count() %>% 
   nrow() # 74 families
 
+n_genera <- data %>% 
+  separate(Scientific_name, into = c('Genus', 'Epithet') , remove = FALSE, extra = 'drop') %>% 
+  group_by(Genus) %>% 
+  count() %>% 
+  nrow() # 292 Genera 
+
 n_spp <- data %>% 
   group_by(Binomial) %>% 
   count() %>% 
@@ -158,7 +164,8 @@ n_sites <- data %>%
 The package was finalized using the primary authors collections from 2023. 
 The testing of the package within this manuscript was performed using a subset of their collections from 2018-2022, *all* of which are un-accessioned. 
 Only collections which had identifications to the level of species or lower, and transcribed collection dates and coordinates were used. 
-This results in a data set of `r nrow(data)` records for testing, from `r n_sites` sites located across Western North America (Figure 2). In total `r n_spp` species (with `r n_sp_authors` sets of authors), with `r n_infraspecies` infraspecies (`r n_infra_sp_auths` authors) in `r n_families` families were used for testing. 
+This results in a data set of `r nrow(data)` records for testing, from `r n_sites` sites located across Western North America (Figure 2). 
+In total `r n_spp` species (with `r n_sp_authors` sets of authors), with `r n_infraspecies` infraspecies (`r n_infra_sp_auths` authors) in `r n_families` families were used for testing. 
 
 ```{r Run pipeline with all steps and benchmarking, eval = F}
 
@@ -302,14 +309,13 @@ BarnebyLives took roughly `r minutemen(sum( time_trials[time_trials$Group=='Loca
 Most of the local run time is attributable to the spatial (spatial: `r sum(tt_local[tt_local$Module=='Geospatial', 'elapsed'])`s), and taxonomic operations (`r sum(tt_local[tt_local$Module=='Taxonomic', 'elapsed'])`s), style: `r sum(tt_local[tt_local$Module=='Style', 'elapsed'])`s. 
 The spell check operation of the scientific name accounted for nearly all of the time (`r sum(tt_local[tt_local$Function=='spell_check', 'elapsed'])`s) spent performing local taxonomic operations.
 The generation of labels consumed around `r minutemen(time_label_gen)` minutes (`r time_label_gen`s) for the rendering, `r time_4perpage`s to combine individual labels four per single sheet of landscape orientated paper, and `r time_final`s to combine the `r length(list.files('labels/processed'))` sheets to a single Portable Document Format (PDF).  
-The total computer run time for processing these XXX specimens was XX minutes. 
-
+The total computer run time for processing these `r nrow(data)` specimens was `r minutemen(sum(time_trials$elapsed))` minutes. 
 
 ```{r}
 rm(time_trials, tt_local)
 ```
 
-## Results
+## Results 
 
 ```{r import results}
 data_p <- readRDS(file = 'data/processed/data_w_POWO_search') %>% 
@@ -398,34 +404,41 @@ epithet_diff <- data_p %>%
              Collection_number %in% c(
                '1217', '1251', '1283', '1311', '1337', '1391', '1450', '1576', 
                '1594', '1745', '2043', '2086', '2108', '2109', '2120', '2127', '2130',
-               '2153', '2199', '2227', '2242', '2256', '2289', '2370', '2379', 
-               '2393', '2415', '2511', '2573', '2648', '2660', '2687', '2690',
-               '2710', '2715', '2750', '2767', '2818')
+               '2153', '2199', '2227', '2242', '2256', '2289', '2297', '2343', '2370', '2379', 
+               '2393', '2415', '2480', '2511', '2561', '2573', '2648', '2660', 
+               '2687', '2690', '2710', '2715', '2727', '2750', '2767', '2818')
              ~ 'Spelling',
-             Collection_number %in% c('1207') ~ 'Binomial_Reversed', 
-             Collection_number %in% c('1588', '2445', '2777', '1337', '2412', '2748', 
-                                      '2652', '2805', '2194', '2040', '2039', '2403',
-                                      '2328', '2076') ~ 'Outdated',
+             Collection_number %in% c(
+               '1588', '1619', '2445', '2777', '1337', '2412', '2487', '2748', '2652',
+               '2805', '2194', '2040', '2039', '2403', '2328', '2076') 
+             ~ 'Outdated', 
              Collection_number %in% c('2644') ~ 'Incorrect',
-             Collection_number %in% c('2326', '2038', '1424', '2618',
-                                      '2665', '2297', '2343') ~ 'Internal_Error',
-             Collection_number %in% c('2110') ~ 'Preferred',
-             Collection_number %in% c('2480', '2561', '2727') ~ 'Not Found'
-             
+             Collection_number %in% c(
+               '1207', '2326', '2038', '1424', '2618', '2622', '2665', '2711', '2713') 
+             ~ 'Internal_Error',
+             Collection_number %in% c('2110', '2540') ~ 'Preferred'
            )
   )
 
 rm(Family_in, Family_out)
 ```
 
-Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. While no families were misspelled, BL made `r nrow(family_incongruence)` suggestions on naming, `r sum(family_incongruence$Situation=='Typo', na.rm = T)` manually entered typos were found, it identified `r sum(family_incongruence$Situation=='Submitter_Incorrect', na.rm = T)` instances where an incorrect family was entered, and `r sum(family_incongruence$Situation=='Outdated', na.rm = T)` instances of an outdated circumscription applied. BL flagged `r sum(family_incongruence$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy, and flagged `r sum(family_incongruence$Situation=='Internal_Error', na.rm = T)` records in error.
+Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. 
+While none of the `r n_families` families were misspelled, BarnebyLives made `r nrow(family_incongruence)` suggestions on naming, identified `r sum(family_incongruence$Situation=='Typo', na.rm = T)` typos, identified `r sum(family_incongruence$Situation=='Submitter_Incorrect', na.rm = T)` instances where an incorrect family was entered, and `r sum(family_incongruence$Situation=='Outdated', na.rm = T)` instances of an outdated circumscription applied. 
+At the level of family BarnebyLives flagged `r sum(family_incongruence$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy, and flagged `r sum(family_incongruence$Situation=='Internal_Error', na.rm = T)` records in error.
 
-BL identified `r nrow(genus_mismatch)` discrepancies at the level of genus between user submitted and processed data. 
-In `r sum(genus_mismatch$Situation=='Outdated')` of these instances the user supplied an outdated name instance of an outdated circumscription applied (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Outdated', 'Genus']))` genera total). BL flagged `r sum(genus_mismatch$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Preferred', 'Genus']))` genera total), and flagged `r sum(genus_mismatch$Situation=='Internal_Error', na.rm = T)` record in error.
+In the `r n_genera` genera analysed  BarnebyLives identified `r nrow(genus_mismatch)` discrepancies at the level of genus between user submitted and processed data. 
+In `r sum(genus_mismatch$Situation=='Outdated')` of these instances the user supplied an outdated name (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Outdated', 'Genus']))` unique genera). 
+BL flagged `r sum(genus_mismatch$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Preferred', 'Genus']))` genera total), and flagged `r sum(genus_mismatch$Situation=='Internal_Error', na.rm = T)` records in error. 
 
-BL flagged 75 species 
+Of the `r nrow(data)` species analysed (`r n_spp` distinct species) BarnebyLives flagged `r nrow(epithet_diff)` records. 
+BL `r sum(epithet_diff$Situation=='Spelling')` detected instances of misspelled epithets (`r sum(epithet_diff$Situation=='Spelling')` unique species). 
+In `r sum(epithet_diff$Situation=='Outdated')` of these instances the user supplied an outdated name (`r nrow(unique(epithet_diff[epithet_diff$Situation=='Outdated', 'Full_name']))` unique species). 
+BL flagged `r sum(epithet_diff$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(epithet_diff[epithet_diff$Situation=='Preferred', 'Full_name']))` unique species), and flagged `r sum(epithet_diff$Situation=='Internal_Error', na.rm = T)` records in error. 
+The final record was an egregious error where the order of the specific epithet and the genus name. 
 
-The number of author abbreviations which were not in the appropriate format were XX (% percent), in nearly all cases the presence or absence of a period were the issue. Plants of the World Online was able to identify XX new names for the submitted taxa, XX of which the author adopted. `r long_flag` records were appropriately flagged for issues with auto fill increment of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values (% of records).
+The number of author abbreviations which were not in the appropriate format were XX (% percent), in nearly all cases the presence or absence of a period were the issue. 
+Plants of the World Online was able to identify XX new names for the submitted taxa, XX of which the author adopted. `r long_flag` records were appropriately flagged for issues with auto fill increment of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values (% of records).
 
 ```{r}
 rm(genus_mismatch, genera_mispelled, family_incongruence)
@@ -440,7 +453,7 @@ rm(genus_mismatch, genera_mispelled, family_incongruence)
 # CONCLUSIONS
 BarnebyLives is a tool which is able to rapidly acquire relevant geographic, and taxonomic data. 
 It is also capable of performing specialized spell checks, and assorted curatorial tasks to produce both digital and analog data. 
-The package relies on no licensed Software, such as the Microsoft suite, and is suitable for install on all major operating systems (Windows, Mac, Linux), with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal.
+The package relies on no licensed Software, such as the Microsoft suite, and is suitable for install on all major operating systems  (Windows, Mac, Linux), with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal.
 
 # AUTHOR CONTRIBUTIONS
 The project was conceptualized by R.C.B. The program was written by R.C.B.
