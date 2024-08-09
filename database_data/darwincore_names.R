@@ -2,8 +2,7 @@ setwd('/media/steppe/hdd/Barneby_Lives-dev/database_data')
 
 library(tidyverse)
 
-all_names <- read.csv('all_darwincore_colnames.csv')
-pop_names <- read.csv('darwinCore_crosswalk-draft.csv')
+all_names <- read.csv('Fields.csv')
 
 final_names <- filter(all_names, !COLNAMES %in% pop_names$DarwinCore ) %>% 
   mutate(BL = NA) %>% 
