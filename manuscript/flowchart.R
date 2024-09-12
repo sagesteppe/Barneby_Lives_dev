@@ -12,7 +12,7 @@ digraph boxes_and_circle {
   node [shape = circle, fontsize = 36, fontname = arial, style = filled, fontcolor = White]
 
       subgraph cluster_import{color= 'white'
-        node [color = '#CDF7F6', shape = egg]
+        node [color = 'black', shape = egg]
         'Raw\nSpreadsheet'
       }
       
@@ -21,11 +21,13 @@ digraph boxes_and_circle {
         node [color = '#94524A']
   
           'Raw\nSpreadsheet' -> 'Convert\nCoordinates\nfrom\nDMS to DD' 
-              [label = '     dms2dd', fontsize = 50, penwidth = 10]
-          'Convert\nCoordinates\nfrom\nDMS to DD' -> 'Clean\nCoordinates' 
-              [label = '     autofill_checker', fontsize = 50, penwidth = 6]
-          'Clean\nCoordinates' -> 'Geospatial\nData' 
+              [label = '     dms2dd', fontsize = 50, penwidth = 6, style = dashed]
+          'Convert\nCoordinates\nfrom\nDMS to DD' -> 'Check for\nautofill\nvalues' 
+              [label = '     autofill_checker', fontsize = 50, penwidth = 6, style = dashed]
+          'Check for\nautofill\nvalues' -> 'Geospatial\nData' 
               [label = '     coords2sf', fontsize = 50, penwidth = 6]
+          'Raw\nSpreadsheet' -> 'Check for\nautofill\nvalues' 
+              [label = '     autofill_checker', fontsize = 50, penwidth = 6]
           'Geospatial\nData' -> 'Political\nBoundaries' 
               [label = '     political_grabber', fontsize = 50, penwidth = 6]
           'Political\nBoundaries' -> 'Site\nCharacteristics' 
@@ -33,10 +35,6 @@ digraph boxes_and_circle {
           'Site\nCharacteristics' -> 'Site\nName' 
               [label = '     site_writer', fontsize = 50, penwidth = 6]
               
-          'Raw\nSpreadsheet' -> 'Check for\nautofill\nvalues' 
-              [label = '     autofill_checker', fontsize = 50, penwidth = 6, style = dashed]
-          'Check for\nautofill\nvalues' -> 'Convert\nCoordinates\nfrom\nDMS to DD' 
-              [penwidth = 6, style = dashed]
           'Geospatial\nData' -> 'Directions'
               [label = '     directions_grabber', fontsize = 50, penwidth =6, style=dashed]
           'Directions' -> 'Site\nName'  [penwidth = 6, style=dashed]
@@ -186,9 +184,9 @@ text <- paste(
   "The top two rows indicate the main data cleaning functionality and are best run in the order outlined",
   "above although taxonomic steps may be ran before spatial steps. The third row can be interspersed",
   "with the above two, includes creation of labels, which allows for detection of formatting or other",
-  "issues which were not captured by the pipeline or in earlier manual review. Further support is offered",
-  "to export data in a format which allows mass upload at the receiving institutuion, and to create a", 
-  "packing/shipping manifest.",
+  "issues which were not captured by the pipeline or in earlier manual review. Further support is",
+  "offered to export data in a format which allows mass upload at the receiving institution, ", 
+  "and to create a shipping manifest and transfer notice.",
   sep = "\n")
 
 # Create a text grob
