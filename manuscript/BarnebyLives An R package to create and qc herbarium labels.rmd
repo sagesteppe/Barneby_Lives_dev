@@ -3,7 +3,7 @@ title: 'BarnebyLives: an R package to create herbarium specimen labels and clean
 author:  |
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
-    | Reed Clark Benkendorf$^1$^[Author for Correspondence: rbenkendorf@chicagobotanic.org]
+    | Reed Clark Benkendorf$^1$$^,$$^2$^[Author for Correspondence: rbenkendorf@chicagobotanic.org], Jeremie B. Fant$^1$$^,$$^2$
 abstract: |
   \noindent
   **Premise:** Depositing specimens to herbaria is a time consuming task. Many institutions have reduced the amount of funding for herbaria, and universities have reduced the amount of education dedicated to curatorial tasks and specimen deposition. Despite this, the continual generation of herbaria specimens are essential for current and future research in evolution and ecology. In order to faciliate the continued growth of herbaria BarnebyLives was developed as tool to supplement collection notes, perform geographic and, taxonomic informatic processes, enact spell checks, produce labels, and submit digital data for fast accessioning of specimens    
