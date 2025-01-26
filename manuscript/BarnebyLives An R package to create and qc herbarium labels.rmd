@@ -155,7 +155,7 @@ The manual review process technically only has one function which is optional, a
 Notably many of the flags which BarnebyLives generates will be placed into columns (e.g. NAMES OF COLUMNS FROM FLAGS), and can be manually reviewed by the analyst, many of these issues can be resolved by simply addressing the relevant issues in the original data input spreadsheet. 
 
 The data exporting module contains three functions, which interact with LaTeX templates and require slightly more advanced R user interactivity such as setting up mapping functions using the tidyverses purrr package.
-*labels_skeleton* is an R script which will require a few modification steps to tailor to each instiution, these r scripts will put data into a TEMPLATE...  
+*labels_skeleton* is an R script which will require a few modification steps to tailor to each institution, these r scripts will put data into a TEMPLATE...  
 
 
 ```{r import example data and gather some summaries}
