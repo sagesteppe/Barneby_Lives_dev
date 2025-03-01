@@ -2,7 +2,6 @@
 output: pdf_document
 params:
   Collection_number: Collection_number
-  UNIQUEID: UNIQUEID
 geometry: paperheight=4in,paperwidth=4in,margin=0.1in
 header-includes:
   - \pagenumbering{gobble}
@@ -21,29 +20,30 @@ library(BarnebyLives)
 ```
 
 ```{r load data}
-data <- readRDS('../data/processed/data_w_Google_Maps') |>
-  sf::st_drop_geometry() |>
-  dplyr::filter(Collection_number == params$Collection_number) |>  
-  sf::st_drop_geometry()
+data <- read.csv('../data/test_data.csv') |>
+  dplyr::mutate(
+    Collection_number = as.numeric(Collection_number), 
+    Coordinate_Uncertainty = '5m') |>
+  dplyr::filter(Collection_number == params$Collection_number)
 ```
 
 \begin{center}
-\textbf{\LARGE Flora of Western North America}
+\textbf{\LARGE}
 \end{center}
 \begin{flushright}
 \uppercase{`r data$Family`}
 \end{flushright}
 \begingroup
 \large
-`r writer(paste(data$Genus, data$Epithet), italics = TRUE)` `r data$Binomial_authority` `r writer(data$Infraspecific_rank)` `r writer(data$Infraspecies, italics = TRUE)` `r writer(data$Infraspecific_authority)`  
+`r writer(paste(data$Genus, data$Epithet), italics = TRUE)` `r writer(data$Binomial_authority)` `r writer(data$Infrarank)` `r writer(data$Infraspecies, italics = TRUE)` `r writer(data$Infraspecific_authority)`  
 \normalsize
 \endgroup
 
 \vspace*{\fill}
 \begingroup
-`r data$latitude_dd` `r data$longitude_dd` (`r data$Datum`). `r data$Gen`. `r writer(data$Site)`   
+`r data$Gen`. `r writer(data$Site)` `r data$latitude_dd` `r data$longitude_dd` (`r data$Datum` `r writer(data$Coordinate_Uncertainty)`).
 
-`r writer(data$Habitat)` `r data$physical_environ`  
+`r writer(data$Habitat)`. `r data$physical_environ`  
 Veg.: `r species_font(data$Vegetation)` `r associates_writer(data$Associates)`
 `r writer(data$Notes)`  
 \endgroup
@@ -57,7 +57,3 @@ Veg.: `r species_font(data$Vegetation)` `r associates_writer(data$Associates)`
 \begingroup
 `r collection_writer(data)`. `r writer_fide(data)`
 \endgroup
-
-\begin{center}
-{\footnotesize Collected under the auspices of the Bureau of Land Management}
-\end{center}

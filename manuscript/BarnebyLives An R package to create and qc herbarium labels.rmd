@@ -151,7 +151,6 @@ The manual review process technically only has one function which is optional, a
 Notably many of the flags which BarnebyLives generates will be placed into columns with obviously flagged names, and can be manually reviewed by the analyst, many of these issues can be resolved by simply addressing the relevant issues in the original data input spreadsheet. 
 
 The data exporting module contains three functions, which interact with LaTeX templates and require slightly more advanced R user interactivity such as setting up mapping functions using the tidyverses purrr package.
-<<<<<<< HEAD
 *labels_skeleton* is an R 'script' which will require a few modification steps to tailor to each institution, these R scripts will put data into a user specified template, and serve as the interface to LaTeX.   
 
 
@@ -277,7 +276,11 @@ associates_spell_check_ass <- system.time({ # ensure associated species are spel
 })
 
 time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
-  data <- associate_dropper(data, 'Full_name')
+  data <- associate_dropper(data, 'Full_name', col  = 'Associates')
+})
+
+time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
+  data <- associate_dropper(data, 'Full_name', col  = 'Vegetation')
 })
 
 time_date_parser <- system.time({ # parse dates into museum formats
@@ -323,7 +326,38 @@ time_directions_grabber <- system.time({ # write directions to sites
 
 saveRDS(time_directions_grabber, file = 'data/processed/time_directions_grabber')
 saveRDS(data, file = 'data/processed/data_w_Google_Maps')
+
 ```
+
+```{r accept or reject changes, eval = F}
+
+# for this example we will just ACCEPT all changes blindly. 
+# basically we just want some data for running timing exercises on the label making. 
+
+# just overwrite the original Associates and Vegetation columns
+data <- data %>% 
+  select(-Associates, -Vegetation) |>
+  rename(Associates = 'SpellCk.Associates', Vegetation = 'SpellCk.Vegetation')
+
+# honestly just overwrite these too. 
+data <- data %>% 
+  select(-SpellCk.gGRP, -Match, -SpellCk.taxon_rank, 
+        -Infrarank, -Infraspecies) |>
+  rename(Full_name = SpellCk.taxon_name, Genus = SpellCk.genus, Epithet = SpellCk.species, 
+         Infrarank = SpellCk.infraspecific_rank, Infraspecies = SpellCk.infraspecies) %>% 
+  mutate(
+    Slope = slope, 
+    Aspect = aspect
+  ) |>
+  unite(Name_authority, 
+        Genus, Epithet, Binomial_authority, Infrarank, Infraspecies, Infraspecific_authority,
+        remove = F, na.rm = T, sep = ' ') |>
+  sf::st_drop_geometry()
+
+# also save a spreadsheet of the cleaned data, we'll use this to create the labels. 
+write.csv(data, file = 'data/processed/cleaned_data.csv', row.names = FALSE)
+```
+
 
 ```{r Total Time of operations, eval = F}
 
@@ -350,6 +384,28 @@ saveRDS(time_trials, file = 'data/processed/time_trials')
 
 rm(time_trials)
 rm(list=ls(pattern = 'time'))
+```
+
+```{r Create Labels}
+processed <- read.csv('data/processed/cleaned_data.csv') %>% 
+  mutate(UNIQUEID = paste0(Primary_Collector, Collection_number), 
+         Coordinate_Uncertainty = '+/- 5m') %>% 
+  data.frame() 
+
+processed <- data.frame( apply(processed, 2, as.character) )
+processed <- mutate(processed, Collection_number = as.numeric(Collection_number))
+
+dir.create('./labels/raw')
+p <- '/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw'
+
+purrr::walk(
+  .x = processed$Collection_number,
+  ~ rmarkdown::render(
+    input = './labels/skeleton.Rmd',
+    output_file = file.path(p, glue::glue("{.x}.pdf")),
+    params = list(Collection_number = {.x})
+  )
+)
 ```
 
 ```{r load in time trials}
@@ -488,13 +544,13 @@ epithet_diff <- data_p %>%
 rm(Family_in, Family_out)
 ```
 
+
 Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. 
 While none of the `r n_families` families were misspelled, BarnebyLives made `r nrow(family_incongruence)` suggestions on naming, identified `r sum(family_incongruence$Situation=='Typo', na.rm = T)` typos, identified `r sum(family_incongruence$Situation=='Submitter_Incorrect', na.rm = T)` instances where an incorrect family was entered, and `r sum(family_incongruence$Situation=='Outdated', na.rm = T)` instances where an outdated circumscription was applied. 
 At the level of family BarnebyLives flagged `r sum(family_incongruence$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy, and flagged `r sum(family_incongruence$Situation=='Internal_Error', na.rm = T)` records in error.
 
 In the `r n_genera` genera analysed  BarnebyLives identified `r nrow(genus_mismatch)` discrepancies at the level of genus between user submitted and processed data. 
 In `r sum(genus_mismatch$Situation=='Outdated')` of these instances the user supplied an outdated name (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Outdated', 'Genus']))` unique genera) flagged `r sum(genus_mismatch$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Preferred', 'Genus']))` genera total), and flagged `r sum(genus_mismatch$Situation=='Internal_Error', na.rm = T)` records in error. 
-
 
 Of the `r nrow(data)` records analysed (`r n_spp` distinct species) BarnebyLives flagged `r nrow(epithet_diff)` records, and detected `r sum(epithet_diff$Situation=='Spelling')`  instances of misspelled epithets (`r sum(epithet_diff$Situation=='Spelling')` unique species). 
 Of the `r nrow(data)` species analysed (`r n_spp` distinct species) BarnebyLives flagged `r nrow(epithet_diff)` records, and detected `r sum(epithet_diff$Situation=='Spelling')`  instances of misspelled epithets (`r sum(epithet_diff$Situation=='Spelling')` unique species). 
