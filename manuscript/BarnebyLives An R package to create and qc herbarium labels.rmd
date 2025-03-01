@@ -3,7 +3,7 @@ title: 'BarnebyLives: an R package to create herbarium specimen labels and clean
 author:  |
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
-    | Reed Clark Benkendorf$^1$^[Author for Correspondence: rbenkendorf@chicagobotanic.org]
+    | Reed Clark Benkendorf$^1$$^,$$^2$^[Author for Correspondence: rbenkendorf@chicagobotanic.org], Jeremie B. Fant$^1$$^,$$^2$
 abstract: |
   \noindent
   **Premise:** Depositing specimens to herbaria is a time consuming process. Many institutions have reduced the amount of funding for herbaria, and universities have reduced the amount of education dedicated towards collections and curatorial tasks. However, the continual generation of herbarium specimens are essential for current and future research in evolution and ecology. In order to faciliate the continued growth of herbaria BarnebyLives was developed as a tool to supplement collection notes, perform geographic and, taxonomic informatic processes, enact spell checks and other QC steps, produce labels, and submit digital data to increase the rate of accessioning specimens.  
@@ -12,9 +12,9 @@ abstract: |
 keywords: |
   herbarium, natural history museum, collections, geospatial, R, LaTeX   
 output:
-  word_document: default
-  toc: no
   pdf_document: default
+  toc: no
+  word_document: default
 csl: "../citations/american-journal-of-botany.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
@@ -89,7 +89,7 @@ Most germanely, Rupert was remembered as being generous with his time to assist 
 
 # METHODS AND RESULTS
 
-\includegraphics[height=\textheight, angle=270]{../graphics/plots/workflow.png}
+![Recommended workflow](../graphics/plots/workflow.png){width=100%}  
 
 ```{r install package}
 ## devtools::install_github('sagesteppe/BarnebyLives', force = TRUE)
@@ -119,19 +119,6 @@ While these steps are run through a shell scripting language like bash, we have 
 Unfortunately, we have not found Windows alternatives to pdfam and pdftek so we are unable to offer the final label generating functionality on that operating system. 
 BarnebyLives was iteratively developed based on data submitted by roughly 20 seasonal field botanists. 
 Essentially, additions to the code have been continually made as the developers were exposed to more idiosyncrasies of collection notes and data entry. 
-
-## Usage
-All steps of BarnebyLives except for label generation are run within the freely available Rstudio. 
-Data may be read in from any common spreadsheet management system or database connection such as Excel, or free of charge alternatives such as: LibreOffice, OpenOffice, or via the cloud on Googlesheets. 
-The latter two options are documented here and in package vignettes, detailed descriptions of the required and suggested input columns are located on the Github page (https://github.com/sagesteppe/BarnebyLives *'Input Data Column Names'*) and over *3*00 real-world examples are on a Google Sheets accessible from the page.
-BarnebyLives is atypical of R packages in that it requires a considerable amount of data to operate (Table 1).
-Virtually all the on-disk memory associated with these data are used in storing spatial data, setting up a local instance of the program - at whichever scale a user desires (see Figure XX) is fully documented in the package documentation. 
-Functions which require the on-disk data require a path to the data as an argument. 
-Manually supplying the path argument allows for users to judiciously decide a storage location suitable for their needs.  
-
-We anticipate BarnebyLives usage will requite less than a couple gigabytes of memory (ours covering all of the conterminous Western U.S. at 90m resolution is ~16 GiB), and the processing takes relatively little RAM, hence we believe installations can work on hardware as limited as Chromebooks, while having the data stored entirely on thumb-drives.
-The final steps of BarnebyLives, generating the labels require working installations of Rmarkdown, a LaTeX installation (e.g. [pdfTeX](https://www.tug.org/applications/pdftex/), [LuaTeX](https://www.luatex.org/), [XeLaTeX](https://www.overleaf.com/learn/latex/XeLaTeX)), and the open source command line tools [pdfjam](https://github.com/rrthomas/pdfjam) and [pdftk](https://linux.die.net/man/1/pdftk).
-While these steps are run through a shell scripting language like bash, we have wrapped them in R functions which bypass the need to enter the commands directly into a terminal.
 Several commands in BarnebyLives require the output from previous functions, and a workflow which satisfies these requirements is presented in Figure 1. 
 
 ## Functionality
@@ -164,6 +151,7 @@ The manual review process technically only has one function which is optional, a
 Notably many of the flags which BarnebyLives generates will be placed into columns with obviously flagged names, and can be manually reviewed by the analyst, many of these issues can be resolved by simply addressing the relevant issues in the original data input spreadsheet. 
 
 The data exporting module contains three functions, which interact with LaTeX templates and require slightly more advanced R user interactivity such as setting up mapping functions using the tidyverses purrr package.
+<<<<<<< HEAD
 *labels_skeleton* is an R 'script' which will require a few modification steps to tailor to each institution, these R scripts will put data into a user specified template, and serve as the interface to LaTeX.   
 
 
@@ -226,12 +214,7 @@ n_sites <- data %>%
 
 ### Herbarium Collections
 
-\begin{wrapfigure}{R}{0.35\textwidth}  
- \begin{center}
-    \includegraphics[width=.35\textwidth]{../graphics/plots/collections_map-trim.png}  
-  \caption{The spatial extent (orange), and herbarium collection sites (burgundy) tested in this manuscript.} 
-\end{center}
-\end{wrapfigure}
+![The spatial extent (orange), and herbarium collection sites (burgundy) tested in this manuscript.](../graphics/plots/collections_map-trim.png){width=50%}  
 
 The package was released into beta testing using the primary authors collections from 2023. 
 The testing of the package within this manuscript was performed using a subset of their collections from 2018-2022, all of which are un-accessioned. 
@@ -519,19 +502,13 @@ In `r sum(epithet_diff$Situation=='Outdated')` of these instances the user suppl
 It also flagged `r sum(epithet_diff$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(epithet_diff[epithet_diff$Situation=='Preferred', 'Full_name']))` unique species), and flagged `r sum(epithet_diff$Situation=='Internal_Error', na.rm = T)` records in error. 
 The final record was an egregious error where the order of the specific epithet and the genus name. 
 
-*The number of author abbreviations which were not in the appropriate format were XX (% percent), in nearly all cases the presence or absence of a period were the issue.*
 `r long_flag` records were appropriately flagged for issues with auto fill increment of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values (% of records). 
 
 ```{r}
 rm(genus_mismatch, genera_mispelled, family_incongruence)
 ```
 
-\begin{wrapfigure}{R}{0.45\textwidth}
-  \begin{center}
-    \includegraphics[width=0.40\textwidth]{../graphics/tables/Screenshot-DataSources.png}
-  \caption{Sources of Data required for operations}
-  \end{center}
-\end{wrapfigure}
+![Data Sources](../graphics/tables/Screenshot-DataSources.png){width=50%}  
 
 # DISCUSSION 
 
