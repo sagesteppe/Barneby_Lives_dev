@@ -20,7 +20,7 @@ library(BarnebyLives)
 ```
 
 ```{r load data}
-data <- read.csv('../data/test_data.csv') |>
+data <- read.csv('../data/processed/cleaned_data.csv') |>
   dplyr::mutate(
     Collection_number = as.numeric(Collection_number), 
     Coordinate_Uncertainty = '5m') |>
@@ -28,7 +28,7 @@ data <- read.csv('../data/test_data.csv') |>
 ```
 
 \begin{center}
-\textbf{\LARGE}
+\textbf{\LARGE `r data$Project_name`}
 \end{center}
 \begin{flushright}
 \uppercase{`r data$Family`}

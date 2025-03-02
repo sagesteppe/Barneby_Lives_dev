@@ -92,7 +92,7 @@ Most germanely, Rupert was remembered as being generous with his time to assist 
 ![Recommended workflow](../graphics/plots/workflow.png){width=100%}  
 
 ```{r install package}
-## devtools::install_github('sagesteppe/BarnebyLives', force = TRUE)
+## devtools::install_github('sagesteppe/BarnebyLives')
 ```
 
 ```{r load libraries}
@@ -152,7 +152,6 @@ Notably many of the flags which BarnebyLives generates will be placed into colum
 
 The data exporting module contains three functions, which interact with LaTeX templates and require slightly more advanced R user interactivity such as setting up mapping functions using the tidyverses purrr package.
 *labels_skeleton* is an R 'script' which will require a few modification steps to tailor to each institution, these R scripts will put data into a user specified template, and serve as the interface to LaTeX.   
-
 
 ```{r import example data and gather some summaries}
 
@@ -386,27 +385,53 @@ rm(time_trials)
 rm(list=ls(pattern = 'time'))
 ```
 
-```{r Create Labels}
+```{r Create Labels, eval = F}
 processed <- read.csv('data/processed/cleaned_data.csv') %>% 
   mutate(UNIQUEID = paste0(Primary_Collector, Collection_number), 
          Coordinate_Uncertainty = '+/- 5m') %>% 
+  filter(Collection_number != 'sine non') %>% 
   data.frame() 
 
 processed <- data.frame( apply(processed, 2, as.character) )
 processed <- mutate(processed, Collection_number = as.numeric(Collection_number))
 
 dir.create('./labels/raw')
-p <- '/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw'
+dir.create('./labels/raw/Reed-raw')
+p <- '/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw/Reed-raw'
 
-purrr::walk(
+raw_lab_time <- system.time({
+  purrr::walk(
   .x = processed$Collection_number,
   ~ rmarkdown::render(
     input = './labels/skeleton.Rmd',
     output_file = file.path(p, glue::glue("{.x}.pdf")),
     params = list(Collection_number = {.x})
+    )
   )
-)
+})
+
+saveRDS(raw_lab_time, file = 'data/processed/time_label_gen')
+
+# now copy bash script to location # note we are one dir up from the lowest level. 
+p2libs <- system.file(package = 'BarnebyLives')
+folds <- file.path( 'rmarkdown', 'render_labels.sh')
+
+file.copy(from = file.path(p2libs, folds), 
+          to = '/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw')
 ```
+
+```{r, eval = T}
+## this SHOULD be a sh chunk, so launch in a shell! I just want to be sure you can see the code. 
+## and eval = TRUE will be respected. 
+user: pwd
+/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw
+# this will have both your script and a dir full of raw labels with a users name
+# now launch the bash script with: 
+bash render_labels.sh collector='Reed'
+# or chmod it etc!
+# et voila! data will be saved up on dir in a 'final' directory. 
+```
+
 
 ```{r load in time trials}
 time_trials <- readRDS('./data/processed/time_trials')
