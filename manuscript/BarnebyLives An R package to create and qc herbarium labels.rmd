@@ -91,7 +91,7 @@ Most germanely, Rupert was remembered as being generous with his time to assist 
 
 ![Recommended workflow](../graphics/plots/workflow.png){width=100%}  
 
-```{r install package}
+```{r install package, eval = F}
 ## devtools::install_github('sagesteppe/BarnebyLives')
 ```
 
@@ -420,7 +420,7 @@ file.copy(from = file.path(p2libs, folds),
           to = '/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw')
 ```
 
-```{r, eval = T}
+```{r combine labels, eval = F}
 ## this SHOULD be a sh chunk, so launch in a shell! I just want to be sure you can see the code. 
 ## and eval = TRUE will be respected. 
 user: pwd
@@ -430,6 +430,8 @@ user: pwd
 bash render_labels.sh collector='Reed'
 # or chmod it etc!
 # et voila! data will be saved up on dir in a 'final' directory. 
+# we timed it like this:
+\time -o ../process2final.txt  bash render_labels.sh collector='Reed'
 ```
 
 
@@ -438,7 +440,6 @@ time_trials <- readRDS('./data/processed/time_trials')
 tt_local <- time_trials[time_trials$Group=='Local',]
 
 time_label_gen <- readRDS('./data/processed/time_label_gen')[['elapsed']]
-time_4perpage <- gsub('user.*$', '', readLines('./labels/4labsperpage.txt'))[1]
 time_final <- gsub('user.*$', '', readLines('./labels/process2final.txt'))[1]
 
 minutemen <- function(x){
@@ -455,7 +456,7 @@ BarnebyLives took roughly `r minutemen(sum( time_trials[time_trials$Group=='Loca
 
 Most of the local run time is attributable to the spatial (`r sum(tt_local[tt_local$Module=='Geospatial', 'elapsed'])`sec), and taxonomic operations (`r sum(tt_local[tt_local$Module=='Taxonomic', 'elapsed'])`sec), while formatting data for labels took `r sum(tt_local[tt_local$Module=='Style', 'elapsed'])`sec. 
 The spell check of the scientific name accounted for nearly all of the time (`r sum(tt_local[tt_local$Function=='spell_check', 'elapsed'])`sec) spent performing local taxonomic operations.
-The generation of labels consumed around `r minutemen(time_label_gen)` minutes (`r time_label_gen`sec) for the rendering, `r time_4perpage`sec to combine individual labels four per single sheet of landscape orientated paper, and `r time_final`sec to combine the `r length(list.files('labels/processed'))` sheets to a single Portable Document Format (PDF). 
+The generation of labels consumed around `r minutemen(time_label_gen)` minutes (`r time_label_gen`sec) for the rendering, and an additional `r time_final`sec to combine the `r length(list.files('labels/processed'))` sheets to a single Portable Document Format (PDF). 
 The total computer run time for processing these `r nrow(data)` specimens was `r minutemen(sum(time_trials$elapsed))` minutes. 
 
 ```{r}
@@ -501,7 +502,7 @@ family_incongruence <- data_p %>%
   sf::st_drop_geometry() %>% 
   filter(POW_Family != 'NOT FOUND') %>% 
   filter(POW_Family != Family) %>% 
-  select(Collection_number, Full_name, Family, POW_Family) %>% 
+  select(Collection_number, Scientific_name, Family, POW_Family) %>% 
   mutate(Situation = 
     case_when(
       Family %in% c('Hydrophyllaceae', 'Namaceae') ~ 'Preferred', 
@@ -515,7 +516,7 @@ family_incongruence <- data_p %>%
 genera_mispelled <- data_p %>% 
   sf::st_drop_geometry() %>% 
   filter(POW_Genus == 'NOT FOUND') %>% 
-  select(Collection_number, Full_name, Genus, POW_Genus) 
+  select(Collection_number, Scientific_name, Genus, POW_Genus) 
 
 # the mismatch between POW genus and not
 genus_mismatch <- data_p %>% 

@@ -1,6 +1,1 @@
-time -o ../data/processed/4labels_per_page_time.txt
-time -o ../data/processed/final_pdf.txt
-
-
-\time -o 4labsperpage.txt  ./4perpage.sh
-\time -o process2final.txt  ./processed2final.sh
+\time -o process2final.txt  bash render_labels.sh collector='Reed'
