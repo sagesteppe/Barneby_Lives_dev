@@ -283,7 +283,7 @@ time_associate_dropper <- system.time({ # remove the focal taxon from the noted 
 })
 
 time_date_parser <- system.time({ # parse dates into museum formats
-  data <- date_parser(data, coll_date = 'Date_digital')
+  data <- date_parser(data, coll_date = 'Date_digital', det_date = 'Determined_date')
 })
 
 time_geodata_writer <- system.time({ # write out collection as GoogleEarth object
@@ -318,12 +318,12 @@ time_powo_searcher <- system.time({ # search for synonyms from plants of the wor
 saveRDS(time_powo_searcher, file = 'data/processed/time_powo_searcher')
 saveRDS(data, file = 'data/processed/data_w_POWO_search')
 
-time_directions_grabber <- system.time({ # write directions to sites
-  SoS_gkey = Sys.getenv("Sos_gkey")
-  data <- directions_grabber(data, api_key = SoS_gkey)
-})
+#time_directions_grabber <- system.time({ # write directions to sites
+#  SoS_gkey = Sys.getenv("Sos_gkey")
+#  data <- directions_grabber(data, api_key = SoS_gkey)
+#})
 
-saveRDS(time_directions_grabber, file = 'data/processed/time_directions_grabber')
+#saveRDS(time_directions_grabber, file = 'data/processed/time_directions_grabber')
 saveRDS(data, file = 'data/processed/data_w_Google_Maps')
 
 ```
@@ -341,8 +341,9 @@ data <- data %>%
 # honestly just overwrite these too. 
 data <- data %>% 
   select(-SpellCk.gGRP, -Match, -SpellCk.taxon_rank, 
-        -Infrarank, -Infraspecies) |>
+        -Infrarank, -Infraspecies, -Binomial_authority, -Infraspecific_authority) |>
   rename(Full_name = SpellCk.taxon_name, Genus = SpellCk.genus, Epithet = SpellCk.species, 
+         Binomial_authority = POW_Binom_authority, Infraspecific_authority = POW_Infra_authority,
          Infrarank = SpellCk.infraspecific_rank, Infraspecies = SpellCk.infraspecies) %>% 
   mutate(
     Slope = slope, 
