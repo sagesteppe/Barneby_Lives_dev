@@ -23,7 +23,7 @@ library(BarnebyLives)
 data <- read.csv('../data/processed/cleaned_data.csv') |>
   dplyr::mutate(
     Collection_number = as.numeric(Collection_number), 
-    Coordinate_Uncertainty = '5m') |>
+    Coordinate_Uncertainty = '+/- 5m') |>
   dplyr::filter(Collection_number == params$Collection_number)
 ```
 
@@ -46,11 +46,6 @@ data <- read.csv('../data/processed/cleaned_data.csv') |>
 `r writer(data$Habitat)`. `r data$physical_environ`  
 Veg.: `r species_font(data$Vegetation)` `r associates_writer(data$Associates)`
 `r writer(data$Notes)`  
-\endgroup
-\begingroup
-\begin{spacing}{0.1}
-{\scriptsize `r data$Directions_BL`}
-\end{spacing}
 \endgroup
  
 \vspace*{\fill}

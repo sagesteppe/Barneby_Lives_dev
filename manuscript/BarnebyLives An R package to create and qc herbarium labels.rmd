@@ -414,11 +414,12 @@ raw_lab_time <- system.time({
 saveRDS(raw_lab_time, file = 'data/processed/time_label_gen')
 
 # now copy bash script to location # note we are one dir up from the lowest level. 
-p2libs <- system.file(package = 'BarnebyLives')
-folds <- file.path( 'rmarkdown', 'render_labels.sh')
+# note that I customized the label template after import, so we will not run this again. 
+# p2libs <- system.file(package = 'BarnebyLives')
+# folds <- file.path( 'rmarkdown', 'render_labels.sh')
 
-file.copy(from = file.path(p2libs, folds), 
-          to = '/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw')
+# file.copy(from = file.path(p2libs, folds), 
+#           to = '/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw')
 ```
 
 ```{r combine labels, eval = F}
