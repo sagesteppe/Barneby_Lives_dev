@@ -238,6 +238,12 @@ time_coords2sf <- system.time({ # create a spatial (simple features) object
   data <- coords2sf(data)
 })
 
+time_geodata_writer <- system.time({ # write out collection as GoogleEarth object
+  geodata_writer(data, path = 'data/processed', 
+               filename = 'Herbarium_Collections',
+               filetype = 'kml')
+})
+
 p2geo <- '/media/steppe/hdd/Barneby_Lives-dev/geodata'
 
 time_political_grabber <- system.time({ # grab political information for collection
@@ -284,12 +290,6 @@ time_associate_dropper <- system.time({ # remove the focal taxon from the noted 
 
 time_date_parser <- system.time({ # parse dates into museum formats
   data <- date_parser(data, coll_date = 'Date_digital', det_date = 'Determined_date')
-})
-
-time_geodata_writer <- system.time({ # write out collection as GoogleEarth object
-  geodata_writer(data, path = 'data/processed', 
-               filename = 'Herbarium_Collections_2023',
-               filetype = 'kml')
 })
 
 rm(p2geo, p2tax)
