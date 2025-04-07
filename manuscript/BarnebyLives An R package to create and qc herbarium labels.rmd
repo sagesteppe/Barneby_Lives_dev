@@ -276,6 +276,8 @@ associates_spell_check_veg <- system.time({ # ensure associated species are spel
   data <- associates_spell_check(data, 'Vegetation', p2tax)
 })
 
+###############3## TAKE A LOOK AT THIS.. 
+# IT'S NOT WORKING THE WAY I WANT IT TO!!!!
 associates_spell_check_ass <- system.time({ # ensure associated species are spelled correctly. 
   data <- associates_spell_check(data, 'Associates', p2tax)
 })
@@ -283,6 +285,8 @@ associates_spell_check_ass <- system.time({ # ensure associated species are spel
 time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
   data <- associate_dropper(data, 'Full_name', col  = 'Associates')
 })
+
+##################333
 
 time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
   data <- associate_dropper(data, 'Full_name', col  = 'Vegetation')
