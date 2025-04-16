@@ -272,24 +272,20 @@ time_author_check <- system.time({ # ensure authorities are spelled-noted correc
   data <- author_check(data, path = p2tax)
 })
 
-associates_spell_check_veg <- system.time({ # ensure associated species are spelled correctly. 
-  data <- associates_spell_check(data, 'Vegetation', p2tax)
+time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
+  data <- associate_dropper(data, 'Binomial', col  = 'Associates')
 })
 
-###############3## TAKE A LOOK AT THIS.. 
-# IT'S NOT WORKING THE WAY I WANT IT TO!!!!
 associates_spell_check_ass <- system.time({ # ensure associated species are spelled correctly. 
   data <- associates_spell_check(data, 'Associates', p2tax)
 })
 
 time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
-  data <- associate_dropper(data, 'Full_name', col  = 'Associates')
+  data <- associate_dropper(data, 'Binomial', col  = 'Vegetation')
 })
 
-##################333
-
-time_associate_dropper <- system.time({ # remove the focal taxon from the noted associates
-  data <- associate_dropper(data, 'Full_name', col  = 'Vegetation')
+associates_spell_check_ass <- system.time({ # ensure associated species are spelled correctly. 
+  data <- associates_spell_check(data, 'Vegetation', p2tax)
 })
 
 time_date_parser <- system.time({ # parse dates into museum formats
@@ -345,10 +341,15 @@ data <- data %>%
 # honestly just overwrite these too. 
 data <- data %>% 
   select(-SpellCk.gGRP, -Match, -SpellCk.taxon_rank, 
-        -Infrarank, -Infraspecies, -Binomial_authority, -Infraspecific_authority) |>
-  rename(Full_name = SpellCk.taxon_name, Genus = SpellCk.genus, Epithet = SpellCk.species, 
-         Binomial_authority = POW_Binom_authority, Infraspecific_authority = POW_Infra_authority,
-         Infrarank = SpellCk.infraspecific_rank, Infraspecies = SpellCk.infraspecies) %>% 
+        -Infrarank, -Infraspecies, -Binomial_authority, -Infraspecific_authority, -Family) |>
+  rename(Full_name = SpellCk.taxon_name,
+         Genus = SpellCk.genus, 
+         Epithet = SpellCk.species, 
+         Binomial_authority = POW_Binom_authority, 
+         Infraspecific_authority = POW_Infra_authority,
+         Infrarank = SpellCk.infraspecific_rank, 
+         Infraspecies = SpellCk.infraspecies,
+         Family = POW_Family) %>% 
   mutate(
     Slope = slope, 
     Aspect = aspect
@@ -406,7 +407,7 @@ p <- '/media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw/Reed-raw'
 
 raw_lab_time <- system.time({
   purrr::walk(
-  .x = processed$Collection_number,
+  .x = na.omit(processed$Collection_number),
   ~ rmarkdown::render(
     input = './labels/skeleton.Rmd',
     output_file = file.path(p, glue::glue("{.x}.pdf")),
@@ -433,7 +434,7 @@ user: pwd
 /media/steppe/hdd/Barneby_Lives-dev/manuscript/labels/raw
 # this will have both your script and a dir full of raw labels with a users name
 # now launch the bash script with: 
-bash render_labels.sh collector='Reed'
+
 # or chmod it etc!
 # et voila! data will be saved up on dir in a 'final' directory. 
 # we timed it like this:
