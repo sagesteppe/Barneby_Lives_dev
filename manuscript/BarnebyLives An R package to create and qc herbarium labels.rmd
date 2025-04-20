@@ -6,9 +6,9 @@ author:  |
     | Reed Clark Benkendorf$^1$$^,$$^2$^[Author for Correspondence: rbenkendorf@chicagobotanic.org], Jeremie B. Fant$^1$$^,$$^2$
 abstract: |
   \noindent
-  **Premise:** Depositing specimens to herbaria is a time consuming process. Many institutions have reduced the amount of funding for herbaria, and universities have reduced the amount of education dedicated towards collections and curatorial tasks. However, the continual generation of herbarium specimens are essential for current and future research in evolution and ecology. In order to faciliate the continued growth of herbaria BarnebyLives was developed as a tool to supplement collection notes, perform geographic and, taxonomic informatic processes, enact spell checks and other QC steps, produce labels, and submit digital data to increase the rate of accessioning specimens.  
-  **Methods and Results:** BarnebyLives uses geospatial data from the U.S. Census Bureau to provide administrative jurisdiction information, and data from other sources, including the United States Geological Survey, to supplement collection notes by providing information on abiotic site conditions. It uses inhouse spell checks to verify the spelling of a collection at all taxonomic ranks, the IPNI standard author database to check standard author abbreviations, and the Royal Botanic Garden Kews 'Plants of the World Online' to check for nomenclatural innovations. Optionally the package writes driving directions to sites using Google Maps. The package outputs data in a tabular format, as well as a spatial format, for review by the user before rendering labels using LaTeX.       
-  **Conclusions:** BarnebyLives provides accurate political and physical information, reduces typos, provides users the most current taxonomic opinions, generates driving directions to sites, and produces aesthetically appealing labels and shipping manifests in a matter of minutes.     
+  **Premise:** Depositing specimens in herbaria is a time-consuming process. Many institutions have reduced the amount of funding for herbaria and universities have reduced the amount of education dedicated to collections and curatorial tasks. However, the continual generation of herbarium specimens is essential for current and future research on evolution and ecology. To facilitate the continued growth of herbaria, BarnebyLives was developed as a tool to supplement collection notes, perform geographic and taxonomic information processing, enact spell checks and other QC steps, produce labels, and submit digital data to increase the rate of accessioning specimens. 
+  **Methods and Results:** BarnebyLives uses geospatial data from the U.S. The Census Bureau provides administrative jurisdictional information and data from other sources, including the United States Geological Survey, to supplement collection notes by providing information on abiotic site conditions. It uses in-house spell checks to verify the spelling of a collection at all taxonomic ranks, the IPNI standard author database to check standard author abbreviations, and the Royal Botanic Garden Kews 'Plants of the World Online' to check for nomenclature innovations. Optionally, the package writes driving directions to the sites using Google Maps. The package outputs data in tabular and spatial formats for review by the user before rendering labels using LaTeX.        
+  **Conclusions:** BarnebyLives provides accurate political and physical information, reduces typos, provides users with the most current taxonomic opinions, generates driving directions to sites, and produces aesthetically appealing labels and shipping manifests in a matter of minutes.       
 keywords: |
   herbarium, natural history museum, collections, geospatial, R, LaTeX   
 output:
@@ -35,55 +35,52 @@ header-includes:
 knitr::opts_chunk$set(echo=F, warning = F, message = F)
 ```
 
-Nearly 400 million specimens are housed in herbaria around the world [@thiers2021herbaria].
-However, The rate of accessioning new collections to herbaria diminished in the 20^th^ century as priorities in biology shifted away from describing and documenting earths biodiversity and towards understanding cellular and molecular processes underpinning life [@prather2004decline; @pyke2010biological; @daru2018widespread].
-This shift, among other factors, lead to a decline in the funding allocated to collections based research, the number of staff maintaining and accessioning new collections, and educating students in these practices [@funk2014erosion]. 
-Historically specimens have been used to describe the taxonomic diversity of plants and document the worlds floristic diversity [@greve2016realising; @james2018herbarium; @brewer2019factors; @ronsted2020integrative].
-However, a renewed interest in herbarium collections utilizing 'big data approaches', such as museuomics, have brought herbaria back to the forefront of the natural sciences [@ronsted2020integrative; @marsico2020small].  
+Nearly 400 million specimens are housed worldwide in herbaria [@thiers2021herbaria]. 
+However, The rate of accessioning new collections to herbaria diminished in the 20^th^ century as priorities in biology shifted away from describing and documenting earths biodiversity and towards understanding cellular and molecular processes underpinning life [@prather2004decline; @pyke2010biological; @daru2018widespread]. 
+This shift, among other factors, led to a decline in the funding allocated to collection-based research, the number of staff maintaining and accessing new collections, and educating students in these practices [@funk2014erosion].
+Historically, specimens have been used to describe the taxonomic diversity of plants and document global floristic diversity [@greve2016realising; @james2018herbarium; @brewer2019factors; @ronsted2020integrative]. 
+However, renewed interest in herbarium collections utilizing 'big data approaches,’ such as museuomics, has brought herbaria back to the forefront of the natural sciences [@ronsted2020integrative; @marsico2020small]. 
 
-In fact, innovations in specimen digitization, data sharing, computing, DNA sequencing, and statistics have perhaps brought about greater use of herbarium specimens than ever before [@greve2016realising; @james2018herbarium; @brewer2019factors; @ronsted2020integrative]. 
-The current uses of specimens and their ancillary data extend well beyond their traditional roles in systematics and floristics, and studies utilizing collections are regularly carried out to better understand the ecological niches, phenological processes, and interactions of plants [@ronsted2020integrative; @davis2023herbarium]. 
-We suspect that collections have yet to realize their full potential, and as currently novel approaches, such as remote and electronic sensing and meta-barcoding, become more accessible the use of collections will increase [@tosa2021rapid].
-While image based or purely observational (rather than collections based) citizen science approaches (e.g. iNaturalist, BudBurst) have recently dovetailed with herbarium specimens to meet many current research needs specimens contain rich data which are not accessible via images. 
-Only specimens have the ability to: provide samples of DNA, secondary metabolites, or proteins, material for measuring (micro-)morphological attributes [@borges2020schrodinger], and seeds or pollen. 
-These factors will ensure that specimens remain the premier botanical data source into perpetuity. 
+Innovations in specimen digitization, data sharing, computing, DNA sequencing, and statistics have perhaps brought about greater use of herbarium specimens than ever before [@greve2016realising; @james2018herbarium; @brewer2019factors; @ronsted2020integrative].
+The current use of specimens and their ancillary data extends well beyond their traditional roles in systematics and floristics, and studies utilizing collections are regularly carried out to better understand the ecological niches, phenological processes, and interactions of plants [@ronsted2020integrative; @davis2023herbarium]. 
+We suspect that collections are yet to realize their full potential, and as currently novel approaches, such as remote and electronic sensing and meta-barcoding, become more accessible the use of collections will increase [@tosa2021rapid]. 
+While image-based or purely observational (rather than collection-based) citizen science approaches (e.g., iNaturalist, BudBurst) have recently dovetailed with herbarium specimens to meet many current research needs, specimens contain rich data that are not accessible via images. 
+Only specimens have the ability to: provide samples of DNA, secondary metabolites, or proteins, material for measuring (micro-)morphological attributes [@borges2020schrodinger], and seeds or pollen.  These factors ensure that the specimens remain the premier botanical data source. 
 
-However, despite the renewed recognition of the utility of collections, efforts to grow them appear slow [@prather2004decline]. 
-We conjecture this is in part because collecting and depositing specimens is a fundamentally slower process, especially for novice collectors, relative to taking photographs via professionally developed apps on smartphones [@daru2018widespread; @mishler2020spatial; @manzano2021fair]. 
-While many young botanists are capable of using dichotomous keys, and other resources, to reliably identify - and are able to collect satisfactory  material, we have observed that they face difficulties navigating several aspects of data acquisition and processing and preparation of labels for submission to herbaria. 
-Evidently, apparent problems include the lack of dedicated time at a field seasons end to process specimens, a general lack of education on cartography and orienteering, natural history (e.g. geology, geomorphology), nomenclature, familiarity with various computer programs (e.g. Microsoft Office suite), and increasingly - foundational knowledge of plant systematics and phylogenetics [@nanglu2023nature; @woodland2007botanists; @barrows2016crossroads]. 
+However, despite renewed recognition of the utility of collections, efforts to grow them appear slow [@prather2004decline].
+We conjecture that this is partly because collecting and depositing specimens is a fundamentally slower process, especially for novice collectors, relative to taking photographs via professionally developed apps on smartphones [@daru2018widespread; @mishler2020spatial; @manzano2021fair].
+While many young botanists are capable of using dichotomous keys and other resources to reliably identify and collect satisfactory  material, we observed that they face difficulties navigating several aspects of data acquisition, processing, and preparation of labels for submission to herbaria.
+Evidently, apparent problems include the lack of dedicated time at the end of a field season to process specimens, a general lack of education on cartography and orienteering, natural history (e.g., geology, geomorphology), nomenclature, and familiarity with various computer programs (for example, Microsoft Office suite), and increasing foundational knowledge of plant systematics and phylogenetics [@nanglu2023nature; @woodland2007botanists; @barrows2016crossroads].  
 
-The generation of an herbarium specimen includes many steps which are easy to take for granted [@forman1989herbarium]. 
-For example while acquiring appropriate political information for a collection site appears simple, young collectors rarely have the adequate cartographic resources (printed topographic maps, or GIS software) at their disposal. 
-In topographically complex areas, where administrative borders are often associated with hydrologic basins and the ridges defining them, collectors are liable to misinterpret their true geographic position and report details in error. 
-Even finding appropriate sites names can rarely be solved without a printed map, as many navigation related softwares, now consider many features which would serve as site names extraneous.  
-Similarly, the rate at which taxonomic innovations are occurring, the volume of the literature and the reluctance of some regional curators to embrace a phylogenetic approach to plant classification, has made it difficult to find more recently applied names - even when these names are unanimously accepted by group experts [@hitchcock2018flora]. 
-Furthermore, formatting a label correctly (e.g. author abbreviations) is a time consuming process with many opportunities to introduce several errors in formatting. 
-Anecdotally, many mail merge templates offered by herbaria still require collectors to modify many variables by hand, e.g. applying italicization. 
-Even if a collector navigates all of these hurdles, the time allocated to each step is quite large. 
+The generation of an herbarium specimen involves many steps that are easy to take for granted [@forman1989herbarium].
+For example, while acquiring appropriate political information for a collection site appears simple, young collectors rarely have adequate cartographic resources (printed topographic maps or GIS software) at their disposal.
+In topographically complex areas, where administrative borders are often associated with hydrological basins and the ridges defining them, collectors are liable to misinterpret their true geographic position and report details in error. 
+Even finding appropriate site names can rarely be solved without a printed map, as many navigation-related software now consider many features that would serve as extraneous site names. 
+Similarly, the rate at which taxonomic innovations occur, the volume of the literature, and the reluctance of some regional curators to embrace a phylogenetic approach to plant classification have made it difficult to find more recently applied names, even when these names are unanimously accepted by group experts [@hitchcock2018flora]. 
+Furthermore, formatting a label correctly (e.g., author abbreviations) is a time-consuming process with many opportunities to introduce errors in formatting. 
+Anecdotally, many mail merge templates offered by herbaria still require collectors to modify many variables by hand, for example, applying italicization. Even if a collector navigates all these hurdles, the time allocated to each step is quite large.  
 
-As a result of these concerns, we have developed an R package, BarnebyLives, that aims to increase both the quality of data rendered to labels and recorded in databases, and to speed up the process of producing labels.  
-It rapidly provides political and administrative boundary information for a collection site using data from the U.S. Census Bureau [@walker2022tigris], the Public Land Survey System (PLSS), and ownership details of public lands via the Protected-Areas Database (PAD-US) from [@usgs2024padus]. 
-Site names are suggested via finding the closest unambiguously named place feature in the Geographic Name Information System (GNIS), and the precise calculation of distance and azimuth from this feature to the collection site [@gnis2024]. 
-Using the Global Mountain Biodiversity Assessment (GMBA) Mountain Inventory V. 2, a standardized named mountain data set with global coverage, which we have supplemented with over XXXX valleys allows for a relevant descriptor of the general region with less ambiguity [@snethlage2022hierarchical]. 
+As a result of these concerns, we have developed an R package, BarnebyLives, that aims to increase both the quality of data rendered to labels and recorded in databases and to speed up the process of producing labels.
+It rapidly provides political and administrative boundary information for a collection site using data from the U.S. Census Bureau [@walker2022tigris], the Public Land Survey System (PLSS), and ownership details of public lands via the Protected-Areas Database (PAD-US) [@usgs2024padus].
+Site names are suggested by finding the closest unambiguously named place feature in the Geographic Name Information System (GNIS) and the precise calculation of distance and azimuth from this feature to the collection site [@gnis2024].
+Using the Global Mountain Biodiversity Assessment (GMBA) Mountain Inventory V. 2, a standardized named mountain data set with global coverage, which we have supplemented with over *XXXX* valleys allows for a relevant descriptor of the general region with less ambiguity [@snethlage2022hierarchical].
 Spell checks on all scientific names (including associated species) are performed using a copy of the World Checklist of Vascular Plants, and the collected species may be searched via Kew's Plant of the World Online for relevant synonyms [@govaerts2021world; @powo2024]. 
-Author abbreviations are verified using International Plant Names Index (IPNI's) Standard Author Abbreviation Checklist and also returned by Kew's Plants of the World Online to ensure proper abbreviation of authorities [@ipni2024; @powo2024]. 
-Checks to search for and flag common issues associated with spreadsheet softwares, or data transcription, such as the auto-filling of coordinate and date columns. 
-After final review of the data generated by the package, it allows for the option to export spreadsheets which are suitable for mass upload of data to multiple common herbarium databases, as well as the generation of herbarium labels. 
+Author abbreviations are verified using the International Plant Names Index (IPNI) Standard Author Abbreviation Checklist and also returned by Kew's Plants of the World Online to ensure proper abbreviations of authorities [@ipni2024; @powo2024].
+Checks to search for and flag common issues associated with spreadsheet software or data transcription, such as the auto-filling of coordinate and date columns. 
+After a final review of the data generated by the package, it allows for the option to export spreadsheets that are suitable for mass uploading of data to multiple common herbarium databases as well as the generation of herbarium labels.  
 
-Currently, the label generation functionality is provided explicitly by two programs PLabel, and Symbiota, as well as commonly by the Microsoft Word tool Mail Merge (@perkins2020Plabel, @gries2014symbiota). 
-The office suite costs money, and in our experience is finicky, further it's functionality ends with label creation. 
-PLabel is a standalone program which has greatly enhanced functionality relative to a Mail Merge, allowing users to specify the layout and formatting of label components using an intuitive and local graphical user interface (GUI) functionality, unfortunately it does not include data cleaning functionalities beyond verifying nations of collection.
-While some sources indicate it can only be used on Microsoft we expect it can be accessed on Linux and Mac using Windows 'emulators' like Wine. 
-The increasingly popular Symbiota biodiversity data management software not only provides label generation capabilities but also provides data cleaning functionality, in an attractive GUI web portal allowing for live management of collections, and bypassing the need for a local installation, allowing it to be accessed on all operating systems. 
-Symbiota offers functionality similar to the first four of our five stages of our 'Taxonomic' module and to our knowledge a check of the 'Political Boundaries' as well (see Figure 1). 
-However, not all herbaria use Symbiota and many have original database systems which they maintain (e.g. Harvard University Herbarium, https://kiki.huh.harvard.edu/databases/specimen_index.html, Missouri Botanical Garden https://tropicos.org/specimen/Search, and The Consortium of Pacific Northwest Herbaria https://www.pnwherbaria.org/). 
-However, many collectors like to generate their own labels, especially as they are likely to be sending different sets of collections to different institutions. 
-Accordingly, Symbiota's functionality should exist in an ecosystem with alternative systems. 
-In scenarios where users want to keep rendering labels in either of the three existing alternatives, they can easily export data in the appropriate formats
-after utilizing BLs data cleaning utilities. 
+Currently, label generation functionality is provided explicitly by two programs, PLabel and Symbiota, as well as by the Microsoft Word tool Mail Merge (@perkins2020Plabel, @gries2014symbiota). 
+The office suite costs money, and in our experience, it is finicky; further, its functionality ends with label creation. 
+PLabel is a standalone program that has greatly enhanced functionality relative to a Mail Merge, allowing users to specify the layout and formatting of label components using an intuitive and local graphical user interface (GUI) functionality. 
+However, it does not include data cleaning functionalities beyond verifying nations of collection. 
+While some sources indicate that it can only be used in Microsoft, we expect it to be accessed on Linux and Mac using Windows 'emulators' like Wine. 
+The increasingly popular Symbiota biodiversity data management software not only provides label generation capabilities but also provides data cleaning functionality in an attractive GUI web portal allowing for live management of collections and bypassing the need for a local installation, allowing it to be accessed on all operating systems. 
+Symbiota offers functionality similar to the first four of our five stages of our 'Taxonomic' module and to our knowledge a check of the 'Political Boundaries’ (see Figure 1). 
+However, not all herbaria use Symbiota and many have original database systems that they maintain (for example, Harvard University Herbarium, https://kiki.huh.harvard.edu/databases/specimen_index.html; Missouri Botanical Garden https://tropicos.org/specimen/Search; and The Consortium of Pacific Northwest Herbaria https://www.pnwherbaria.org/). 
+However, many collectors prefer to generate their own labels, especially as they are likely to send different sets of collections to different institutions. 
+Accordingly, the functionality of Symbiota should exist in an ecosystem with alternative systems.  In scenarios where users want to keep rendering labels in either of the three existing alternatives, they can easily export data in the appropriate formats after utilizing BLs data cleaning utilities.  
 
-BarnebyLives was named for plant taxonomist Rupert Charles Barneby (1911-2000), who published over 6,500 pages of text, described over 750 taxa, and is notable for balancing his studies at the William & Lynda Steere Herbarium at the New York Botanical Garden with annual collection trips in Western North America from 1937-1970 and sporadically until his passing in 2000 [@welsh2001rupert]. 
+BarnebyLives was named by plant taxonomist Rupert Charles Barneby (1911-2000), who published over 6,500 pages of text, described over 750 taxa, and is notable for balancing his studies at the William and Lynda Steere Herbarium at the New York Botanical Garden with annual collection trips in Western North America from 1937-1970 and sporadically until he passed in 2000 [@welsh2001rupert].  
 Select accolades of Rupert include the 1989 Asa Gray Award from the American Society of Plant Taxonomists (ASPT), the 1991 Engler Silver Medal from the International Association of Plant Taxonomists (IAPT), as well as being one of eight recipients of the International Botanical Congress's (IBC) Millennium Botany Award (1999) [@welsh2001rupert]. 
 Most germanely, Rupert was remembered as being generous with his time to assist younger botanists with the more arcane aspects of field botany and taxonomy [@holmgren2017]. 
 
@@ -100,58 +97,53 @@ library(tidyverse) # data operations
 library(BarnebyLives) # for helping accession collections
 ```
 
-BarnebyLives was iteratively developed based on data submitted by roughly 20 seasonal field botany teams over two years. 
-Essentially, continual updates have been made as the developers became aware of more idiosyncrasies of collection notes and data entry. 
+BarnebyLives was iteratively developed based on data submitted by approximately 20 seasonal field botany teams over two years. 
+Essentially, continual updates were made as the developers became aware of the idiosyncrasies of collection notes and data entry.  
 
 ## Usage
-All steps of BarnebyLives except for label generation are run within the freely available Rstudio. 
-Data may be read in from any common spreadsheet management system or database connection such as Excel, or free alternatives such as: LibreOffice, OpenOffice, or via the cloud on Google Sheets. 
-The latter two options are documented here and in package vignettes, detailed descriptions of the required and suggested input columns are located on a Github page (https://github.com/sagesteppe/BarnebyLives *'Input Data Column Names'*) and 96 real-world examples are on a Google Sheets accessible from the page.
-BarnebyLives is atypical of R packages in that it requires a considerable amount of data to operate (Table 1).
-Virtually all the on-disk memory associated with the package are used in storing spatial data. 
-The amount of spatial data will vary by the domain which the user decides to support (Figure 3). 
-Functions which require the on-disk data require a path to the data as an argument. 
-Manually supplying the path argument allows for users to judiciously decide a storage location suitable for their needs.  
+All steps of BarnebyLives, except for label generation are run within the freely available Rstudio. 
+Data may be read from any common spreadsheet management system or database connection such as Excel, or free alternatives such as LibreOffice, OpenOffice, or via the cloud on Google Sheets. 
+The latter two options are documented here and in package vignettes, detailed descriptions of the required and suggested input columns are located on a Github page (https://github.com/sagesteppe/BarnebyLives 'Input Data Column Names') and 96 real-world examples are on a Google Sheets accessible from the page. 
+BarnebyLives is atypical for R packages in that it requires a considerable amount of data to operate (Table 1). 
+Virtually all on-disk memory associated with the package are used to store spatial data.
+The amount of spatial data varies according to the domain that the user decides to support (Figure 3).
+Functions that require on-disk data require a path to data as an argument.  Manually supplying the path argument allows users to judiciously determine a storage location suitable for their needs. 
 
-We anticipate that for the typical user BarnebyLives will require less than a couple gigabytes of memory (ours covering all of the conterminous Western U.S. at 90m resolution is ~16 GiB), while the processing takes relatively little RAM, hence we believe installations can work on hardware as limited as Chromebooks, while having the data stored entirely on thumb-drives.
+We anticipate that for a typical user, BarnebyLives will require less than a couple gigabytes of memory (ours covering all of the conterminous Western U.S. at 90m resolution is ~16 GiB), while the processing requires relatively little RAM; hence, we believe installations can work on hardware as limited as Chromebooks, while having the data stored entirely on thumb-drives. 
 The final steps of BarnebyLives, generating the labels, requires working installations of R Markdown, a LaTeX installation (e.g. [pdfTeX](https://www.tug.org/applications/pdftex/), [LuaTeX](https://www.luatex.org/), [XeLaTeX](https://www.overleaf.com/learn/latex/XeLaTeX)), and the open source command line tools [pdfjam](https://github.com/rrthomas/pdfjam) and [pdftk](https://linux.die.net/man/1/pdftk).
-While these steps are run through a shell scripting language like bash, we have wrapped them in R functions which bypass the need to enter the commands directly into a terminal. 
-Unfortunately, we have not found Windows alternatives to pdfam and pdftek so we are unable to offer the final label generating functionality on that operating system. 
-BarnebyLives was iteratively developed based on data submitted by roughly 20 seasonal field botanists. 
-Essentially, additions to the code have been continually made as the developers were exposed to more idiosyncrasies of collection notes and data entry. 
-Several commands in BarnebyLives require the output from previous functions, and a workflow which satisfies these requirements is presented in Figure 1. 
+While these steps are run through a shell scripting language such as bash, we have wrapped them in R functions that bypass the need to enter the commands directly into a terminal.
+Unfortunately, we did not find Windows alternatives to pdfam and pdftek, so we are unable to offer the final label-generating functionality on that operating system. 
+BarnebyLives was iteratively developed based on the data submitted by approximately 20 seasonal field botanists. 
+Essentially, additions to the code have been continually made, as developers were exposed to more idiosyncrasies of collection notes and data entry.
+Several commands in BarnebyLives require output from previous functions, and a workflow that satisfies these requirements is presented in Figure 1.
 
 ## Functionality
-BarnebyLives can be thought of as consisting of five main modules (Figure 1): spatial, taxonomic, formatting, manual review, and data exporting. 
+BarnebyLives can be thought of as consisting of five main modules (Figure 1): spatial, taxonomic, formatting, manual review, and data exporting.  
 
-The spatial module has five required functions, and two optional functions.
-*autofill_checker* searches for patterns in the input latitude and longitude data associated with autofilling from various spreadsheet programs, and will emit a warning if they are encountered. 
-*coords2sf* will create a spatially explicit simple feature (sf) geometry data set of the input data. 
-*political_grabber* will determine many levels of administrative ownership including land management, and public land survey system sections. 
-*physical_grabber* provides various geographic data such as elevation, landform position, and aspect using 90m resolution spatial data. 
-*site_writer* will write directions from an officially named and located placename to the collection site. 
-*dms2dd* is an optional function used to convert from coordinates denoted in the degrees minutes and second format (e.g. 42°08'39.9"N 87°47'08.3"W) to decimal degree format (e.g. 42.14439, -87.78569).
-*directions_grabber* is an optional function which writes driving directions from a reasonably sized town to the closet drivable area to the site using the Google Maps API; this will require a valid Google account, which is free per month for most personal and smaller academic usages. 
+The spatial module has five required functions and two optional functions. 
 
-The taxonomic module has four required functions, and one optional function. 
-*spell_check* will perform a spell check on the entered scientific name based on a local copy of Kew Plants of the World database filtered to the local continents, or a user specified backbone. 
-*spell_check_family* performs a spell check on the family entered for each scientific name. 
-*author_check* ensures authors are entered in a valid format, e.g. the correct standard abbreviations are used. 
-*associates_check* will perform a spell check on all of the associated species using the local taxonomic database.
-*powo_searcher* can be used tandem to the functions *spell_check_family*, and *author-check*, but we use it in lieu of them; this function will search the current Plants of the World Online to determine relevant synonyms and alternative higher taxonomy for the focal species. 
-No API key or any registration is required to use *powo_searcher*. 
+*autofill_checker* searches for patterns in the input latitude and longitude data associated with autofilling from various spreadsheet programs and will emit a warning if they are encountered. 
+*coords2sf* creates a spatially explicit simple feature (sf) geometry dataset for the input data. political_grabber determines many levels of administrative ownership, including land management and public land survey system sections. 
+*physical_grabber* provides various geographic data, such as elevation, landform position, and aspect using 90m resolution spatial data. site_writer will write directions from an officially named placename to the collection site. dms2dd is an optional function used to convert from coordinates denoted in the degrees minutes and second format (for example, 42°08'39.9\"N 87°47'08.3\"W) to decimal degree format (for example 42.14439, -87.78569). 
+*directions_grabber* is an optional function that writes driving directions from a reasonably sized town to the closest drivable area to the site using the Google Maps API, which will require a valid Google account that is free per month for most personal and smaller academic usages. 
 
-The formatting modules has three functions, the first two we will detail are technically optional, but they are run locally and so quickly there is no reason to skip them. 
-*associate_dropper* if present this function will silently remove the collected species from the list of associated species, however it will search for the species to remove using scientific name entered initially by the user rather than returned via spell checks etc. 
-*field_lengths* will emit messages for any fields which we suspect will create an 'overflow' on the physical label and should be truncated for clarity. 
-*date_parser* is mandatory and will parse an input date into various formats for notating collection and determination dates on labels. 
+The taxonomic module has four required functions and one optional function. 
+*spell_check* will perform a spell check on the entered scientific name based on a local copy of Kew Plants of the World database filtered to the local continents or a user-specified backbone. 
+*spell_check_family* performs a spell check on the family entered for each scientific name. author_check ensures that the authors are entered in a valid format, for example, the correct standard abbreviations are used. 
+*associates_check* performs a spell check on all associated species using the local taxonomic database.
+*powo_searcher* can be used in tandem with the functions spell_check_family and author-check, but we use it in lieu of them to search the current Plants of the World Online to determine relevant synonyms and alternative higher taxonomy for the focal species. No API key or registration is required to use powo_searcher. 
 
-The manual review process technically only has one function which is optional, and may be ran during the spatial process (after *coords2sf*), but the importance of manual review is important enough that it warrants explicit mention. 
+The formatting module has three functions. The first two we will detail are technically optional; however, they are run locally and so quickly that there is no reason to skip them. 
+*associate_dropper* silently removes the collected species from the list of associated species; however, it searches for the species to be removed using the scientific name entered initially by the user rather than returned via spell checks. 
+*field_lengths* will emit messages for any fields that we suspect will create an 'overflow' on the physical label and should be truncated for clarity.
+*date_parser* is mandatory and parses an input date into various formats for notating collection and determination dates on labels.
+
+The manual review process technically only has one function that is optional and may be executed during the spatial process (after coords2sf), but the importance of manual review is important enough to warrant explicit mention. 
 *geodata_writer* will write out a spatial copy of the data set to any geospatial format supported by the sf package, but defaults to writing out 'kmls' which are readily used with [Google Earth](https://earth.google.com/web/), and can also be opened in several other free geographic information system (GIS) softwares such as [QGIS](https://www.qgis.org/). 
-Notably many of the flags which BarnebyLives generates will be placed into columns with obviously flagged names, and can be manually reviewed by the analyst, many of these issues can be resolved by simply addressing the relevant issues in the original data input spreadsheet. 
+Notably, many of the flags that BarnebyLives generates will be placed into columns with obviously flagged names and can be manually reviewed by the analyst, and many of these issues can be resolved by simply addressing the relevant issues in the original data input spreadsheet. 
 
-The data exporting module contains three functions, which interact with LaTeX templates and require slightly more advanced R user interactivity such as setting up mapping functions using the tidyverses purrr package.
-*labels_skeleton* is an R 'script' which will require a few modification steps to tailor to each institution, these R scripts will put data into a user specified template, and serve as the interface to LaTeX.   
+The data exporting module contains three functions that interact with LaTeX templates and require slightly more advanced R user interactivity, such as setting up mapping functions using the tidyverses purrr package.
+*labels_skeleton* is an R 'script' which will require a few modification steps to tailor to each institution, these R scripts will put data into a user specified template, and serve as the interface to LaTeX.   " 
 
 ```{r import example data and gather some summaries}
 
@@ -601,30 +593,29 @@ rm(genus_mismatch, genera_mispelled, family_incongruence)
 
 # DISCUSSION 
 
-While numerous tools have been developed for cleaning of existing herbarium and museum records, few tools help with ensuring that the data entered are accurate (@patten2024geographic). 
-We argue that the original collectors are the most qualified individuals to perform quality control checks, and BarnebyLives allows them to do so in a relatively fast and streamlined format. 
-By utilizing both R and LaTeX, and having publicly available source code on Github, this program allows users immediate familiarity with the system for troubleshooting issues, and implementing upgrades and modifications on project branches. 
+While numerous tools have been developed for cleaning existing herbarium and museum records, few tools help to ensure that the data entered are accurate (@patten2024geographic).
+We argue that the original collectors are the most qualified individuals to perform quality control checks and that BarnebyLives allows them to do so in a relatively fast and streamlined format.
+By utilizing both R and LaTeX and having publicly available source code on Github, this program allows users immediate familiarity with the system for troubleshooting issues and implementing upgrades and modifications in project branches. 
 
-Accessioning often relies on the use of the Microsoft Office suite of programs, and may utilize other costly software, such as ArcPro, or Adobe Acrobat. 
-While BarnebyLives does not have it's own graphic user interface, the functionality of commonly used Interactive Development Environments (IDE's), such as Rstudio and VisualStudio (VS) Code, now offer functionality to readily view and filter data sets using familiar spreadsheet like formats, making them more accessible to many users. 
-Whereas the other software often cost money, these are also free, and we recommend users install an open source PDF viewer such as Okular to review their rendered documents. 
+Accessioning often relies on the use of the Microsoft Office suite of programs and may utilize other costly software such as ArcPro or Adobe Acrobat. 
+While BarnebyLives does not have its own graphic user interface, the functionality of commonly used Interactive Development Environments (IDE's), such as Rstudio and VisualStudio (VS) Code, now offers functionality to readily view and filter datasets using familiar spreadsheet-like formats, making them more accessible to many users.  
+While other software often cost money, these are also free, and we recommend that users install an open-source PDF viewer such as Okular to review their rendered documents. 
 
-While numerous tools have been developed for cleaning of existing herbarium and museum records, few help with ensuring that the entered data are accurate (@patten2024geographic). 
-We argue that the original collectors are the most qualified individuals to perform quality control checks, and BarnebyLives allows them to do so in a relatively fast and streamlined format. 
-By utilizing both R and LaTeX, and having publicly available source code on Github, this program allows most users immediate familiarity with the system for troubleshooting issues, and implementing upgrades and modifications on project branches. 
+While numerous tools have been developed for cleaning existing herbarium and museum records, few help ensure that the entered data are accurate (@patten2024geographic).
+We argue that the original collectors are the most qualified individuals to perform quality control checks, and BarnebyLives allows them to do so in a relatively fast and streamlined format.
+By utilizing both R and LaTeX and having publicly available source code on Github, this program allows most users immediate familiarity with the system for troubleshooting issues and implementing upgrades and modifications to project branches.  
 
-Accessioning often times relies on the use of the Office Suite of programs, and may utilize other costly software, such as ArcPro, or Adobe Acrobat. 
-While BarnebyLives does not have it's own graphic user interface, the functionality of commonly used Interactive Development Environments (IDE's), such as Rstudio and VisualStudio (VS) Code, now offer functionality to readily view and filter data sets using familiar spreadsheet like formats.
+Accessioning often relies on the use of the Office Suite of programs and may utilize other costly software such as ArcPro or Adobe Acrobat.  
+While BarnebyLives does not have its own graphic user interface, the functionality of commonly used Interactive Development Environments (IDE's), such as Rstudio and VisualStudio (VS) Code, now offers functionality to readily view and filter datasets using familiar spreadsheet-like formats.
 
-LaTeX offers well documented and detailed functionality for customizing labels for individuals and institutions. Anecdotally, using its default settings it is able to produce more aesthetically pleasing results than the typical word processors. 
-Very good documentation of LaTeX capabilities is offered in multiple areas for instance via the [Overleaf](https://www.overleaf.com/learn)) project. 
+LaTeX offers well-documented and detailed functionality to customize labels for individuals and institutions. 
+Anecdotally, using its default settings, it can produce more aesthetically pleasing results than typical word processors. 
+Very good documentation of LaTeX capabilities is offered in multiple areas; for instance, via the [Overleaf](https://www.overleaf.com/learn)) project. 
 
 # CONCLUSIONS
-BarnebyLives is an R package which can rapidly acquire relevant geographic, and taxonomic data. 
-It is also capable of performing specialized spell checks, and assorted curatorial tasks to produce both digital and analog data. 
+BarnebyLives is an R package that can be used to rapidly acquire relevant geographic and taxonomic data. 
+It can also perform specialized spell checks and assorted curatorial tasks to produce both digital and analog data. 
 The package relies on no licensed software, such as the Microsoft Office suite, and is suitable for install on all major operating systems  (Windows, Mac, Linux), however currently label generation support is only offered on Linux and Mac, with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal. 
-
-The package relies on no licensed Software, such as the Microsoft suite, and is suitable for install on all major operating systems  (Windows, Mac, Linux), with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal. 
 
 # AUTHOR CONTRIBUTIONS 
 The project was conceptualized by R.C.B. The program was written by R.C.B. 
@@ -632,19 +623,18 @@ Data collection and analysis were performed by R.C.B.
 R.C.B. & J.B.F wrote the manuscript, and both authors approved the final version of the manuscript. 
 
 # ACKNOWLEDGEMENTS 
-The Bureau of Land Management are graciously acknowledged as providers of funding to R.C.B for most of his specimen collection activities. 
-Two anonymous peer reviewers who increased the quality of this manuscript are thanked. 
+The Bureau of Land Management is gratefully acknowledged as a provider of funding to R. C. B. for most of his specimen collection activities. 
+We thank the two anonymous peer reviewers who have increased the quality of this manuscript.
 Sofia Garcia is acknowledged for creating the 'Valleys' data set which place naming in the package relies on. 
-Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz & Dakota Becerra, Hannah Lovell and , Caitlin Miller & Hubert Szczygiel. 
-Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz, Dakota Becerra, Hannah Lovell, Caitlin Miller & Hubert Szczygiel. 
-Rosalind Rowe is thanked for providing useful feedback during the later development stages of the program. 
+Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz & Dakota Becerra, Hannah Lovell and, Caitlin Miller & Hubert Szczygiel. 
+We thank Rosalind Rowe for providing useful feedback during the later developmental stages of the program. 
 
 # DATA AVAILABILITY STATEMENT
-The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives).  
-The package includes three real use-case vignettes (tutorials) on usage available at a Github pages site (https://sagesteppe.github.io/BarnebyLives/). 
-One vignette "setting_up_files" explores setting up a instance for a certain geographic area. 
-Another vignette "running_pipeline" showcases the usage of the package for processing data entered on a spreadsheet. 
-A final vignette "creating_labels" shows the usage of an R, and Bash script launched from RStudio to produce print-ready labels. 
+The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives). 
+The package includes three real use-case vignettes (tutorials) available on a Github page site (https://sagesteppe.github.io/BarnebyLives/).
+One vignette *"setting_up_files"* explores setting up a instance for a certain geographic area.  
+Another vignette *"running_pipeline"* showcases the usage of the package for processing data entered on a spreadsheet.  
+The final vignette *"creating_labels"* shows the usage of an R and Bash script launched from RStudio to produce print-ready labels. 
 All data used in this manuscript are available at: https://github.com/sagesteppe/Barneby_Lives_dev/manuscript. 
 
 # ORCID
