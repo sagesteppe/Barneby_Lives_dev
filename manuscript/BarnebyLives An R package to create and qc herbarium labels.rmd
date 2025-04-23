@@ -6,7 +6,7 @@ author:  |
     | Reed Clark Benkendorf$^1$$^,$$^2$^[Author for Correspondence: rbenkendorf@chicagobotanic.org], Jeremie B. Fant$^1$$^,$$^2$
 abstract: |
   \noindent
-  **Premise:** Depositing specimens in herbaria is a time-consuming process. Many institutions have reduced the amount of funding for herbaria and universities have reduced the amount of education dedicated to collections and curatorial tasks. However, the continual generation of herbarium specimens is essential for current and future research on evolution and ecology. To facilitate the continued growth of herbaria, BarnebyLives was developed as a tool to supplement collection notes, perform geographic and taxonomic information processing, enact spell checks and other QC steps, produce labels, and submit digital data to increase the rate of accessioning specimens. 
+  **Premise:** Depositing specimens in herbaria is a time-consuming process. Many institutions have reduced the amount of funding for herbaria and universities have reduced the amount of education dedicated to collections and curatorial tasks. However, the continual generation of herbarium specimens is essential for current and future research on evolution and ecology. To facilitate the continued growth of herbaria, BarnebyLives was developed as a tool to supplement collection notes, perform geographic and taxonomic information processing, enact spell checks and other QC steps, produce labels, and submit digital data to increase the rate of accessioning specimens.  
   **Methods and Results:** BarnebyLives uses geospatial data from the U.S. The Census Bureau provides administrative jurisdictional information and data from other sources, including the United States Geological Survey, to supplement collection notes by providing information on abiotic site conditions. It uses in-house spell checks to verify the spelling of a collection at all taxonomic ranks, the IPNI standard author database to check standard author abbreviations, and the Royal Botanic Garden Kews 'Plants of the World Online' to check for nomenclature innovations. Optionally, the package writes driving directions to the sites using Google Maps. The package outputs data in tabular and spatial formats for review by the user before rendering labels using LaTeX.        
   **Conclusions:** BarnebyLives provides accurate political and physical information, reduces typos, provides users with the most current taxonomic opinions, generates driving directions to sites, and produces aesthetically appealing labels and shipping manifests in a matter of minutes.       
 keywords: |
@@ -80,7 +80,7 @@ However, not all herbaria use Symbiota and many have original database systems t
 However, many collectors prefer to generate their own labels, especially as they are likely to send different sets of collections to different institutions. 
 Accordingly, the functionality of Symbiota should exist in an ecosystem with alternative systems.  In scenarios where users want to keep rendering labels in either of the three existing alternatives, they can easily export data in the appropriate formats after utilizing BLs data cleaning utilities.  
 
-BarnebyLives was named by plant taxonomist Rupert Charles Barneby (1911-2000), who published over 6,500 pages of text, described over 750 taxa, and is notable for balancing his studies at the William and Lynda Steere Herbarium at the New York Botanical Garden with annual collection trips in Western North America from 1937-1970 and sporadically until he passed in 2000 [@welsh2001rupert].  
+BarnebyLives was named by plant taxonomist Rupert Charles Barneby (1911-2000), who published over 6,500 pages of text, described over 750 taxa, and is notable for balancing his studies at the William and Lynda Steere Herbarium at the New York Botanical Garden with annual collection trips in Western North America from 1937-1970 and sporadically until he passed in 2000 [@welsh2001rupert]. 
 Select accolades of Rupert include the 1989 Asa Gray Award from the American Society of Plant Taxonomists (ASPT), the 1991 Engler Silver Medal from the International Association of Plant Taxonomists (IAPT), as well as being one of eight recipients of the International Botanical Congress's (IBC) Millennium Botany Award (1999) [@welsh2001rupert]. 
 Most germanely, Rupert was remembered as being generous with his time to assist younger botanists with the more arcane aspects of field botany and taxonomy [@holmgren2017]. 
 
@@ -147,9 +147,14 @@ The data exporting module contains three functions that interact with LaTeX temp
 
 ```{r import example data and gather some summaries}
 
+#subs_batch <- c(1384, 1388, 1394, 1396, 1397, 1400, 1435, 1438, 2161, 2187, 2268, 
+#                2301, 2302, 2577, 2746, 2785, 1460, 1461, 1379, 1381)
+
 data <- read.csv('data/test_data.csv', na.strings = "") %>% 
   drop_na(c('Longitude', 'Latitude', 'Date_digital')) %>% 
-  unite(col = 'Scientific_name', c(Binomial, Infrarank, Infraspecies), na.rm=TRUE, sep = " ", remove = F)
+  unite(col = 'Scientific_name', 
+        c(Binomial, Infrarank, Infraspecies), na.rm=TRUE, sep = " ", remove = F) %>% 
+  filter(Scientific_name != '')#, Collection_number %in% subs_batch)#, Collection_number %in% subs_batch)
 
 n_families <- data %>% 
   group_by(Family) %>% 
@@ -310,12 +315,12 @@ time_powo_searcher <- system.time({ # search for synonyms from plants of the wor
 saveRDS(time_powo_searcher, file = 'data/processed/time_powo_searcher')
 saveRDS(data, file = 'data/processed/data_w_POWO_search')
 
-#time_directions_grabber <- system.time({ # write directions to sites
-#  SoS_gkey = Sys.getenv("Sos_gkey")
-#  data <- directions_grabber(data, api_key = SoS_gkey)
-#})
+time_directions_grabber <- system.time({ # write directions to sites
+  SoS_gkey = Sys.getenv("Sos_gkey")
+  data <- directions_grabber(data, api_key = SoS_gkey)
+})
 
-#saveRDS(time_directions_grabber, file = 'data/processed/time_directions_grabber')
+saveRDS(time_directions_grabber, file = 'data/processed/time_directions_grabber')
 saveRDS(data, file = 'data/processed/data_w_Google_Maps')
 
 ```
@@ -512,6 +517,10 @@ family_incongruence <- data_p %>%
     ))
 
 # how many of my genera were mis-spelled??
+
+## HEY REED SPLIT OUT GENERA FOR THIS !!!!! AGAIN .... 
+data_p <- split_scientificName(data_p, sciName_col = 'Scientific_name')
+
 genera_mispelled <- data_p %>% 
   sf::st_drop_geometry() %>% 
   filter(POW_Genus == 'NOT FOUND') %>% 
@@ -522,7 +531,7 @@ genus_mismatch <- data_p %>%
   sf::st_drop_geometry() %>% 
   filter(POW_Genus != 'NOT FOUND') %>% 
   filter(POW_Genus != Genus) %>% 
-  select(Collection_number, Full_name, Genus, POW_Genus) %>% 
+  select(Collection_number, Scientific_name, Genus, POW_Genus) %>% 
   mutate(Situation = 
     case_when(
       Genus %in% c('Glandularia', 'Oenothera', 'Chamerion') ~ 'Preferred',
@@ -535,27 +544,27 @@ genus_mismatch <- data_p %>%
       Genus %in% c('Vaccinium', 'Eleocharis') ~ 'Internal_Error',
       .default = 'Typo'
     ),
-    Situation = if_else(Full_name == 'Oenothera caespitosa Nutt.', 'Internal_Error', Situation))
+    Situation = if_else(Scientific_name == 'Oenothera caespitosa Nutt.', 'Internal_Error', Situation))
 
 binom_auth_difference <- data_p %>% 
   filter(Binomial_authority != POW_Name_authority)
 
 epithet_diff <- data_p %>% 
   sf::st_drop_geometry() %>% 
-  filter(Epithet != POW_Epithet, !Full_name %in% genus_mismatch$Full_name) %>% 
-  select(Collection_number, Full_name, Epithet, POW_Genus, POW_Epithet, POW_Infraspecies) %>% 
-  distinct(Full_name, .keep_all = T) %>%  # do we record repeat collections ?
+  filter(Epithet != POW_Epithet, !Scientific_name %in% genus_mismatch$Scientific_name) %>% 
+  select(Collection_number, Scientific_name, Epithet, POW_Genus, POW_Epithet, POW_Infraspecies) %>% 
+  distinct(Scientific_name, .keep_all = T) %>%  # do we record repeat collections ?
   mutate(Situation = 
            case_when(
              Collection_number %in% c(
-               '1217', '1251', '1283', '1311', '1337', '1391', '1450', '1576', 
-               '1594', '1745', '2043', '2086', '2108', '2109', '2120', '2127', '2130',
-               '2153', '2199', '2227', '2242', '2256', '2289', '2297', '2343', '2370', '2379', 
+               '1217', '1251', '1283', '1311', '1337', '1391', '1415', '1421', '1435', '1450', '1576', 
+               '1594', '1624', '1627', '1745', '2043', '2086', '2108', '2109', '2120', '2127', '2130', '2135', 
+               '2153', '2199', '2227', '2242', '2256', '2289', '2297', '2315', '2343', '2370', '2379', 
                '2393', '2415', '2480', '2511', '2561', '2573', '2648', '2660', 
                '2687', '2690', '2710', '2715', '2727', '2750', '2767', '2818')
              ~ 'Spelling',
              Collection_number %in% c(
-               '1588', '1619', '2445', '2777', '1337', '2412', '2487', '2748', '2652',
+               '1556', '1588', '1619', '2445', '2777', '1337', '2004', '2412', '2487', '2748', '2652',
                '2805', '2194', '2040', '2039', '2403', '2328', '2076') 
              ~ 'Outdated', 
              Collection_number %in% c('2644') ~ 'Incorrect',
@@ -579,8 +588,8 @@ In `r sum(genus_mismatch$Situation=='Outdated')` of these instances the user sup
 
 Of the `r nrow(data)` records analysed (`r n_spp` distinct species) BarnebyLives flagged `r nrow(epithet_diff)` records, and detected `r sum(epithet_diff$Situation=='Spelling')`  instances of misspelled epithets (`r sum(epithet_diff$Situation=='Spelling')` unique species). 
 Of the `r nrow(data)` species analysed (`r n_spp` distinct species) BarnebyLives flagged `r nrow(epithet_diff)` records, and detected `r sum(epithet_diff$Situation=='Spelling')`  instances of misspelled epithets (`r sum(epithet_diff$Situation=='Spelling')` unique species). 
-In `r sum(epithet_diff$Situation=='Outdated')` of these instances the user supplied an outdated name (`r nrow(unique(epithet_diff[epithet_diff$Situation=='Outdated', 'Full_name']))` unique species). 
-It also flagged `r sum(epithet_diff$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(epithet_diff[epithet_diff$Situation=='Preferred', 'Full_name']))` unique species), and flagged `r sum(epithet_diff$Situation=='Internal_Error', na.rm = T)` records in error. 
+In `r sum(epithet_diff$Situation=='Outdated')` of these instances the user supplied an outdated name (`r nrow(unique(epithet_diff[epithet_diff$Situation=='Outdated', 'Scientific_name']))` unique species). 
+It also flagged `r sum(epithet_diff$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(epithet_diff[epithet_diff$Situation=='Preferred', 'Scientific_name']))` unique species), and flagged `r sum(epithet_diff$Situation=='Internal_Error', na.rm = T)` records in error. 
 The final record was an egregious error where the order of the specific epithet and the genus name. 
 
 `r long_flag` records were appropriately flagged for issues with auto fill increment of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values (% of records). 
@@ -605,7 +614,7 @@ While numerous tools have been developed for cleaning existing herbarium and mus
 We argue that the original collectors are the most qualified individuals to perform quality control checks, and BarnebyLives allows them to do so in a relatively fast and streamlined format.
 By utilizing both R and LaTeX and having publicly available source code on Github, this program allows most users immediate familiarity with the system for troubleshooting issues and implementing upgrades and modifications to project branches.  
 
-Accessioning often relies on the use of the Office Suite of programs and may utilize other costly software such as ArcPro or Adobe Acrobat.  
+Accessioning often relies on the use of the Office Suite of programs and may utilize other costly software such as ArcPro or Adobe Acrobat. 
 While BarnebyLives does not have its own graphic user interface, the functionality of commonly used Interactive Development Environments (IDE's), such as Rstudio and VisualStudio (VS) Code, now offers functionality to readily view and filter datasets using familiar spreadsheet-like formats.
 
 LaTeX offers well-documented and detailed functionality to customize labels for individuals and institutions. 
