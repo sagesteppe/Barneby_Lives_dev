@@ -17,7 +17,13 @@ Dear Dr. Gross,
 
 I am writing to propose an original software article titled *"BarnebyLives: an R package to create herbarium specimen labels and clean spreadsheets"*
 
+While a great variety of software tools and packages exist for interacting with accessioned herbarium data, far fewer are dedicated towards accessioning material. 
+And even fewer of these tools are intended for an actual collector to interact with. 
+This isn't terribly surprising, as the number of collectors who are not curators has decreased over the last few years, and the barrier to entry for both activities is generally a degree of eccentricity and particularity. 
+Unfortunately, the particularity of curators often makes depositing specimens to herbaria a challenging task for collectors, especially those who work on large projects implemented by federal agencies, such as germplasm collection (e.g. Seeds of Success), ecological monitoring (e.g. National Wetland Condition Assessment, and Assess, Inventory, and Monitor), and have to satisfy the particularities of multiple curators simultaneously. 
 
+Fortunately, I have been scolded (which on occasion has included some constructive criticism), by about 10 curators over the last decade and built up a wide knowledge of quirks to watch our for. 
+As a manager of young botanists for the last handful of years, I have insisted on maintaining a degree of separation between my employees and curators, in hopes that the small glimmer of hope which the youths have isn't extinguished. 
 
 
 

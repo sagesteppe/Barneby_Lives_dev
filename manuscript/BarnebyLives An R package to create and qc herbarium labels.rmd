@@ -459,7 +459,7 @@ Most of the local run time is attributable to the spatial (`r sum(tt_local[tt_lo
 The spell check of the scientific name accounted for nearly all of the time (`r sum(tt_local[tt_local$Function=='spell_check', 'elapsed'])`sec) spent performing local taxonomic operations.
 The generation of labels consumed around `r minutemen(time_label_gen)` minutes (`r time_label_gen`sec) for the rendering, and an additional `r time_final`sec to combine the 182 sheets to a single Portable Document Format (PDF). 
 The total label generation run time for processing these `r n_spp` collections was `r minutemen(sum(time_trials$elapsed))` minutes. 
-In total the `r n_spp` collections, which underwent all processing steps, took `minutemen(sum(time_trials$elapsed, time_label_gen, as.numeric(time_final)))` minutes to process. 
+In total the `r n_spp` collections, which underwent all processing steps, took `r minutemen(sum(time_trials$elapsed, time_label_gen, as.numeric(time_final)))` minutes to process. 
 
 ```{r}
 rm(time_trials, tt_local)
