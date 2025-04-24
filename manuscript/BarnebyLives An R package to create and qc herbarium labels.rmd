@@ -1,9 +1,9 @@
 --- 
 title: 'BarnebyLives: an R package to create herbarium specimen labels and clean spreadsheets'
 author:  |
+    | Reed Clark Benkendorf$^1$$^,$$^2$^[Author for Correspondence: rbenkendorf@chicagobotanic.org], Jeremie B. Fant$^1$$^,$$^2$
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
-    | Reed Clark Benkendorf$^1$$^,$$^2$^[Author for Correspondence: rbenkendorf@chicagobotanic.org], Jeremie B. Fant$^1$$^,$$^2$
 abstract: |
   \noindent
   **Premise:** Depositing specimens in herbaria is a time-consuming process. Many institutions have reduced the amount of funding for herbaria and universities have reduced the amount of education dedicated to collections and curatorial tasks. However, the continual generation of herbarium specimens is essential for current and future research on ecology, evolution, and conservation. To facilitate the continued growth of herbaria, BarnebyLives was developed as a tool to supplement collection notes, perform geographic and taxonomic information processing, enact spell checks and other QC steps, produce labels, and submit digital data to increase the ease of accessioning specimens.  
@@ -117,10 +117,14 @@ BarnebyLives can be thought of as consisting of five main modules (Figure 1): sp
 
 The spatial module has five required functions and two optional functions. 
 
-*autofill_checker* searches for patterns in the input latitude and longitude data associated with autofilling from various spreadsheet programs and will emit a warning if they are encountered.  
 *coords2sf* creates a spatially explicit simple feature (sf) geometry dataset for the input data. political_grabber determines many levels of administrative ownership, including land management and public land survey system sections.  
-*physical_grabber* provides various geographic data, such as elevation, landform position, and aspect using 90m resolution spatial data. site_writer will write directions from an officially named placename to the collection site. dms2dd is an optional function used to convert from coordinates denoted in the degrees minutes and second format (for example, 42°08'39.9\"N 87°47'08.3\"W) to decimal degree format (for example 42.14439, -87.78569).  
-*directions_grabber* is an optional function that writes driving directions from a reasonably sized town to the closest drivable area to the site using the Google Maps API, which will require a valid Google account that is free per month for most personal and smaller academic usages.  
+*physical_grabber* provides various geographic data, such as elevation, landform position, and aspect using 90m resolution spatial data.  
+*political_grabber*  grabs a wide range of administrative information for a collection site. 
+*site_writer*  write distance and azimuth to collection site from the nearest official named place from the GNIS database. 
+*directions_grabber* is an optional function that writes driving directions from a reasonably sized town to the closest drivable area to the site using the Google Maps API, which will require a valid Google account that is free per month for most personal and smaller academic usages. 
+*dms2dd* is an optional function used to convert from coordinates denoted in the degrees minutes and second format (for example, 42°08'39.9\"N 87°47'08.3\"W) to decimal degree format (for example 42.14439, -87.78569). 
+*autofill_checker* searches for patterns in the input latitude and longitude data associated with autofilling from various spreadsheet programs and will emit a warning if they are encountered.  
+
 
 The taxonomic module has four required functions and one optional function. 
 *spell_check* will perform a spell check on the entered scientific name based on a local copy of Kew Plants of the World database filtered to the local continents or a user-specified backbone.  
@@ -143,8 +147,8 @@ The data exporting module contains three functions that interact with LaTeX temp
 
 ```{r import example data and gather some summaries}
 
-#subs_batch <- c(1384, 1388, 1394, 1396, 1397, 1400, 1435, 1438, 2161, 2187, 2268, 
-#                2301, 2302, 2577, 2746, 2785, 1460, 1461, 1379, 1381)
+subs_batch <- c(11207,  1263, 1326, 1384, 1388, 1394, 1396, 1397, 1400, 1435, 1437, 1438,
+                2161, 2301, 2517, 2746, 2785)
 
 data <- read.csv('data/test_data.csv', na.strings = "") %>% 
   drop_na(c('Longitude', 'Latitude', 'Date_digital')) %>% 
@@ -513,9 +517,7 @@ family_incongruence <- data_p %>%
 
 # how many of my genera were mis-spelled??
 
-## HEY REED SPLIT OUT GENERA FOR THIS !!!!! AGAIN .... 
 data_p <- split_scientificName(data_p, sciName_col = 'Scientific_name')
-
 genera_mispelled <- data_p %>% 
   sf::st_drop_geometry() %>% 
   filter(POW_Genus == 'NOT FOUND') %>% 
