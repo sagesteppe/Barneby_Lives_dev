@@ -1,0 +1,24 @@
+---
+output:
+  pdf_document: default
+  word_document: default
+---
+
+\begin{flushleft}
+Brianna Gross \newline
+Editor in Chief \newline
+Applications in Plant Sciences \newline
+\end{flushleft} 
+
+\hfill April 24^th^, 2025  
+
+Dear Dr. Gross, 
+\vspace{3em}
+
+I am writing to propose an original software article titled *"BarnebyLives: an R package to create herbarium specimen labels and clean spreadsheets"*
+
+
+
+
+
+I have no conflicts of interest to disclose. 
