@@ -19,12 +19,12 @@ I am writing to propose an original software article titled *"BarnebyLives: an R
 Please bear with me when I cheekily explain it's impetus for existence, otherwise it's utility may seem opaque. 
 
 While a variety of software tools exist for interacting with accessioned herbarium data, few are dedicated to accessioning new material. 
-And even fewer of these tools are intended for an actual collector to use.  
-This isn't surprising, as the number of collectors who are not curators has decreased, and the barrier to entry for both activities is a degree of particularity and eccentricity. 
+And even fewer of these tools are intended for an actual collector to use. 
+Which isn't surprising, as the number of collectors who are not curators has decreased, and the barrier to entry for both activities is a high degree of particularity and eccentricity. 
 Unfortunately, the particularity of curators often makes contributing to herbaria a challenging task for collectors. 
 A common challenge for collectors, especially those who work on large projects implemented by federal agencies, such as germplasm collection (e.g. SOS) and ecological monitoring (e.g. NWCA, and AIM), is the need to simultaneously satisfy the particularities of multiple curators under tight deadlines.  
 
-Fortunately, I have been scolded by many curators over the last decade, on occasion even receiving constructive criticism, and have built up a wide knowledge of quirks to cater to. 
+Fortunately, I have been scolded by many curators over the last decade, and on occasion received actionable criticism, and have built up a wide knowledge of quirks to cater to. 
 To assist in running quality control checks, for both my - and the young botanists whom I manage - collections, I developed a wide range of functions which help meet a broad set of interests.
 In fact 'BarnebyLives' the package which integrates these tools, has 30 user facing functions,  10+ internal functions, and 8 built in data sets. 
 
@@ -38,20 +38,5 @@ We believe that on occasion herbaria are not seen as resources for the future, b
 
 I have no conflicts of interest to disclose. 
 
-\newpage
-
-Reviewers: 
-
-Shelly Gaynor mlgaynor@umich.edu 
-R package author extraordinaire, including multiple documented in APPS software notes, and (former?) member of iDigBio team. 
-
-Ben Legler blegler@uwyo.edu 
-Database administrator and creator of two large herbaria consortia websites, and a *bona fide* field botanist.    
-
-Jason Alexander jason_alexander@berkeley.edu 
-I don't actually know Jason, word from our mutuals is he knows his stuff and this should be within his wheelhouse. 
-
-Charles Davies cdavis@oeb.harvard.edu 
-A bit of a stretch, but I need to suggest four reviewers. 
-I doubt he has time for this, but maybe one of his graduate students would be interested. 
-Reasoning: Charles is a profuse user of herbarium specimens for both global scale ecology studies, localized natural history, and systematics.   
+Sincerely,  
+Reed  

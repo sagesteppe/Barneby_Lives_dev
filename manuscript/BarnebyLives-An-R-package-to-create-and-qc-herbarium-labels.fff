@@ -18,3 +18,10 @@
 \includegraphics[width=0.5\textwidth,height=\textheight]{../graphics/tables/Screenshot-DataSources.png}
 \caption{Data Sources}
 \end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth,height=\textheight]{../graphics/plots/RCB2759.png}
+\caption{A label generated from a default template}
+\end{figure}

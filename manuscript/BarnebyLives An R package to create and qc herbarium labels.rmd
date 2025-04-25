@@ -613,14 +613,17 @@ By utilizing both R and LaTeX and having publicly available source code on Githu
 Accessioning often relies on the use of the Office Suite of programs and may utilize other costly software such as ArcPro or Adobe Acrobat. 
 While BarnebyLives does not have its own graphic user interface, the functionality of commonly used Interactive Development Environments (IDE's), such as Rstudio and VisualStudio (VS) Code, now offers functionality to readily view and filter datasets using familiar spreadsheet-like formats.
 
+![A label generated from a default template](../graphics/plots/RCB2759.png){width=50%}  
+
 LaTeX offers well-documented and detailed functionality to customize labels for individuals and institutions. 
-Anecdotally, using its default settings, it can produce more aesthetically pleasing results than typical word processors. 
+Anecdotally, using its default settings, it can produce aesthetically pleasing results (Figure 4). 
 Very good documentation of LaTeX capabilities is offered in multiple areas; for instance, via the [Overleaf](https://www.overleaf.com/learn) project. 
 
 # CONCLUSIONS
 BarnebyLives is an R package that can be used to rapidly acquire relevant geographic and taxonomic data. 
 It can also perform specialized spell checks and assorted curatorial tasks to produce both digital and analog data. 
 The package relies on no licensed software, such as the Microsoft Office suite, and is suitable for install on all major operating systems  (Windows, Mac, Linux), however currently label generation support is only offered on Linux and Mac, with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal. 
+Thematically, it's area of interest is Western North America. 
 
 # AUTHOR CONTRIBUTIONS 
 The project was conceptualized by R.C.B. The program was written by R.C.B. 
@@ -628,10 +631,9 @@ Data collection and analysis were performed by R.C.B.
 R.C.B. & J.B.F wrote the manuscript, and both authors approved the final version of the manuscript. 
 
 # ACKNOWLEDGEMENTS 
-The Bureau of Land Management is gratefully acknowledged as a provider of funding to R. C. B. for most of his specimen collection activities. 
+The Bureau of Land Management is gratefully acknowledged as a provider of funding to R.C.B. for most of his specimen collection activities. 
 We thank the two anonymous peer reviewers who have increased the quality of this manuscript.
 Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz, Hannah Lovell, Dakota Becerra, Caitlin Miller, Hubert Szczygiel. 
-We thank Rosalind Rowe for providing useful feedback during the later developmental stages of the program. 
 
 # DATA AVAILABILITY STATEMENT
 The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives). 
