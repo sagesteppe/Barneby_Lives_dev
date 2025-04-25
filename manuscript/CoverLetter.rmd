@@ -9,34 +9,36 @@ Brianna Gross \newline
 Editor in Chief \newline
 Applications in Plant Sciences \newline
 \end{flushleft} 
+\vspace{1em}
 
 \hfill April 24^th^, 2025  
+\vspace{1em}
 
 Dear Dr. Gross, 
 \vspace{3em}
 
-I am writing to propose an original software article titled *"BarnebyLives: an R package to create herbarium specimen labels and clean spreadsheets"*. 
-Please bear with me when I cheekily explain it's impetus for existence, otherwise it's utility may seem opaque. 
+I am pleased to submit a software note titled *"BarnebyLives: an R package to create herbarium specimen labels and clean spreadsheets"* for consideration in Applications in Plant Sciences.  
+\vspace{2em}
 
-While a variety of software tools exist for interacting with accessioned herbarium data, few are dedicated to accessioning new material. 
-And even fewer of these tools are intended for an actual collector to use. 
-Which isn't surprising, as the number of collectors who are not curators has decreased, and the barrier to entry for both activities is a high degree of particularity and eccentricity. 
-Unfortunately, the particularity of curators often makes contributing to herbaria a challenging task for collectors. 
-A common challenge for collectors, especially those who work on large projects implemented by federal agencies, such as germplasm collection (e.g. SOS) and ecological monitoring (e.g. NWCA, and AIM), is the need to simultaneously satisfy the particularities of multiple curators under tight deadlines.  
+This package was developed to assist field botanists, particularly those engaged in large-scale federal efforts such as germplasm collection (e.g., Seeds of Success) or ecological monitoring programs (e.g., National Wetland Condition Assessment, or  Assess, Inventory and Monitor), in generating herbarium specimen labels and ensuring the quality and veracity of their data. 
+While several tools exist for working with already accessioned herbarium data, few are tailored to the needs of collectors preparing specimens for deposit.
+Fewer yet are designed with the realities of tight timelines and varying herbarium requirements in mind.
+\vspace{2em}
 
-Fortunately, I have been scolded by many curators over the last decade, and on occasion received actionable criticism, and have built up a wide knowledge of quirks to cater to. 
-To assist in running quality control checks, for both my - and the young botanists whom I manage - collections, I developed a wide range of functions which help meet a broad set of interests.
-In fact 'BarnebyLives' the package which integrates these tools, has 30 user facing functions,  10+ internal functions, and 8 built in data sets. 
-
-The package is used to both evaluate commonly mistaken data, perform an array of spell checks, offer botanists more recently applied scientific names, and export data and write labels for them. 
-Curators across roughly 15 institutes have been satisfied by the results while one curator just seems to just dislike me as individual. 
-While I note it as a an R package, it also creeps into LaTeX and some bash utilities, which are 99% restricted to the RStudio environment, making it slightly outside the realm of a typical R Package; we could probably render labels through html, but why bother to go through all this work to create labels which look terrible? 
+The software has already been used to prepare data for collections, from a variety of teams, deposited at approximately 15 herbaria, and the output from it has been received quiet warmly. 
+Feedback from curators has helped shape its features and scope, and we hope that making it widely available will help empower field botanists to contribute high-quality collections with greater efficiency and confidence.
+\vspace{2em}
 
 I think that APPS is a wonderful place for this paper to be published, and APPS would be happy to have this paper. 
-Several editors of APPS have been unrelenting in their support of herbaria, and that herbaria maintain their role as the center of academic and field botany. 
+Several editors of APPS have been unrelenting in their support of herbaria and that herbaria maintain their role as the center of academic and field botany. 
 We believe that on occasion herbaria are not seen as resources for the future, but rather catalogues of the past, and would like to make our small contribution to ensure that does not become true. 
+\vspace{2em}
 
-I have no conflicts of interest to disclose. 
+We affirm that this submission is original, has not been published elsewhere, and is not under consideration by another journal. There are no conflicts of interest to disclose.
+\vspace{2em}
+
+Thank you for considering this submission. I look forward to your response.
+\vspace{1em}
 
 Sincerely,  
 Reed  
