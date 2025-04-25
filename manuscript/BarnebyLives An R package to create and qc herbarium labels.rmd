@@ -147,8 +147,7 @@ The data exporting module contains three functions that interact with LaTeX temp
 
 ```{r import example data and gather some summaries}
 
-subs_batch <- c(11207,  1263, 1326, 1384, 1388, 1394, 1396, 1397, 1400, 1435, 1437, 1438,
-                2161, 2301, 2517, 2746, 2785)
+subs_batch <- c(1586, 1880, 2187, 2159)
 
 data <- read.csv('data/test_data.csv', na.strings = "") %>% 
   drop_na(c('Longitude', 'Latitude', 'Date_digital')) %>% 

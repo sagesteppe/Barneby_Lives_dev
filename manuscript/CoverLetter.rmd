@@ -15,20 +15,26 @@ Applications in Plant Sciences \newline
 Dear Dr. Gross, 
 \vspace{3em}
 
-I am writing to propose an original software article titled *"BarnebyLives: an R package to create herbarium specimen labels and clean spreadsheets"*
+I am writing to propose an original software article titled *"BarnebyLives: an R package to create herbarium specimen labels and clean spreadsheets"*. 
+Please bear with me when I cheekily explain it's impetus for existence, otherwise it's utility may seem opaque. 
 
-While a variety of software tools exist for interacting with accessioned herbarium data, fewer are dedicated towards accessioning material. 
-And even fewer of these tools are intended for an actual collector to interact with. 
-This isn't surprising, as the number of collectors who are not curators has decreased, and the barrier to entry for both activities is a degree of eccentricity and particularity. 
-Unfortunately, the particularity of curators often makes depositing specimens to herbaria a challenging task for collectors. 
-A common challenge for collectors, especially those who work on large projects implemented by federal agencies, such as germplasm collection (e.g. Seeds of Success), ecological monitoring (e.g. National Wetland Condition Assessment, and Assess, Inventory, and Monitor), are the needs to satisfy the particularities of multiple curators simultaneously. 
+While a variety of software tools exist for interacting with accessioned herbarium data, few are dedicated to accessioning new material. 
+And even fewer of these tools are intended for an actual collector to use.  
+This isn't surprising, as the number of collectors who are not curators has decreased, and the barrier to entry for both activities is a degree of particularity and eccentricity. 
+Unfortunately, the particularity of curators often makes contributing to herbaria a challenging task for collectors. 
+A common challenge for collectors, especially those who work on large projects implemented by federal agencies, such as germplasm collection (e.g. SOS) and ecological monitoring (e.g. NWCA, and AIM), is the need to simultaneously satisfy the particularities of multiple curators under tight deadlines.  
 
-Fortunately, I have been scolded by many curators over the last decade (and on occasion even received constructive criticism), and built up a wide knowledge of quirks to cater to. 
-As a manager of young botanists for the last handful of years, I have insisted on maintaining a degree of separation between my employees and curators, in hopes that the small glimmer of hope which the youths have for the profession isn't extinguished. 
-To assist myself in running quality control checks, for both mine and their collections, I developed a wind range of functions which help meet a broad set of interests; in fact the package with all of these tools have been rolled into - BarnebyLives - has 30 user facing functions, at least another 10 internals, and 8 data sets. 
-The package is used to both access commonly mistaken data, perform an array of spell checks, offer botanists more recently applied scientific names, and export data and write labels for them. 
-Curators across roughly 15 institutes have been very impressed by the results, while one or two may just dislike me as individual. 
+Fortunately, I have been scolded by many curators over the last decade, on occasion even receiving constructive criticism, and have built up a wide knowledge of quirks to cater to. 
+To assist in running quality control checks, for both my - and the young botanists whom I manage - collections, I developed a wide range of functions which help meet a broad set of interests.
+In fact 'BarnebyLives' the package which integrates these tools, has 30 user facing functions,  10+ internal functions, and 8 built in data sets. 
 
+The package is used to both evaluate commonly mistaken data, perform an array of spell checks, offer botanists more recently applied scientific names, and export data and write labels for them. 
+Curators across roughly 15 institutes have been satisfied by the results while one curator just seems to just dislike me as individual. 
+While I note it as a an R package, it also creeps into LaTeX and some bash utilities, which are 99% restricted to the RStudio environment, making it slightly outside the realm of a typical R Package; we could probably render labels through html, but why bother to go through all this work to create labels which look terrible? 
+
+I think that APPS is a wonderful place for this paper to be published, and APPS would be happy to have this paper. 
+Several editors of APPS have been unrelenting in their support of herbaria, and that herbaria maintain their role as the center of academic and field botany. 
+We believe that on occasion herbaria are not seen as resources for the future, but rather catalogues of the past, and would like to make our small contribution to ensure that does not become true. 
 
 I have no conflicts of interest to disclose. 
 
@@ -37,15 +43,15 @@ I have no conflicts of interest to disclose.
 Reviewers: 
 
 Shelly Gaynor mlgaynor@umich.edu 
-R package author extraordinaire, multiple thorough publications with APPS for software notes, and (former?) member of iDigBio team. 
+R package author extraordinaire, including multiple documented in APPS software notes, and (former?) member of iDigBio team. 
 
 Ben Legler blegler@uwyo.edu 
-Database administrator and creator of two large herbaria consortia, field botanist extraordinaire. 
+Database administrator and creator of two large herbaria consortia websites, and a *bona fide* field botanist.    
 
 Jason Alexander jason_alexander@berkeley.edu 
 I don't actually know Jason, word from our mutuals is he knows his stuff and this should be within his wheelhouse. 
 
 Charles Davies cdavis@oeb.harvard.edu 
-Yeah, this one is a bit of a stretch, but I need to suggest four reviewers. 
+A bit of a stretch, but I need to suggest four reviewers. 
 I doubt he has time for this, but maybe one of his graduate students would be interested. 
-Reasoning: general using herbaria specimens in ecology at global scale perspectives, as well as active taxonomist.  
+Reasoning: Charles is a profuse user of herbarium specimens for both global scale ecology studies, localized natural history, and systematics.   
