@@ -7,9 +7,9 @@
  
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth,height=\textheight]{../graphics/plots/collections_map-trim.png}
-\caption{The spatial extent (orange), and herbarium collection sites
-(burgundy) tested in this manuscript.}
+\includegraphics[width=0.5\textwidth,height=\textheight]{../graphics/plots/collections_map.png}
+\caption{The spatial extent-or domain- (orange), and herbarium
+collection sites (burgundy) tested in this manuscript.}
 \end{figure}
 \efloatseparator
  

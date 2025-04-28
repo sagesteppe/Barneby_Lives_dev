@@ -138,7 +138,7 @@ The taxonomic module has four required functions and one optional function.
 *associates_check* performs a spell check on all associated species using the local taxonomic database. 
 *powo_searcher* can be used in tandem with the functions *spell_check_family* and *author_check*, but we use it in lieu of them to search the current Plants of the World Online to determine relevant synonyms and alternative higher taxonomy for the focal species. No API key or registration is required to use *powo_searcher*.  
 
-The formatting module has three functions.Two are optional; however, they are run locally and so quickly that there is no reason to skip them. 
+The formatting module has three functions. Two are optional; however, they are run locally and so quickly that there is no reason to skip them. 
 *date_parser* parses an input date into various formats for notating collection and determination dates on labels.
 *associate_dropper* silently removes the collected species from the list of associated species; however, it searches for the species to be removed using the scientific name entered initially by the user rather than returned via spell checks. 
 *field_lengths* will emit messages for any fields that we suspect will create an 'overflow' on the physical label and should be truncated for clarity.
@@ -215,7 +215,7 @@ n_sites <- data %>%
 
 ### Herbarium Collections
 
-![The spatial extent (orange), and herbarium collection sites (burgundy) tested in this manuscript.](../graphics/plots/collections_map-trim.png){width=50%}  
+![The spatial extent-or domain- (orange), and herbarium collection sites (burgundy) tested in this manuscript.](../graphics/plots/collections_map.png){width=50%}  
 
 The testing of the package within this manuscript was performed using a subset of the authors collections from 2018-2022, while most development was performed on their 2023 and 2024 collections. 
 Only collections which had identifications to the level of species or lower, and transcribed collection dates and coordinates were used for most functionality. 
@@ -536,14 +536,16 @@ genus_mismatch <- data_p %>%
   select(Collection_number, Scientific_name, Genus, POW_Genus) %>% 
   mutate(Situation = 
     case_when(
-      Genus %in% c('Glandularia', 'Oenothera', 'Chamerion') ~ 'Preferred',
       # check Pleuraphis, i am confused on this still....
-      Genus %in% c('Cryptantha', 'Ivesia', 'Lotus', 'Polygala', 'Minuartia', 'Pleuraphis',
-                    'Pseudostellaria', 'Achnatherum', 'Scirpus', 'Peritoma', 'Arenaria', 
-                    'Spartina', 'Polygonum', 'Atriplex', 'Cymopterus', 'Trisetum', 'Bahia', 
-                   'Oryzopsis', 'Potentilla', 'Pascopyrum'
+      Collection_number %in% c(
+        '1231', '1243', '1245', '1248', '1251', '1263', '1299', '1363', '1373',
+        '1392', '1400', '1438', '1458', '1570', '1599', '1603', '1628', '2060',
+        '2094', '2185', '2233', '2249', '2249', '2258', '2264', '2291', '2421', 
+        '2424', '2426', '2473', '2538', '2545', '2569', '2581', '2598', '2620', 
+        '2638', '2684', '2686', '2697', '2715', '2806', '2810', '2812'
                     ) ~ 'Outdated',
-      Genus %in% c('Allium', 'Vaccinium', 'Eleocharis') ~ 'Internal_Error',
+      Collection_number %in% c('1236', '207', '2115', '2212', '2803') ~ 'Preferred', 
+      Collection_number %in% c('2435', '2517' ) ~ 'Internal_Error',
       .default = 'Typo'
     ),
     Situation = if_else(Scientific_name == 'Oenothera caespitosa Nutt.', 'Internal_Error', Situation))
@@ -604,8 +606,20 @@ rm(genus_mismatch, genera_mispelled, family_incongruence)
 # DISCUSSION 
 
 While numerous tools have been developed for cleaning existing herbarium and museum records, few tools help to ensure that the data entered are accurate [@patten2024geographic].
-We argue that the original collectors are the most qualified individuals to perform quality control checks and that BarnebyLives allows them to do so in a relatively fast and streamlined format.
+We argue that the original collectors are the most qualified individuals to perform quality control checks and that BarnebyLives allows them to assume that responsibility in a relatively fast and streamlined format.
 By utilizing both R and LaTeX and having publicly available source code on Github, this program allows users immediate familiarity with the system for troubleshooting issues and implementing upgrades and modifications in project branches. 
+
+LaTeX, a software system used for typesetting, allows users to focus on the content rather than the style of the documents rendered from it. 
+However, using its default settings, it can produce aesthetically pleasing results (Figure 4). 
+Additionally LaTeX offers users a wide variety of ways which they can modify labels which are under-explored in the package. 
+Very good documentation of LaTeX capabilities is offered in multiple areas; for instance, via the [Overleaf](https://www.overleaf.com/learn) project. 
+While the templates in the package are quite simple, LaTeX also offers the ability to use custom fonts, to alter font weights and colors, alter line spacing, to include images (e.g. dot maps) and customize labels beyond what the default templates support.  
+
+Thematically, BarnebyLives is set up to cover Western North America. 
+However, the package supports the use of a 'domain' being drawn over any of the conterminous United States. 
+Several of the attributes which it collects and displays on labels, relate to topics which more senior curators are interested in, i.e. the administrative information on Township Section and Range (or 'TRS'), but are considered less value in other geographic regions.  
+Further several of the abiotic variables which it acquires information on: slope, aspect, and geology have long been considered prominent drivers of plant distributions in semi-arid and montane systems and warranted on a label in these types of systems, whereas curators in other regions may find this information superfluous. 
+Finally, it is plausible people in other geographic areas are less interested in displaying which land management agency has jurisdiction over a collection; however in the west we believe this is useful information which may help a collector interested in revisiting a site to determine if they will require permits for access or to make new collections.  
 
 Accessioning often relies on the use of the Microsoft Office suite of programs and may utilize other costly software such as ArcPro or Adobe Acrobat. 
 While BarnebyLives does not have its own graphic user interface, the functionality of commonly used Interactive Development Environments (IDE's), such as Rstudio and VisualStudio (VS) Code, now offer functionality to readily view and filter datasets using familiar spreadsheet-like formats, making them more accessible to many users. 
@@ -613,15 +627,11 @@ While other software often cost money, these are also free, and we recommend tha
 
 ![A label generated from a default template](../graphics/plots/RCB2759.png){width=50%}  
 
-LaTeX offers well-documented and detailed functionality to customize labels for individuals and institutions. 
-Anecdotally, using its default settings, it can produce aesthetically pleasing results (Figure 4). 
-Very good documentation of LaTeX capabilities is offered in multiple areas; for instance, via the [Overleaf](https://www.overleaf.com/learn) project. 
 
 # CONCLUSIONS
 BarnebyLives is an R package that can be used to rapidly acquire relevant geographic and taxonomic data. 
 It can also perform specialized spell checks and assorted curatorial tasks to produce both digital and analog data. 
 The package relies on no licensed software, such as the Microsoft Office suite, and is suitable for install on all major operating systems  (Windows, Mac, Linux), however currently label generation support is only offered on Linux and Mac, with a small amount of use of the command line, which may be called from the Rstudio rather than a 'traditional' terminal. 
-Thematically, it's area of interest is Western North America. 
 
 # AUTHOR CONTRIBUTIONS 
 The project was conceptualized by R.C.B. The program was written by R.C.B. 
