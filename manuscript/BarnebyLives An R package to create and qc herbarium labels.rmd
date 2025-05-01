@@ -47,11 +47,11 @@ These factors will ensure that the specimens remain the premier botanical data s
 
 However, despite renewed recognition of the utility of collections, efforts to grow them appear slow [@prather2004decline].
 We conjecture that this is partly because collecting and depositing specimens is a fundamentally slower process, especially for novice collectors, relative to taking photographs via commercially developed apps on smartphones [@daru2018widespread; @mishler2020spatial; @manzano2021fair].
-While many young botanists are capable of using dichotomous keys and other resources to reliably identify and collect satisfactory  material, we observe that they face difficulties navigating several aspects of data acquisition, processing, and preparation of labels for submission to herbaria.
+While many novice botanists are capable of using dichotomous keys and other resources to reliably identify and collect satisfactory  material, we observe that they face difficulties navigating several aspects of data acquisition, processing, and preparation of labels for submission to herbaria.
 Some of the apparent problems include the lack of dedicated time at the end of a field season to process specimens, a general lack of education on cartography and orienteering, natural history (e.g., geology, geomorphology), nomenclature, and familiarity with various computer programs (for example, Microsoft Office suite), and increasing foundational knowledge of plant systematics and phylogenetics [@nanglu2023nature; @woodland2007botanists; @barrows2016crossroads].  
 
 The generation of an herbarium specimen involves many steps that are easy to take for granted [@forman1989herbarium].
-For example, while acquiring appropriate political information for a collection site appears simple, young collectors rarely have adequate cartographic resources (printed topographic maps or GIS software) at their disposal.
+For example, while acquiring appropriate political information for a collection site appears simple, novice collectors rarely have adequate cartographic resources (printed topographic maps or GIS software) at their disposal.
 In topographically complex areas, where administrative borders are often associated with hydrological basins and the ridges defining them, collectors are liable to misinterpret their true geographic position and report administrative details in error. 
 Even finding appropriate site names can rarely be resolved without a printed map, as many navigation-related software now consider most features that would serve as site names extraneous. 
 Similarly, the rate at which taxonomic innovations occur, the volume of the literature, and the reluctance of some regional curators to embrace a phylogenetic approach to plant classification have made it difficult to find more recently applied scientific names, even when these names are unanimously accepted by taxonomic specialists in the group and other regional curators [@hitchcock2018flora]. 
@@ -156,13 +156,13 @@ The data exporting module contains three functions that interact with LaTeX temp
 
 ```{r import example data and gather some summaries}
 
-subs_batch <- c(1586, 1880, 2187, 2159)
+#subs_batch <- c(1586, 1880, 2187, 2159)
 
 data <- read.csv('data/test_data.csv', na.strings = "") %>% 
   drop_na(c('Longitude', 'Latitude', 'Date_digital')) %>% 
   unite(col = 'Scientific_name', 
         c(Binomial, Infrarank, Infraspecies), na.rm=TRUE, sep = " ", remove = F) %>% 
-  filter(Scientific_name != '', Collection_number %in% subs_batch)#, Collection_number %in% subs_batch)
+  filter(Scientific_name != '')#, Collection_number %in% subs_batch)#, Collection_number %in% subs_batch)
 
 n_families <- data %>% 
   group_by(Family) %>% 
@@ -329,14 +329,13 @@ time_directions_grabber <- system.time({ # write directions to sites
 
 saveRDS(time_directions_grabber, file = 'data/processed/time_directions_grabber')
 saveRDS(data, file = 'data/processed/data_w_Google_Maps')
-
 ```
 
 ```{r accept or reject changes, eval = F}
 
 # for this example we will just ACCEPT all changes blindly. 
 # basically we just want some data for running timing exercises on the label making. 
-
+data <- readRDS( file = 'data/processed/data_w_Google_Maps')
 # just overwrite the original Associates and Vegetation columns
 data <- data %>% 
   select(-Associates, -Vegetation) |>
@@ -346,9 +345,9 @@ data <- data %>%
 data <- data %>% 
   select(-SpellCk.gGRP, -Match, -SpellCk.taxon_rank, 
         -Infrarank, -Infraspecies, -Binomial_authority, -Infraspecific_authority, -Family) |>
-  rename(Full_name = SpellCk.taxon_name,
-         Genus = SpellCk.genus, 
-         Epithet = SpellCk.species, 
+  rename(Full_name = POW_Full_name,
+         Genus = POW_Genus, 
+         Epithet = POW_Epithet, 
          Binomial_authority = POW_Binom_authority, 
          Infraspecific_authority = POW_Infra_authority,
          Infrarank = SpellCk.infraspecific_rank, 
@@ -476,7 +475,8 @@ rm(time_trials, tt_local)
 
 ```{r import results}
 data_p <- readRDS(file = 'data/processed/data_w_POWO_search') %>% 
-  sf::st_drop_geometry()
+  sf::st_drop_geometry() %>% 
+  split_scientificName('Scientific_name')
 
 no_binomial_auth_issues <- drop_na(data_p, Binomial_authority) %>% 
   nrow() # nearly all relating to the absence/presence of a period

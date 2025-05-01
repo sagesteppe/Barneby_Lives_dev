@@ -150,7 +150,7 @@ The data exporting module contains three functions that interact with LaTeX temp
 subs_batch <- c(1207, 2818, 2747, 2748, 2760:2770, 2782:2784, 2435, 2517, 1424, 
                 2644, 2038, 2326, 2618)
 
-data <- read.csv('data/test_data.csv', na.strings = "") %>% 
+data <- read.csv('data/test_data-2accession.csv', na.strings = "") %>% 
   drop_na(c('Longitude', 'Latitude', 'Date_digital')) %>% 
   unite(col = 'Scientific_name', 
         c(Binomial, Infrarank, Infraspecies), na.rm=TRUE, sep = " ", remove = F) %>% 
@@ -267,16 +267,24 @@ time_powo_searcher <- system.time({ # search for synonyms from plants of the wor
 
 ```{r accept or reject changes, eval = F}
 
-# for this example we will just ACCEPT all changes blindly. 
-# basically we just want some data for running timing exercises on the label making. 
-
 # just overwrite the original Associates and Vegetation columns
-data <- data %>% 
+data <- data %>%
   select(-Associates, -Vegetation) |>
   rename(Associates = 'SpellCk.Associates', Vegetation = 'SpellCk.Vegetation')
 
-# honestly just overwrite these too. 
-data <- data %>% 
+original_names <- c(1424, 2038, 2326, 2435, 2517, 2618, 2644, 2782:2784)
+
+data1 <- data |>
+  sf::st_drop_geometry() |>
+  split_scientificName(sciName_col = 'Scientific_name')
+  
+  # for these records, we want to retain the originally entered information 
+  mutate(
+    POW_Family = if_else(Collection_number %in% c(2435, 2517), 'Ranunculaceae', POW_Family)), 
+    POW_Genus 
+    
+  ) |> 
+
   select(-SpellCk.gGRP, -Match, -SpellCk.taxon_rank, 
         -Infrarank, -Infraspecies, -Binomial_authority, -Infraspecific_authority, -Family) |>
   rename(Full_name = SpellCk.taxon_name,

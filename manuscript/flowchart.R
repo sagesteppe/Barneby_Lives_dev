@@ -10,18 +10,11 @@ digraph boxes_and_circle {
   graph[rankdir = LR, ratio = 0.2, nodesep = 0.01, ranksep = 0.01]
   
   node [shape = circle, fontsize = 72, fontname = arial, style = filled, fontcolor = White]
-
-      subgraph cluster_import{color= 'white'
-        node [color = 'black', shape = egg]
-        'Raw\nSpreadsheet'
-      }
       
         # Geospatial Operations
       subgraph cluster_geospatial {style=dashed; color= 'white'; 
         node [color = '#94524A']
-  
-          'Raw\nSpreadsheet' -> 'Convert\nfrom\nDMS to DD' 
-              [label = '     dms2dd', fontsize = 72, penwidth = 6, style = dashed]
+
           'Convert\nfrom\nDMS to DD' -> 'Check for\nautofill\nvalues' 
               [label = '     autofill_checker', fontsize = 72, penwidth = 6, style = dashed]
           'Check for\nautofill\nvalues' -> 'Geospatial\nData' 
