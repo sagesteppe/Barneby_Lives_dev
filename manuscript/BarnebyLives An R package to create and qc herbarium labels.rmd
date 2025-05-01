@@ -11,8 +11,7 @@ abstract: |
   **Conclusions:** BarnebyLives improves data accuracy, ensures up-to-date taxonomy, and significantly reduces the time and effort required to accession herbarium specimens.        
 keywords: |
   herbarium, natural history museum, collections, geospatial, R, LaTeX   
-output:
-  pdf_document: default
+output:  pdf_document: default
   toc: no
   word_document: default
 csl: "../citations/american-journal-of-botany.csl"
@@ -601,7 +600,6 @@ The final record was an egregious error where the order of the specific epithet 
 All flags were correct, and in several instances more errors were found in the rows following the flagged values. 
 
 ```{r}
-??long_flag
 rm(genus_mismatch, genera_mispelled, family_incongruence)
 ```
 
