@@ -4,7 +4,8 @@ library(sf)
 library(tidyverse)
 library(tigris)
 library(rnaturalearth)
-setwd('/media/steppe/hdd/Barneby_Lives-dev/manuscript')
+#setwd('/media/steppe/hdd/Barneby_Lives-dev/manuscript')
+setwd('/home/sagesteppe/Documents/assoRted/Barneby_Lives_dev/manuscript')
 
 polybb <- st_as_sfc(
   st_bbox(

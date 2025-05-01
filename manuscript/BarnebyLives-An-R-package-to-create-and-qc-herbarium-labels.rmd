@@ -162,7 +162,7 @@ data <- read.csv('data/test_data.csv', na.strings = "") %>%
   drop_na(c('Longitude', 'Latitude', 'Date_digital')) %>% 
   unite(col = 'Scientific_name', 
         c(Binomial, Infrarank, Infraspecies), na.rm=TRUE, sep = " ", remove = F) %>% 
-  filter(Scientific_name != '', Collection_number %in% subs_batch)#, Collection_number %in% subs_batch)
+  filter(Scientific_name != '')#, Collection_number %in% subs_batch)#, Collection_number %in% subs_batch)
 
 n_families <- data %>% 
   group_by(Family) %>% 
@@ -572,7 +572,7 @@ epithet_diff <- data_p %>%
              ~ 'Spelling',
              Collection_number %in% c(
                '1556', '1588', '1619', '2445', '2777', '1337', '2004', '2412', '2487', '2748', '2652',
-               '2805', '2194', '2040', '2039', '2252', '2403', '2328', '2076') 
+               '2805', '2194', '2040', '2039', '2403', '2328', '2076') 
              ~ 'Outdated', 
              Collection_number %in% c('2644') ~ 'Incorrect',
              Collection_number %in% c(
