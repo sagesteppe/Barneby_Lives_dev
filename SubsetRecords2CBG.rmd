@@ -1,0 +1,25 @@
+---
+author: "Reed Benkendorf"
+date: "2025-04-29"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+p <- './manuscript/data'
+
+dat_sub <- read.csv(file.path(p, 'test_data.csv')) |>
+  select(Collection_number, CBG_ACC_BOOL) |>
+  mutate(CBG_ACC_BOOL = if_else(is.na(CBG_ACC_BOOL), TRUE, FALSE)) |>
+  filter(CBG_ACC_BOOL == TRUE)
+
+read.csv( file.path(p, 'processed', 'cleaned_data.csv') ) |>
+  select(-CBG_ACC_BOOL) |>
+  right_join(dat_sub)
+```
+
