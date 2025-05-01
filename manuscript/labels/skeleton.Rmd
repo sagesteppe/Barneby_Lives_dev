@@ -20,7 +20,8 @@ library(BarnebyLives)
 ```
 
 ```{r load data}
-data <- read.csv('../data/processed/cleaned_data.csv') |>
+data <- #read.csv('../data/processed/cleaned_data.csv') |>
+  read.csv('../data/processed/cleaned_data-problemchildren.csv') |>
   dplyr::mutate(
     Collection_number = as.numeric(Collection_number), 
     Coordinate_Uncertainty = '+/- 5m') |>
