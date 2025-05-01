@@ -598,8 +598,10 @@ It also flagged `r sum(epithet_diff$Situation=='Preferred', na.rm = T)` records 
 The final record was an egregious error where the order of the specific epithet and the genus name. 
 
 `r long_flag` records were appropriately flagged for issues with auto fill increment of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values. 
+All flags were correct, and in several instances more errors were found in the rows following the flagged values. 
 
 ```{r}
+??long_flag
 rm(genus_mismatch, genera_mispelled, family_incongruence)
 ```
 

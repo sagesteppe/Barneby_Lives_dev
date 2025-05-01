@@ -1,16 +1,16 @@
 library(tidyverse)
 library(DiagrammeR)
 library(ggpubr)
-#setwd('/media/steppe/hdd/Barneby_Lives-dev/manuscript')
-setwd('/home/sagesteppe/Documents/assoRted/Barneby_Lives_dev/manuscript')
+setwd('/media/steppe/hdd/Barneby_Lives-dev/manuscript')
+#setwd('/home/sagesteppe/Documents/assoRted/Barneby_Lives_dev/manuscript')
 
 grViz("
 
 digraph boxes_and_circle {
   graph[rankdir = LR, ratio = 0.2, nodesep = 0.01, ranksep = 0.01]
   
-  node [shape = circle, fontsize = 72, fontname = arial, style = filled, fontcolor = White]
-      
+  node [shape = circle, fontsize = 72, fontname = 'arial, Bold', style = filled, fontcolor = White]
+    
         # Geospatial Operations
       subgraph cluster_geospatial {style=dashed; color= 'white'; 
         node [color = '#94524A']
@@ -19,8 +19,6 @@ digraph boxes_and_circle {
               [label = '     autofill_checker', fontsize = 72, penwidth = 6, style = dashed]
           'Check for\nautofill\nvalues' -> 'Geospatial\nData' 
               [label = '     coords2sf', fontsize = 72, penwidth = 6]
-          'Raw\nSpreadsheet' -> 'Check for\nautofill\nvalues' 
-              [label = '     autofill_checker', fontsize = 72, penwidth = 6]
           'Geospatial\nData' -> 'Political\nBoundaries' 
               [label = '     political_grabber', fontsize = 72, penwidth = 6]
           'Political\nBoundaries' -> 'Site\nCharacteristics' 
@@ -171,9 +169,7 @@ digraph boxes_and_circle {
   charToRaw %>% 
   rsvg::rsvg_png("../graphics/plots/Resultmod.png")
 
-
 text <- paste(
-  "Sample workflow for using BarnebyLives on data which has been manually entered into a spreadsheet.",
   "The top two rows indicate the main data cleaning functionality and are best run in the order outlined",
   "above although taxonomic steps may be ran before spatial steps. The third row can be interspersed",
   "with the above two, includes creation of labels, which allows for detection of formatting or other",
