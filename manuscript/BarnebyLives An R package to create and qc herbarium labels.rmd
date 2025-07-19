@@ -11,7 +11,8 @@ abstract: |
   **Conclusions:** BarnebyLives improves data accuracy, ensures up-to-date taxonomy, and significantly reduces the time and effort required to accession herbarium specimens.        
 keywords: |
   herbarium, natural history museum, collections, geospatial, R, LaTeX   
-output:  pdf_document: default
+output: 
+  pdf_document: default
   toc: no
   word_document: default
 csl: "../citations/american-journal-of-botany.csl"
@@ -30,6 +31,8 @@ header-includes:
 ```{r echo = F}
 knitr::opts_chunk$set(echo=F, warning = F, message = F)
 ```
+
+# INTRODUCTION 
 
 Nearly 400 million specimens are housed worldwide in herbaria [@thiers2021herbaria]. 
 However, The rate of accessioning new collections to herbaria diminished in the 20^th^ century as priorities in biology shifted away from describing and documenting earths biodiversity and towards understanding cellular and molecular processes underpinning life [@prather2004decline; @pyke2010biological; @daru2018widespread]. 
@@ -640,7 +643,7 @@ The project was conceptualized by R.C.B. The program was written by R.C.B.
 Data collection and analysis were performed by R.C.B. 
 R.C.B. & J.B.F wrote the manuscript, and both authors approved the final version of the manuscript. 
 
-# ACKNOWLEDGEMENTS 
+# ACKNOWLEDGMENTS 
 The Bureau of Land Management is gratefully acknowledged as a provider of funding to R.C.B. for most of his specimen collection activities. 
 We thank the two anonymous peer reviewers who have increased the quality of this manuscript.
 Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz, Hannah Lovell, Dakota Becerra, Caitlin Miller, Hubert Szczygiel. 
@@ -664,7 +667,3 @@ Jeremie Fant https://orcid.org/0000-0001-9276-1111
 \clearpage
 <div id="refs"></div>
 
-# SUPPORTING INFORMATION
-Additional supporting information can be found online in the Supporting Information section at the end of this article. 
-
-**Appendix S1.** A table of all time trials for each function.
