@@ -38,7 +38,7 @@ Nearly 400 million specimens are housed worldwide in herbaria [@thiers2021herbar
 However, The rate of accessioning new collections to herbaria diminished in the 20^th^ century as priorities in biology shifted away from describing and documenting Earth's biodiversity and towards understanding cellular and molecular processes underpinning life [@prather2004decline; @pyke2010biological; @daru2018widespread]. 
 This shift, among other factors, led to a decline in the funding allocated to collection-based research, the number of staff maintaining and accessing new collections, and educating students in these practices [@funk2014erosion].
 Historically, specimens have been used to describe the taxonomic diversity of plants and document global floristic diversity [@greve2016realising; @james2018herbarium; @brewer2019factors; @ronsted2020integrative]. 
-However, renewed interest in herbarium collections utilizing 'big data approaches,’ such as museuomics, has brought herbaria back to the forefront of the natural sciences and grearly expanded their roles in science [@ronsted2020integrative; @marsico2020small]. 
+However, renewed interest in herbarium collections utilizing 'big data approaches,’ such as museomics, has brought herbaria back to the forefront of the natural sciences and grearly expanded their roles in science [@ronsted2020integrative; @marsico2020small]. 
 
 Innovations in specimen digitization, data sharing, computing, DNA sequencing, and statistics have perhaps brought about greater use of herbarium specimens than ever before [@greve2016realising; @james2018herbarium; @brewer2019factors; @ronsted2020integrative]. 
 The current use of specimens and their ancillary data extends well beyond their traditional roles in systematics and floristics, and studies utilizing collections are regularly carried out to better understand the ecological niches, phenological processes, and interactions of plants [@ronsted2020integrative; @davis2023herbarium]. 
@@ -50,7 +50,7 @@ These factors will ensure that the specimens remain the premier botanical data s
 However, despite renewed recognition of the utility of collections, efforts to grow them appear slow [@prather2004decline].
 We conjecture that this is partly because collecting and depositing specimens is a fundamentally slower process, especially for novice collectors, relative to taking photographs via commercially developed apps on smartphones [@daru2018widespread; @mishler2020spatial; @manzano2021fair].
 While many novice botanists are capable of using dichotomous keys and other resources to reliably identify and collect satisfactory  material, we observe that they face difficulties navigating several aspects of data acquisition, processing, and preparation of labels for submission to herbaria.
-Some of the apparent problems include the lack of dedicated time at the end of a field season to process specimens, a general lack of education on cartography and orienteering, natural history (e.g., geology, geomorphology), nomenclature, familiarity with various computer programs (for example, Microsoft Office suite), and increasing foundational knowledge of plant systematics and phylogenetics [@nanglu2023nature; @woodland2007botanists; @barrows2016crossroads].  
+Some of the apparent problems include the lack of dedicated time at the end of a field season to process specimens, a general lack of education on cartography and orienteering, natural history (e.g., geology, geomorphology), nomenclature, familiarity with various computer programs (for example, Microsoft Office suite), and foundational knowledge of plant systematics and phylogenetics [@nanglu2023nature; @woodland2007botanists; @barrows2016crossroads].  
 
 The generation of an herbarium specimen involves many steps that are easy to take for granted [@forman1989herbarium].
 For example, while acquiring appropriate political information for a collection site appears simple, novice collectors rarely have adequate cartographic resources (printed topographic maps or GIS software) at their disposal.
@@ -587,19 +587,19 @@ epithet_diff <- data_p %>%
 rm(Family_in, Family_out)
 ```
 
-Even on data which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. 
-While none of the `r n_families` families were misspelled, BarnebyLives made `r nrow(family_incongruence)` suggestions on naming, identified `r sum(family_incongruence$Situation=='Submitter_Incorrect', na.rm = T)` instances where the user entered an unequivocally incorrect family (or taxonomic entity), identified `r sum(family_incongruence$Situation=='Autofilled', na.rm = T)` records where families were autofilled,  and `r sum(family_incongruence$Situation=='Outdated', na.rm = T)` instance where an outdated circumscription was applied. 
+Even on our test data set which had been manually cleaned and error-checked by a human several times BarnebyLives was able to reduce transcription errors, identify typos, make nomenclature suggestions, and reformat text elements for downstream use. 
+While none of the `r n_families` families were misspelled, BarnebyLives made `r nrow(family_incongruence)` suggestions on family level nomenclature, identified `r sum(family_incongruence$Situation=='Submitter_Incorrect', na.rm = T)` instances where the user entered an unequivocally incorrect family (or taxonomic entity), identified `r sum(family_incongruence$Situation=='Autofilled', na.rm = T)` records where families were autofilled,  and `r sum(family_incongruence$Situation=='Outdated', na.rm = T)` instance where an outdated circumscription was applied. 
 At the level of family BarnebyLives flagged `r sum(family_incongruence$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy, and flagged `r sum(family_incongruence$Situation=='Internal_Error', na.rm = T)` records in error, it appears most of these errors are due to issues in the backbone used by the earlier spell check function.
 
 In the `r n_genera` genera analysed  BarnebyLives identified `r nrow(genus_mismatch)` discrepancies at the level of genus between user submitted and processed data. 
-In `r sum(genus_mismatch$Situation=='Outdated')` of these instances the user supplied an outdated name (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Outdated', 'Genus']))` unique genera) flagged `r sum(genus_mismatch$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Preferred', 'Genus']))` genera total), and flagged `r sum(genus_mismatch$Situation=='Internal_Error', na.rm = T)` record in error. 
+In `r sum(genus_mismatch$Situation=='Outdated')` of these instances the user supplied an outdated name (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Outdated', 'Genus']))` unique genera) flagged `r sum(genus_mismatch$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(genus_mismatch[genus_mismatch$Situation=='Preferred', 'Genus']))` genera total), and flagged `r sum(genus_mismatch$Situation=='Internal_Error', na.rm = T)` records in error. 
 
 Of `r n_spp` distinct species analysed BarnebyLives flagged `r nrow(epithet_diff)` records, and detected `r sum(epithet_diff$Situation=='Spelling', na.rm = TRUE)`  instances of misspelled epithets (`r sum(epithet_diff$Situation=='Spelling',  na.rm = TRUE)` unique species). 
 In `r sum(epithet_diff$Situation=='Outdated', na.rm = TRUE)` of these instances the user supplied an outdated name (`r nrow(unique(epithet_diff[epithet_diff$Situation=='Outdated', 'Scientific_name']))` unique species). 
 It also flagged `r sum(epithet_diff$Situation=='Preferred', na.rm = T)` records where the author follows an alternative taxonomy (`r nrow(unique(epithet_diff[epithet_diff$Situation=='Preferred', 'Scientific_name']))` unique species), and flagged `r sum(epithet_diff$Situation=='Internal_Error', na.rm = T)` records in error. 
-The final record was an egregious error where the order of the specific epithet and the genus name. 
+The final record was an egregious error where the order of the specific epithet and the genus name were swapped. 
 
-`r long_flag` records were appropriately flagged for issues with auto fill increment of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values. 
+Five records were appropriately flagged for issues with auto fill increment of the longitude value, and `r lat_flag` records were also auto-flagged for increases in latitude values. 
 All flags were correct, and in several instances more errors were found in the rows following the flagged values. 
 
 ```{r}
@@ -622,13 +622,13 @@ While the templates in the package are quite simple, LaTeX also offers the abili
 
 Thematically, BarnebyLives is set up to cover Western North America. 
 However, the package supports the use of a 'domain' being drawn over any of the conterminous United States. 
-Several of the attributes which it collects and displays on labels, relate to topics which more senior curators are interested in, i.e. the administrative information on Township Section and Range (or 'TRS'), but are considered less value in other geographic regions.  
-Further several of the abiotic variables which it acquires information on: slope, aspect, and geology have long been considered prominent drivers of plant distributions in semi-arid and montane systems and warranted on a label in these types of systems, whereas curators in other regions may find this information superfluous. 
-Finally, it is plausible people in other geographic areas are less interested in displaying which land management agency has jurisdiction over a collection; however in the west we believe this is useful information which may help a collector interested in revisiting a site to determine if they will require permits for access or to make new collections.  
+Several of the attributes which it collects and displays on labels, relate to topics which more senior curators are interested in, i.e. the administrative information on Township Section and Range (or 'TRS'), but are considered less valuable in other geographic regions.  
+Further several of the abiotic variables on which it acquires information on: slope, aspect, and geology, have long been considered prominent drivers of plant distributions in semi-arid and montane systems and is warranted on a label in these types of systems, whereas curators in other regions may find this information superfluous. 
+Finally, it is plausible botanists in other geographic areas are less interested in displaying which land management agency has jurisdiction over a collection; however in the Western United States we believe this is useful information which may help a collector interested in revisiting a site to determine if they will require permits for access or to make new collections.  
 
 Accessioning often relies on the use of the Microsoft Office suite of programs and may utilize other costly software such as ArcPro or Adobe Acrobat. 
 While BarnebyLives does not have its own graphic user interface, the functionality of commonly used Interactive Development Environments (IDE's), such as Rstudio and VisualStudio (VS) Code, now offer functionality to readily view and filter datasets using familiar spreadsheet-like formats, making them more accessible to many users. 
-While other software often cost money, these are also free, and we recommend that users install an open-source PDF viewer such as Okular to review their rendered documents. 
+While other software packages often cost money, these are also free, and we recommend that users install an open-source PDF viewer such as Okular to review their rendered documents. 
 
 ![A label generated from a default template](../graphics/plots/RCB2759.png){width=50%}  
 
