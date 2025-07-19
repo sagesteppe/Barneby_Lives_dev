@@ -274,22 +274,21 @@ data <- data %>%
 
 original_names <- c(1424, 2038, 2326, 2435, 2517, 2618, 2644, 2782:2784)
 
-data1 <- data |>
+data <- data |>
   sf::st_drop_geometry() |>
-  split_scientificName(sciName_col = 'Scientific_name')
+  split_scientificName(sciName_col = 'Scientific_name') |>
   
   # for these records, we want to retain the originally entered information 
   mutate(
-    POW_Family = if_else(Collection_number %in% c(2435, 2517), 'Ranunculaceae', POW_Family)), 
-    POW_Genus 
-    
+    POW_Family = if_else(Collection_number %in% c(2435, 2517), 'Ranunculaceae', POW_Family),
+    POW_Genus = if_else(Collection_number %in% original_names, Genus, POW_Genus),
+    POW_Epithet = if_else(Collection_number %in% original_names, Epithet, POW_Epithet),
   ) |> 
-
-  select(-SpellCk.gGRP, -Match, -SpellCk.taxon_rank, 
+  select(-SpellCk.gGRP, -Match, -SpellCk.taxon_rank, -Genus, -Epithet,
         -Infrarank, -Infraspecies, -Binomial_authority, -Infraspecific_authority, -Family) |>
-  rename(Full_name = SpellCk.taxon_name,
-         Genus = SpellCk.genus, 
-         Epithet = SpellCk.species, 
+  rename(Full_name = POW_Full_name,
+         Genus = POW_Genus, 
+         Epithet = POW_Epithet, 
          Binomial_authority = POW_Binom_authority, 
          Infraspecific_authority = POW_Infra_authority,
          Infrarank = SpellCk.infraspecific_rank, 
@@ -313,13 +312,13 @@ rm(list=ls(pattern = 'time'))
 ```
 
 ```{r Create Labels, eval = F}
-processed <- read.csv('data/processed/cleaned_data-problemchildren.csv.csv') %>% 
+processed <- read.csv('data/processed/cleaned_data-problemchildren.csv') %>% 
   mutate(UNIQUEID = paste0(Primary_Collector, Collection_number), 
          Coordinate_Uncertainty = '+/- 5m') %>% 
   filter(Collection_number != 'sine non') %>% 
   data.frame() 
 
-processed <- data.frame( apply(processed, 2, as.character) )
+processed <- data.frame(apply(processed, 2, as.character))
 processed <- mutate(processed, Collection_number = as.numeric(Collection_number))
 
 dir.create('./labels/raw')
@@ -336,8 +335,6 @@ raw_lab_time <- system.time({
     )
   )
 })
-
-saveRDS(raw_lab_time, file = 'data/processed/time_label_gen')
 
 ```
 
