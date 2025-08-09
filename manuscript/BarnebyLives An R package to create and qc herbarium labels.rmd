@@ -611,40 +611,27 @@ rm(genus_mismatch, genera_mispelled, family_incongruence)
 # DISCUSSION 
 
 While numerous tools have been developed for cleaning existing herbarium and museum records, few tools help to ensure that the data entered are accurate [@patten2024geographic].
-We argue that the original collectors are the most qualified individuals to perform quality control checks and that BarnebyLives allows them to assume that responsibility in a relatively fast and streamlined format.
+We argue that the original collectors are the most qualified individuals to perform quality control checks and that BarnebyLives allows them to assume this responsibility in a relatively fast and streamlined format. 
+While BarnebyLives may be adopted by herbarium curators, its original use was for natural resource management employees (for example, US Forest Service, heritage programs, natural history surveys) and graduate students in ecology and conservation (e.g., performing inventory and community ecology work), and we expect it to be most widely used in this realm. 
+Beyond always having the data collected by BarnebyLives terminating in a label for a physical specimen, its utility may be extended to providing information for various biotic databases (e.g., heritage program databases) or modelling applications (e.g., modelling in community ecology) as a user sees fit.
 By utilizing both R and LaTeX and having publicly available source code on Github, this program allows users immediate familiarity with the system for troubleshooting issues and implementing upgrades and modifications in project branches. 
-
-- User groups 
-  - Academia
-    - Botanists (floristics, inventory work)
-    - Ecology (community ecologists)
-  - herbaria personnel 
-
-We argue that the original collectors are the most qualified individuals to perform quality control checks and that BarnebyLives allows them to assume that responsibility in a relatively fast and streamlined format
-While we largely highlight the usage of BarnebyLives in the context of herbaria, it's original use case was for natural resource management workers (e.g. US Forest Service, heritage programs, natural history surveys), and graduate students in ecology and conservation (e.g. inventory, and community ecology work). 
-
-We believe that these 
-additional uses cases exist in domains where users seldom interface with curatorial staff, such as
-
-
-
-LaTeX, a software system used for typesetting, allows users to focus on the content rather than the style of the documents rendered from it. 
-However, using its default settings, it can produce aesthetically pleasing results (Figure 4). 
-Additionally LaTeX offers users a wide variety of ways which they can modify labels which are under-explored in the package. 
+LaTeX, a software system used for typesetting, was developed to allow users to focus on the content rather than the style of the rendered documents. 
+Indeed, using the default LaTeX settings along with standard templates allows users to produce aesthetically pleasing results (Figure 4). 
+However, LaTeX also offers a rich suite of customizable parameters that offer users a wide variety of ways to modify labels that are under-explored in the package.
 Very good documentation of LaTeX capabilities is offered in multiple areas; for instance, via the [Overleaf](https://www.overleaf.com/learn) project. 
 While the templates in the package are quite simple, LaTeX also offers the ability to use custom fonts, to alter font weights and colors, alter line spacing, to include images (e.g. dot maps) and customize labels beyond what the default templates support.  
 
 Thematically, many of the variables which BarnebyLives collects information on are tailored to Western North America. 
 However, the package supports the use of a 'domain' being drawn over any of the conterminous United States. 
-Several of the attributes which it collects and displays on labels, relate to topics which more senior curators are interested in, i.e. the administrative information on Township Section and Range (or 'TRS'), but are considered less valuable in other geographic regions.  
+Several of the attributes which it collects and displays on labels, relate to topics in which more senior curators are interested, i.e. the administrative information on Township Section and Range (or 'TRS'), but are considered less valuable in other geographic regions.  
 Further several of the abiotic variables on which it acquires information on: slope, aspect, and geology, have long been considered prominent drivers of plant distributions in semi-arid and montane environments and are warranted on an herbarium label for specimens collected from these environments, whereas curators in other regions may find this information superfluous. 
-Finally, it is plausible botanists in other geographic areas are less interested in displaying which land management agency has jurisdiction over a collection; however in the Western United States we believe this is useful information which may help a collector interested in revisiting a site to determine if they will require permits for access or to make new collections.  
+Finally, it is plausible botanists in other geographic areas are less interested in displaying which land management agency has jurisdiction over a collection; however in the Western United States we believe this is useful information which may help a collector interested in revisiting a site to determine if they will require permits for access or to make new collections. 
 
 Accessioning often relies on the use of the Microsoft Office suite of programs and may utilize other costly software such as ArcPro or Adobe Acrobat. 
 While BarnebyLives does not have its own graphic user interface, the functionality of commonly used Interactive Development Environments (IDE's), such as Rstudio and VisualStudio (VS) Code, now offer functionality to readily view and filter datasets using familiar spreadsheet-like formats, making them more accessible to many users. 
 While other software packages often cost money, these are also free, and we recommend that users install an open-source PDF viewer such as Okular to review their rendered documents. 
 
-![A label generated from a default template](../graphics/plots/RCB2759.png){width=50%}  
+![A label generated from a default template included with the package](../graphics/plots/RCB2759.png){width=50%}  
 
 
 # CONCLUSIONS
@@ -660,7 +647,7 @@ R.C.B. & J.B.F wrote the manuscript, and both authors approved the final version
 # ACKNOWLEDGMENTS 
 The Bureau of Land Management is gratefully acknowledged as a provider of funding to R.C.B. for most of his specimen collection activities. 
 We thank the two anonymous peer reviewers who have increased the quality of this manuscript.
-Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz, Hannah Lovell, Dakota Becerra, Caitlin Miller, Hubert Szczygiel. 
+Several prominent associated collectors of specimens used in this study are thanked: Dani Yashinovitz, Hannah Lovell, Dakota Becerra, Caitlin Miller, and Hubert Szczygiel. 
 
 # DATA AVAILABILITY STATEMENT
 The BarnebyLives R package is open source, the development version is available on GitHub (https://github.com/sagesteppe/BarnebyLives). 
