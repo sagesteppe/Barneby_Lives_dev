@@ -614,6 +614,20 @@ While numerous tools have been developed for cleaning existing herbarium and mus
 We argue that the original collectors are the most qualified individuals to perform quality control checks and that BarnebyLives allows them to assume that responsibility in a relatively fast and streamlined format.
 By utilizing both R and LaTeX and having publicly available source code on Github, this program allows users immediate familiarity with the system for troubleshooting issues and implementing upgrades and modifications in project branches. 
 
+- User groups 
+  - Academia
+    - Botanists (floristics, inventory work)
+    - Ecology (community ecologists)
+  - herbaria personnel 
+
+We argue that the original collectors are the most qualified individuals to perform quality control checks and that BarnebyLives allows them to assume that responsibility in a relatively fast and streamlined format
+While we largely highlight the usage of BarnebyLives in the context of herbaria, it's original use case was for natural resource management workers (e.g. US Forest Service, heritage programs, natural history surveys), and graduate students in ecology and conservation (e.g. inventory, and community ecology work). 
+
+We believe that these 
+additional uses cases exist in domains where users seldom interface with curatorial staff, such as
+
+
+
 LaTeX, a software system used for typesetting, allows users to focus on the content rather than the style of the documents rendered from it. 
 However, using its default settings, it can produce aesthetically pleasing results (Figure 4). 
 Additionally LaTeX offers users a wide variety of ways which they can modify labels which are under-explored in the package. 

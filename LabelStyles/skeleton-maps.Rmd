@@ -1,0 +1,77 @@
+---
+output: pdf_document
+params:
+  Collection_number: Collection_number
+  imagepath: imagepath
+geometry: paperheight=4in,paperwidth=4in,margin=0.1in
+header-includes:
+  - \pagenumbering{gobble}
+  - \usepackage{setspace}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(dpi = 300) 
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+```{r load library}
+library(BarnebyLives)
+```
+
+```{r load data}
+record <- collection_examples |>
+  dplyr::filter(Collection_number == params$Collection_number) |>  
+  sf::st_drop_geometry()
+
+imagepath <- params$imagepath
+```
+
+\begin{center}
+\textbf{\Large `r writer(record[['Project_Name']])`}
+\end{center}
+\begin{flushright}
+\uppercase{`r record[['Family']]`}
+\end{flushright}
+
+\noindent
+\begin{minipage}[t]{0.78\textwidth}\vspace*{0pt}
+
+\begingroup
+\large
+`r writer(paste(record[['Genus']], record[['Epithet']]), italics = TRUE)` `r writer(record[['Binomial_authority']])` `r writer(record[['Infrarank']])` `r writer(record[['Infraspecies']], italics = TRUE)` `r writer(record[['Infraspecific_authority']])`  
+`r writer_fide(record)`
+\normalsize
+\endgroup
+
+\vspace*{\fill}
+
+\begingroup
+`r record[['Gen']]`. `r writer(record[['Site']])` `r record[['latitude_dd']]` `r record[['longitude_dd']]` (`r record[['Datum']]` `r writer(record[['Coordinate_Uncertainty']])`).
+
+`r writer(record[['Habitat']])`. `r record[['physical_environ']]`  
+Veg.: `r species_font(record[['Vegetation']])` `r associates_writer(record[['Associates']])`
+`r writer(record[['Notes']])`  
+\endgroup
+ 
+\vspace*{\fill}
+\begingroup
+`r collection_writer(record)`
+\endgroup
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.18\textwidth}\vspace*{0pt}
+\hspace*{4mm}% left margin
+\centering
+\includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{`r imagepath`}
+\end{minipage}
+
+
+
+
+convert -density 300 Molecular_nets-crop.pdf -quality 100 \
+        -gravity West -background white -splice 100x0 \
+        \( -background transparent -fill black -pointsize 12 \
+           label:"Time within Season" -rotate -90 \) \
+        -geometry +0+250 -composite Molecular_nets-crop-labelled.png
