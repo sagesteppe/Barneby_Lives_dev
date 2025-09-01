@@ -1,5 +1,7 @@
 library(gt)
-setwd('/media/steppe/hdd/Barneby_Lives-dev/manuscript')
+library(tidyverse)
+# setwd('/media/steppe/hdd/Barneby_Lives-dev/manuscript')
+setwd('/home/sagesteppe/Documents/assoRted/Barneby_Lives_dev/manuscript')
 
 footnote = 'Counties and States are merged into the same dataset while setting up the package. The value for "County" includes State.'
 
@@ -61,17 +63,67 @@ data_sources <- local_data |>
     Subset_Size = "Size (GiB)") |>  
   tab_footnote(footnote) |> 
   
-  tab_options(heading.background.color = "#94524A",
-              heading.border.lr.color='#2F0A28', 
-              table.background.color='#eff4ec',
-              row.striping.background_color = 'black',
-              footnotes.background.color = '#A27E6F',
-              heading.padding = 0)
+  tab_options(
+    heading.background.color = "#94524A",
+    heading.border.lr.color='#2F0A28', 
+    table.background.color='#eff4ec',
+    row.striping.background_color = 'black',
+    footnotes.background.color = '#A27E6F',
+    heading.padding = 0
+    )
 
 
 gtsave(data_sources, "../graphics/tables/rab_tab_examples.png")
 
-
-
-
 sessioninfo::session_info()
+
+## and create a second table for the alternative data sources page. 
+
+data_dropins <- select(local_data, -Subset_Size) |>
+  mutate(
+    across(.cols = everything(), ~ na_if(.x, ''))
+    ) |> 
+  fill(everything()) |>
+  filter(Source %in% c('US Census Bureau', 'US Geological Survey')) |>
+  mutate(
+    Alternative = case_when(
+      Variable == 'County' ~ 'geoBoundaries', 
+      Variable == 'State' ~ 'geoBoundaries',
+      Variable == 'Surficial Geology' ~ 'Macrostrat',  # NOTE API, requests, not local. 
+      Variable == 'Place Names' ~ 'GeoNames',  # NOTE API, requests, not local. 
+      .default = as.character('?')
+    )
+  ) |>
+  mutate(
+    Status = case_when(
+      Alternative == 'geoBoundaries' ~ 'Downloadable', 
+      Alternative == 'GeoNames' ~ 'Downloadable',
+      Alternative == 'Macrostrat' ~ 'API Calls',
+      .default = as.character('?')
+    ),
+    Source = if_else(Source == 'US Geological Survey', 'USGS', 'USCB')
+  ) |>
+  select(Name, Usage, Source, Alternative, Status)
+
+data_dropins <- data_dropins |> 
+  gt() |>  
+  fmt_markdown(columns = everything()) |> 
+  tab_header(
+    title = 'Possible, non-Federal, Alternative Data Sources')|> 
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_column_labels()) |> 
+  cols_align(align = "center" ) |> 
+  cols_align(
+    align = "left",
+    columns = Name
+  ) |>
+  tab_options(
+    heading.background.color = "#94524A",
+    heading.border.lr.color='#2F0A28', 
+    table.background.color='#eff4ec',
+    row.striping.background_color = 'black',
+    footnotes.background.color = '#A27E6F',
+    heading.padding = 0
+  )
+
+gtsave(data_dropins, "../graphics/tables/Alternative_data_sources.png")
