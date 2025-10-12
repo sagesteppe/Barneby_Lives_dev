@@ -1,0 +1,69 @@
+---
+title: "Pull hu10"
+format: html
+editor: visual
+---
+
+```{r}
+library(sf)
+library(tidyverse)
+library(rmapshaper)
+getwd()
+```
+
+```{r, eval = F}
+p <- '/media/steppe/hdd/Geospatial_data/NHDPlusNationalData/NHDPlusV21_National_Seamless_Flattened_Lower48.gdb'
+st_layers(p)
+hu10 <- st_read(p, layer = 'HUC12') |>
+  st_make_valid()
+
+domain <- st_read('/media/steppe/hdd/Barneby_Lives-dev/ValleysProject/data/domain.gpkg') |>
+  st_transform(st_crs(hu10))
+
+hu10 <- hu10[ unlist(st_intersects(domain, hu10)),] |>
+  st_make_valid()
+
+mountains <- st_read('/media/steppe/hdd/Barneby_Lives-dev/geodata/mountains') |>
+  st_make_valid() |>
+  st_transform(st_crs(hu10)) |>
+  st_union()
+
+mountains <- sf::st_set_precision(mountains, precision = 1e3) |>
+  st_make_valid()
+hu10 <- sf::st_set_precision(hu10, precision = 1e3)|>
+  st_make_valid()
+
+hu10 <- st_difference(hu10, mountains)
+hu10 <- st_make_valid(hu10)
+
+polys <- hu10[complete.cases(
+  sf::st_coordinates(sf::st_centroid(sf::st_geometry(hu10)))
+), ]
+
+polys <- polys %>%
+  sf::st_collection_extract("POLYGON") 
+
+polys <- polys %>%
+    st_make_valid() %>%                     # Step 1: Repair invalid geometries
+    st_cast("MULTIPOLYGON", warn = FALSE) %>%  # Step 2: Ensure MULTIPOLYGON type
+    st_cast("POLYGON", warn = FALSE) %>%       # Step 3: Flatten to POLYGONs
+    filter(!st_is_empty(.))           # Final: Drop empty geometries
+
+st_write(polys, '/media/steppe/hdd/Barneby_Lives-dev/ValleysProject/data/Main_huc12_polygons.gpkg', append = F)
+#hu10 <- rmapshaper::ms_simplify(hu10, keep = 0.05, keep_shapes = TRUE)
+```
+
+
+```{r}
+polys <- st_read(
+  '/media/steppe/hdd/Barneby_Lives-dev/ValleysProject/data/Main_huc12_polygons.gpkg') |>
+  sf::st_make_valid() 
+
+polys_simp <- rmapshaper::ms_simplify(polys, keep = 0.1, keep_shapes  = TRUE)
+polys_simp <- polys_simp[!st_is_empty(polys_simp),]
+
+st_write(
+  polys_simp, 
+  '/media/steppe/hdd/Barneby_Lives-dev/ValleysProject/data/Simplified_huc12_polygons.gpkg', 
+  append = F)
+```
