@@ -41,7 +41,7 @@ data <- read.csv('SoS-ExampleCollection.csv') |>
 
 \vspace*{\fill}
 \begingroup
-`r data$Gen`. `r writer(data$Site)` `r data$latitude_dd` `r data$longitude_dd` (`r data$Datum` `r writer(data$Coordinate_Uncertainty)`).
+`r data$Gen`. `r writer(data$Site)` `r data$latitude_dd` `r data$longitude_dd` (`r data$Datum` `r writer(data$Coordinate_uncertainty)`).
 
 `r writer(data$Habitat)`. `r data$physical_environ`  
 Veg.: `r species_font(data$Vegetation)` `r associates_writer(data$Associates)`
