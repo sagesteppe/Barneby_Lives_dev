@@ -11,7 +11,7 @@
 
 
 
-<title>ComputerSpecsAppendix</title>
+<title>ComputerSpecsAppendix.knit</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -361,77 +361,73 @@ Information was collected via standard system commands at time of
 receiving reviewer comments.</p>
 <div id="operating-system" class="section level2">
 <h2>Operating System</h2>
-<pre><code>$ lsb_release -a
-
-Distributor ID: Ubuntu  
-Description:    Ubuntu 22.04.5 LTS  
-Release:    22.04  
-Codename:   jammy  </code></pre>
+<pre class="sh"><code>lsb_release -a</code></pre>
+<p>Distributor ID: Ubuntu<br />
+Description: Ubuntu 22.04.5 LTS<br />
+Release: 22.04<br />
+Codename: jammy</p>
 </div>
 <div id="cpu" class="section level2">
 <h2>CPU</h2>
-<pre><code>$ lscpu
-
-Architecture:             x86_64  
-  CPU op-mode(s):         32-bit, 64-bit  
-  Address sizes:          39 bits physical, 48 bits virtual  
-  Byte Order:             Little Endian  
-CPU(s):                   16  
-  On-line CPU(s) list:    0-15  
-Vendor ID:                GenuineIntel  
-  Model name:             11th Gen Intel(R) Core(TM) i7-11700K @ 3.60GHz  
-    CPU family:           6  
-    Model:                167  
-    Thread(s) per core:   2  
-    Core(s) per socket:   8  
-    Socket(s):            1  
-    Stepping:             1  
-    CPU max MHz:          5100.0000  
-    CPU min MHz:          800.0000  
-    BogoMIPS:             7200.00  </code></pre>
+<pre class="sh"><code>lscpu</code></pre>
+<p>Architecture: x86_64<br />
+CPU op-mode(s): 32-bit, 64-bit<br />
+Address sizes: 39 bits physical, 48 bits virtual<br />
+Byte Order: Little Endian<br />
+CPU(s): 16<br />
+On-line CPU(s) list: 0-15<br />
+Vendor ID: GenuineIntel<br />
+Model name: 11th Gen Intel(R) Core(TM) i7-11700K @ 3.60GHz<br />
+CPU family: 6<br />
+Model: 167<br />
+Thread(s) per core: 2<br />
+Core(s) per socket: 8<br />
+Socket(s): 1<br />
+Stepping: 1<br />
+CPU max MHz: 5100.0000<br />
+CPU min MHz: 800.0000<br />
+BogoMIPS: 7200.00</p>
 </div>
 <div id="memory" class="section level2">
 <h2>Memory</h2>
-<pre><code>$ free -h
-               total        used        free      shared  buff/cache   available  
-Mem:           125Gi       3.4Gi       112Gi       585Mi       9.7Gi       120Gi  
-Swap:          2.0Gi          0B       2.0Gi  </code></pre>
+<pre class="sh"><code>free -h</code></pre>
+<pre><code>           total        used        free      shared  buff/cache   available  </code></pre>
+<p>Mem: 125Gi 3.1Gi 112Gi 569Mi 9.7Gi 120Gi<br />
+Swap: 2.0Gi 0B 2.0Gi</p>
 </div>
 <div id="internet-speed" class="section level2">
 <h2>Internet Speed</h2>
-<pre><code>$ speedtest-cli
-
-Retrieving speedtest.net configuration...  
-Testing from Astound Broadband (168.91.196.6)...  
-Retrieving speedtest.net server list...  
-Selecting best server based on ping...  
-Hosted by Sangoma (Chicago, IL) [17.63 km]: 18.388 ms  
-Testing download speed..........................................................  
-Download: 21.58 Mbit/s  
-Testing upload speed............................................................  
-Upload: 27.43 Mbit/s  </code></pre>
+<pre class="sh"><code>speedtest-cli</code></pre>
+<p>Retrieving speedtest.net configuration…<br />
+Testing from Astound Broadband (168.91.196.6)…<br />
+Retrieving speedtest.net server list…<br />
+Selecting best server based on ping…<br />
+Hosted by Sangoma (Chicago, IL) [17.63 km]: 18.388 ms<br />
+Testing download speed………………………………………………….<br />
+Download: 21.58 Mbit/s<br />
+Testing upload speed……………………………………………………<br />
+Upload: 27.43 Mbit/s</p>
 </div>
 <div id="filesystem-usage" class="section level2">
 <h2>Filesystem Usage</h2>
-<pre><code>$ df -h
-
-Filesystem      Size  Used Avail Use% Mounted on  
-tmpfs            13G  2.6M   13G   1% /run  
-/dev/nvme0n1p2  468G  242G  203G  55% /  
-tmpfs            63G   14M   63G   1% /dev/shm  
-tmpfs           5.0M  4.0K  5.0M   1% /run/lock  
-efivarfs        192K   88K  100K  47% /sys/firmware/efi/efivars  
-/dev/nvme0n1p1  511M  6.1M  505M   2% /boot/efi  
-tmpfs            13G  132K   13G   1% /run/user/1000  
-/dev/sda1       3.6T  3.2T  295G  92% /media/steppe/hdd  </code></pre>
+<pre class="sh"><code>df -h</code></pre>
+<p>Filesystem Size Used Avail Use% Mounted on<br />
+tmpfs 13G 2.6M 13G 1% /run<br />
+/dev/nvme0n1p2 468G 242G 203G 55% /<br />
+tmpfs 63G 14M 63G 1% /dev/shm<br />
+tmpfs 5.0M 4.0K 5.0M 1% /run/lock<br />
+efivarfs 192K 88K 100K 47% /sys/firmware/efi/efivars<br />
+/dev/nvme0n1p1 511M 6.1M 505M 2% /boot/efi<br />
+tmpfs 13G 132K 13G 1% /run/user/1000<br />
+/dev/sda1 3.6T 3.2T 295G 92% /media/steppe/hdd</p>
 </div>
 <div id="io-performance" class="section level2">
 <h2>I/O Performance</h2>
-<pre><code>sudo hdparm -Tt /dev/nvme0n1p2</code></pre>
+<pre class="sh"><code>sudo hdparm -Tt /dev/nvme0n1p2</code></pre>
 <p>Timing cached reads: 44096 MB in 2.00 seconds = 22095.91 MB/sec<br />
 Timing buffered disk reads: 4470 MB in 3.00 seconds = 1489.83 MB/sec</p>
 <p>All files were stored on the following drive.</p>
-<pre><code>sudo hdparm -Tt /dev/sda1</code></pre>
+<pre class="sh"><code>sudo hdparm -Tt /dev/sda1</code></pre>
 <p>Timing cached reads: 45870 MB in 2.00 seconds = 22986.94 MB/sec<br />
 Timing buffered disk reads: 514 MB in 3.01 seconds = 170.57 MB/sec</p>
 </div>

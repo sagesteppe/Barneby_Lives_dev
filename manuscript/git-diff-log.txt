@@ -1,0 +1,129 @@
+sagesteppe@sagesteppe-ThinkPad-T15p-Gen-3:~/Documents/assoRted/BarnebyLives$ git diff --stat d73ab1d 1e50728
+ .gitignore                                                             |   1 +
+ BarnebyLives.Rproj                                                     |   1 +
+ DESCRIPTION                                                            |   8 +-
+ NEWS.html                                                              | 411 --------------
+ R/.Rhistory                                                            | 512 -----------------
+ R/BarnebyLives.r                                                       |  13 +-
+ R/TaxUnpack.R                                                          | 103 +++-
+ R/all_authors.R                                                        |  23 +-
+ R/associate_dropper.R                                                  |  16 +-
+ R/associates_spell_check.R                                             | 131 +++--
+ R/associates_writer.R                                                  |  20 +-
+ R/author_check.R                                                       |  43 +-
+ R/autofill_checker.R                                                   |  27 +-
+ R/collection_writer.R                                                  |  37 +-
+ R/coords2sf.R                                                          |  81 +--
+ R/data_download.R                                                      | 351 +++++++-----
+ R/data_setup.R                                                         | 830 ++++++++++++++++++++-------
+ R/date2text.R                                                          |  13 +-
+ R/date_parser.R                                                        |  63 ++-
+ R/directions_grabber.R                                                 |  32 +-
+ R/directions_overview.R                                                |  42 +-
+ R/dms2dd.R                                                             | 108 ++--
+ R/escape_latex.R                                                       |  22 +
+ R/family_spell_check.R                                                 |  19 +-
+ R/format_database_import.R                                             |  46 +-
+ R/format_degree.R                                                      |   2 +-
+ R/geodata_writer.R                                                     |  37 +-
+ R/get_google_directions.R                                              |  28 +-
+ R/label_writer.R                                                       |  28 +-
+ R/map_maker.R                                                          | 162 +++++-
+ R/notFound.R                                                           |  14 +-
+ R/physical_grabber.R                                                   | 113 +++-
+ R/political_grabber.R                                                  |  85 ++-
+ R/powNAce.R                                                            | 161 +++---
+ R/powo_searcher.R                                                      |  12 +-
+ R/project_examples.R                                                   |   3 -
+ R/result_grabber.R                                                     |  12 +-
+ R/shipping_examples.R                                                  |   4 +-
+ R/site_writer.R                                                        |  52 +-
+ R/species_font.R                                                       |  52 +-
+ R/specificDirections.R                                                 |  18 +-
+ R/spell_check.R                                                        | 111 ++--
+ R/split_scientificName.R                                               | 118 ++--
+ R/try_again.R                                                          |   2 +-
+ R/wcvp_update.R                                                        | 116 ++--
+ R/writer.R                                                             | 105 ++--
+ README.md                                                              |  20 +-
+ README.rmd                                                             |  58 +-
+ _pkgdown.yml                                                           | 165 +++---
+ data-raw/.Rhistory                                                     | 988 ++++++++++++++++-----------------
+ data-raw/sample_data.R                                                 |  18 +-
+ data-sources.md                                                        |   9 +
+ data/collection_examples.rda                                           | Bin 18825 -> 19937 bytes
+ data/uncleaned_collection_examples.rda                                 | Bin 0 -> 11283 bytes
+ inst/rmarkdown/templates/labels/skeleton/.Rhistory                     | 404 ++++++++++++--
+ inst/rmarkdown/templates/labels/skeleton/skeleton-SOS.Rmd              |  33 +-
+ .../templates/labels/skeleton/skeleton-customfont-downloaded.Rmd       |  71 +++
+ inst/rmarkdown/templates/labels/skeleton/skeleton-customfont.Rmd       |  36 +-
+ inst/rmarkdown/templates/labels/skeleton/skeleton-logo.Rmd             |  73 +++
+ inst/rmarkdown/templates/labels/skeleton/skeleton-maps.Rmd             |  78 +++
+ inst/rmarkdown/templates/labels/skeleton/skeleton-modern.Rmd           |  64 +++
+ inst/rmarkdown/templates/labels/skeleton/skeleton-new.Rmd              |  53 --
+ inst/rmarkdown/templates/labels/skeleton/skeleton-research.Rmd         |  64 +++
+ inst/rmarkdown/templates/labels/skeleton/skeleton.Rmd                  |  67 +++
+ inst/rmarkdown/templates/transmittal/skeleton/logo.png                 | Bin 0 -> 176338 bytes
+ man/PAD_dl.Rd                                                          |  15 -
+ man/TaxUnpack.Rd                                                       |   4 +-
+ man/associates_writer.Rd                                               |   5 +-
+ man/check_data_setup_outputs.Rd                                        |  22 +
+ man/collection_examples.Rd                                             |   7 +
+ man/data_download.Rd                                                   |   3 +-
+ man/data_setup.Rd                                                      |   1 -
+ man/dms2dd.Rd                                                          |  12 +-
+ man/escape_latex.Rd                                                    |  11 +
+ man/figures/Alternative_data_sources.png                               | Bin 0 -> 107206 bytes
+ man/figures/Map-2823.png                                               | Bin 0 -> 42164 bytes
+ man/figures/Nunito/Nunito-Italic-VariableFont_wght.ttf                 | Bin 0 -> 280276 bytes
+ man/figures/Nunito/Nunito-VariableFont_wght.ttf                        | Bin 0 -> 275644 bytes
+ man/figures/Nunito/OFL.txt                                             |  93 ++++
+ man/figures/Nunito/README.txt                                          |  79 +++
+ man/figures/Nunito/static/Nunito-Black.ttf                             | Bin 0 -> 132028 bytes
+ man/figures/Nunito/static/Nunito-BlackItalic.ttf                       | Bin 0 -> 135332 bytes
+ man/figures/Nunito/static/Nunito-Bold.ttf                              | Bin 0 -> 132148 bytes
+ man/figures/Nunito/static/Nunito-BoldItalic.ttf                        | Bin 0 -> 135392 bytes
+ man/figures/Nunito/static/Nunito-ExtraBold.ttf                         | Bin 0 -> 132068 bytes
+ man/figures/Nunito/static/Nunito-ExtraBoldItalic.ttf                   | Bin 0 -> 135404 bytes
+ man/figures/Nunito/static/Nunito-ExtraLight.ttf                        | Bin 0 -> 131988 bytes
+ man/figures/Nunito/static/Nunito-ExtraLightItalic.ttf                  | Bin 0 -> 135340 bytes
+ man/figures/Nunito/static/Nunito-Italic.ttf                            | Bin 0 -> 135528 bytes
+ man/figures/Nunito/static/Nunito-Light.ttf                             | Bin 0 -> 132216 bytes
+ man/figures/Nunito/static/Nunito-LightItalic.ttf                       | Bin 0 -> 135660 bytes
+ man/figures/Nunito/static/Nunito-Medium.ttf                            | Bin 0 -> 132300 bytes
+ man/figures/Nunito/static/Nunito-MediumItalic.ttf                      | Bin 0 -> 135584 bytes
+ man/figures/Nunito/static/Nunito-Regular.ttf                           | Bin 0 -> 132200 bytes
+ man/figures/Nunito/static/Nunito-SemiBold.ttf                          | Bin 0 -> 132152 bytes
+ man/figures/Nunito/static/Nunito-SemiBoldItalic.ttf                    | Bin 0 -> 135404 bytes
+ man/figures/custom-font-downloaded2823.pdf                             | Bin 0 -> 15152 bytes
+ man/figures/custom-font-downloaded2823.png                             | Bin 0 -> 84301 bytes
+ man/figures/custom-font2823.png                                        | Bin 0 -> 88562 bytes
+ man/figures/custom-twofonts2823.png                                    | Bin 0 -> 93365 bytes
+ man/figures/logo-2823.png                                              | Bin 0 -> 92816 bytes
+ man/figures/modern2823.png                                             | Bin 0 -> 78616 bytes
+ man/figures/research2823.png                                           | Bin 0 -> 102038 bytes
+ man/figures/workflow.png                                               | Bin 747405 -> 1299514 bytes
+ man/map_maker.Rd                                                       |  42 +-
+ man/{geological_map.Rd => process_geology.Rd}                          |   6 +-
+ man/project_examples.Rd                                                |   3 -
+ man/safe_untar.Rd                                                      |  22 +
+ NEWS.md => news.md                                                     |   0
+ pkgdown/favicon/apple-touch-icon.png                                   | Bin 0 -> 22930 bytes
+ pkgdown/favicon/favicon-96x96.png                                      | Bin 0 -> 9043 bytes
+ pkgdown/favicon/favicon.ico                                            | Bin 0 -> 15086 bytes
+ pkgdown/favicon/favicon.svg                                            |   3 +
+ pkgdown/favicon/site.webmanifest                                       |  21 +
+ pkgdown/favicon/web-app-manifest-192x192.png                           | Bin 0 -> 25461 bytes
+ pkgdown/favicon/web-app-manifest-512x512.png                           | Bin 0 -> 126449 bytes
+ vignettes/.gitignore                                                   |   1 +
+ vignettes/ExampleCollection.csv                                        |   2 -
+ vignettes/built_in_templates.Rmd                                       | 166 ++++++
+ vignettes/creating_labels.Rmd                                          | 188 +++++--
+ vignettes/custom_label_fonts.Rmd                                       | 174 +++++-
+ .../{custom_label_templates.Rmd => customizing_a_label_template.Rmd}   | 118 ++--
+ vignettes/labels_with_graphics.Rmd                                     | 210 +++++++
+ vignettes/rendering_shipping_manifests.Rmd                             |   2 +
+ vignettes/running_pipeline.Rmd                                         | 122 ++--
+ vignettes/setting_up_files.Rmd                                         | 166 ++++--
+ 126 files changed, 4932 insertions(+), 2955 deletions(-)
+
