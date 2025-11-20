@@ -1,0 +1,79 @@
+---
+title: "Printing herbarium labels and exporting a digital copy of data"
+output: rmarkdown::html_vignette
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteIndexEntry{Printing herbarium labels and exporting a digital copy of data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+description: >
+  Rendering herbarium labels
+---
+
+
+```{r load libraries and import data}
+# remotes::install_github('sagesteppe/BarnebyLives') 
+# OR devtools::install_github('sagesteppe/BarnebyLives')
+library(BarnebyLives)
+library(dplyr)
+library(glue)
+data('collection_examples')
+```
+
+## creating a driver script to feed the skeleton data
+
+```{r}
+p <- file.path(path.expand('~'), 'Documents', 'assoRted', 'Barneby_Lives_dev', 'LabelStyles')
+driver <- function(x, name){
+  purrr::walk(
+    .x = 2823,
+  ~ rmarkdown::render(
+    input = x,                      # template to populate
+    output_file = file.path(p, glue("{name}{.x}.pdf")),# write one PDF per record
+    params = list(Collection_number = {.x})      # pass record to skeleton
+    )
+  )
+}
+```
+
+### BUILT IN TEMPLATES
+
+```{r, eval = F}
+driver("skeleton-default.Rmd", name = 'default')
+
+driver("skeleton-research.Rmd", name = 'research')
+driver("skeleton-modern.Rmd", name = 'modern')
+driver("skeleton-SOS.Rmd", name = 'SOS')
+driver("skeleton-customfont.Rmd", name = 'customfont')
+```
+
+
+### LABELS WITH GRAPHICS
+
+```{r}
+#driver("skeleton-maps.Rmd", name = 'map')
+#driver("skeleton-default.Rmd", name = 'default-')
+```
+
+
+## customizing a label template
+
+```{r customizing label templates, eval = F}
+driver("skeleton-SOS.Rmd", name = 'default-SOS-')
+driver("SoS-skeleton-noDir.Rmd", name = 'noDir-SOS-')
+driver("SoS-skeleton-Spaced.Rmd", name = 'Spaced-SOS-')
+driver("SoS-skeleton-large.Rmd", name = 'large-SOS-')
+driver("SoS-skeleton-familyLeft.Rmd", name = 'familyLeft-SOS-')
+driver("SoS-skeleton-Det.Rmd", name = 'Det-SOS-')
+```
+
+
+## customizing label fonts
+
+(completed)
+
+```{r, eval = F}
+driver("skeleton-customfont.Rmd", name = 'custom-font')
+driver("skeleton-customfont-twofonts.Rmd", name = 'custom-twofonts')
+driver("skeleton-customfont-downloaded.Rmd", name = 'custom-font-downloaded')
+```

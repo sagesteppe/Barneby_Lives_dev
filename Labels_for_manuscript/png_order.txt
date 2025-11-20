@@ -1,0 +1,3 @@
+mogrify -density 400 -format png -background white -flatten -resize 420x420 *.pdf
+
+montage -density 400 default2823.png default-SOS-2823.png modern2823.png custom-font-downloaded2823.png map2823.png logo-2823.png -tile 2x3 -geometry +0+0 -background white -density 400 TemplateExamples.png

@@ -1,0 +1,70 @@
+---
+output: pdf_document
+params:
+  Collection_number: Collection_number
+geometry: paperheight=4in,paperwidth=4in,margin=0.1in
+header-includes:
+  - \pagenumbering{gobble}
+  - \usepackage{setspace}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(dpi = 300) 
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+```{r load library}
+library(BarnebyLives)
+```
+
+```{r load data}
+record <- read.csv('SoS-ExampleCollection.csv') |>
+  dplyr::mutate(
+    Collection_number = as.numeric(Collection_number), 
+    Coordinate_Uncertainty = '+/- 5m') |>
+  dplyr::filter(Collection_number == params$Collection_number) |>
+  dplyr::mutate(Project_name = 'SOS Template')
+```
+
+\begin{center}
+\textbf{\LARGE `r record[['Project_name']]`}
+\end{center}
+\vspace{-\baselineskip} 
+\begin{flushright}
+\uppercase{`r record[['Family']]`}
+\end{flushright}
+\vspace{-\baselineskip} 
+\begingroup
+\large
+`r writer(paste(record[['Genus']], record[['Epithet']]), italics = TRUE)` `r writer(record[['Binomial_authority']])` `r writer(record[['Infrarank']])` `r writer(record[['Infraspecies']], italics = TRUE)` `r writer(record[['Infraspecific_authority']])`  
+\endgroup
+
+\vspace{\fill}
+\begingroup
+\small
+`r record[['Gen']]`. `r writer(record[['Site']])` `r record[['latitude_dd']]` `r record[['longitude_dd']]` (`r record[['Datum']]` `r writer(record[['Coordinate_uncertainty']])`).
+
+
+`r writer(record$Habitat)`. `r record[['physical_environ']]`  
+Veg.: `r species_font(record[['Vegetation']])` `r associates_writer(record[['Associates']])`
+`r writer(record[['Notes']])`  
+\endgroup
+\begingroup
+\begin{spacing}{0.02}
+{\scriptsize `r record[['Directions_BL']]`}
+\end{spacing}
+\endgroup
+ 
+\par\vspace{\fill}
+
+\begingroup
+\small
+`r collection_writer(record)`. `r writer_fide(record)`
+\endgroup
+
+\vspace{-\baselineskip} 
+\begin{center}
+{\footnotesize Collected under the auspices of the Bureau of Land Management}
+\end{center}

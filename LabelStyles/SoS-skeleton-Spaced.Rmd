@@ -20,40 +20,46 @@ library(BarnebyLives)
 ```
 
 ```{r load data}
-data <- read.csv('SoS-ExampleCollection.csv') |>
+record <- read.csv('SoS-ExampleCollection.csv') |>
   dplyr::mutate(
     Collection_number = as.numeric(Collection_number), 
     Coordinate_uncertainty = '+/- 5m') |>
-  dplyr::filter(Collection_number == params$Collection_number)
+  dplyr::filter(Collection_number == params$Collection_number) |>
+  dplyr::mutate(Project_name = 'SOS Template')
 ```
 
 \begin{center}
-\textbf{\LARGE Seeds of Success}
+\textbf{\LARGE `r record[['Project_name']]`}
 \end{center}
+\vspace{-\baselineskip} 
 \begin{flushright}
-\uppercase{`r data$Family`}
+\uppercase{`r record[['Family']]`}
 \end{flushright}
+\vspace{-\baselineskip} 
 \begingroup
 \large
-`r writer(paste(data$Genus, data$Epithet), italics = TRUE)` `r writer(data$Binomial_authority)` `r writer(data$Infrarank)` `r  writer(data$Infraspecies, italics = TRUE)` `r writer(data$Infraspecific_authority)`  
-\normalsize
+`r writer(paste(record[['Genus']], record[['Epithet']]), italics = TRUE)` `r writer(record[['Binomial_authority']])` `r writer(record[['Infrarank']])` `r writer(record[['Infraspecies']], italics = TRUE)` `r writer(record[['Infraspecific_authority']])`  
 \endgroup
 
-\vspace*{\fill}
+\vspace{\fill}
 \begingroup
-`r data$Gen`. `r writer(data$Site)` `r data$latitude_dd` `r data$longitude_dd` (`r data$Datum` `r writer(data$Coordinate_uncertainty)`).
+\small
+`r record[['Gen']]`. `r writer(record[['Site']])` `r record[['latitude_dd']]` `r record[['longitude_dd']]` (`r record[['Datum']]` `r writer(record[['Coordinate_uncertainty']])`).
 
-`r writer(data$Habitat)`. `r data$physical_environ`  
+`r writer(record$Habitat)`. `r record[['physical_environ']]`  
 
-Veg.: `r species_font(data$Vegetation)` `r associates_writer(data$Associates)`
-`r writer(data$Notes)`  
+Veg.: `r species_font(record[['Vegetation']])` `r associates_writer(record[['Associates']])`
+`r writer(record[['Notes']])`  
 \endgroup
  
-\vspace*{\fill}
+\par\vspace{\fill}
+
 \begingroup
-`r collection_writer(data)`. `r writer_fide(data)`
+\small
+`r collection_writer(record)`. `r writer_fide(record)`
 \endgroup
 
+\vspace{-\baselineskip} 
 \begin{center}
 {\footnotesize Collected under the auspices of the Bureau of Land Management}
 \end{center}

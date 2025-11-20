@@ -30,7 +30,8 @@ local <- file.path('~', 'Documents', 'assoRted', 'Barneby_Lives_dev', 'LabelStyl
 record <- read.csv(file.path(local, 'SoS-ExampleCollection.csv')) |>
   sf::st_drop_geometry() |>
   data.frame() |>
-  dplyr::filter(Collection_number == params$Collection_number) 
+  dplyr::filter(Collection_number == params$Collection_number)  |>
+  dplyr::mutate(Project_name = 'Custom font Skeleton')
 ```
 
 \begin{center}

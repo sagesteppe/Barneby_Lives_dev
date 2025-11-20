@@ -24,7 +24,8 @@ data <- read.csv('SoS-ExampleCollection.csv') |>
   dplyr::mutate(
     Collection_number = as.numeric(Collection_number), 
     Coordinate_uncertainty = '+/- 5m') |>
-  dplyr::filter(Collection_number == params$Collection_number)
+  dplyr::filter(Collection_number == params$Collection_number) |>
+  dplyr::mutate(Project_name = 'SOS Template')
 ```
 
 \begin{center}
